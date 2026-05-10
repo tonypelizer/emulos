@@ -60,6 +60,22 @@ const CASES: CaseListing[] = [
       "26F — 6 weeks pregnant, vaginal bleeding, right-sided pelvic pain, prior ectopic",
     tags: ["Ectopic Pregnancy", "First Trimester", "Bleeding", "TVUS", "β-hCG"],
   },
+  {
+    id: "preeclampsia-001",
+    title: "Headache at 34 Weeks",
+    specialty: "OB/GYN",
+    difficulty: "intermediate",
+    estimatedMinutes: 20,
+    chiefComplaint:
+      "28F — 34 weeks pregnant, severe headache, visual disturbances, BP 162/108",
+    tags: [
+      "Preeclampsia",
+      "Eclampsia",
+      "Third Trimester",
+      "Magnesium Sulphate",
+      "Hypertension",
+    ],
+  },
 ];
 
 const DIFFICULTY_LABEL: Record<CaseListing["difficulty"], string> = {

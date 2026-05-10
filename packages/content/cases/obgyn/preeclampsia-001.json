@@ -1,0 +1,975 @@
+{
+  "id": "preeclampsia-001",
+  "version": "1.0.0",
+  "metadata": {
+    "title": "Headache at 34 Weeks",
+    "specialty": "obstetrics",
+    "difficulty": "intermediate",
+    "estimatedMinutes": 20,
+    "tags": [
+      "preeclampsia",
+      "hypertension in pregnancy",
+      "eclampsia",
+      "magnesium sulphate",
+      "third trimester",
+      "obstetric emergency",
+      "proteinuria"
+    ],
+    "author": "emulos-content-team",
+    "expansionPack": "ob-gyn-pack-01",
+    "requiredEngineVersion": ">=1.0.0"
+  },
+  "patient": {
+    "demographics": {
+      "name": "Amara Okonkwo",
+      "age": 28,
+      "sex": "female",
+      "weight": 72,
+      "occupation": "PE teacher"
+    },
+    "initialVitals": {
+      "heartRate": 86,
+      "bloodPressure": {
+        "systolic": 162,
+        "diastolic": 108
+      },
+      "respiratoryRate": 16,
+      "temperature": 37.1,
+      "oxygenSaturation": 99,
+      "consciousness": "alert",
+      "painScore": 6
+    },
+    "conditions": {
+      "active": [],
+      "hidden": [
+        {
+          "conditionId": "preeclampsia-severe",
+          "severity": "severe"
+        }
+      ]
+    },
+    "riskFactors": [
+      "nulliparity",
+      "african-heritage",
+      "borderline-hypertension-at-28-weeks",
+      "family-history-preeclampsia"
+    ]
+  },
+  "scoring": {
+    "maxScore": 1000,
+    "passingScore": 600,
+    "gradeThresholds": {
+      "S": 950,
+      "A": 850,
+      "B": 700,
+      "C": 600
+    },
+    "timeBonuses": [
+      {
+        "gameTimeThreshold": 30,
+        "bonus": 150,
+        "label": "MgSO₄ and antihypertensives given within 30 minutes — Exceptional"
+      },
+      {
+        "gameTimeThreshold": 60,
+        "bonus": 75,
+        "label": "Treatment commenced within 60 minutes of assessment"
+      }
+    ],
+    "criticalActions": [
+      {
+        "actionId": "bp-formally-assessed",
+        "points": 50,
+        "isMandatory": true,
+        "label": "Blood pressure formally assessed with correct technique"
+      },
+      {
+        "actionId": "preeclampsia-suspected",
+        "points": 75,
+        "isMandatory": true,
+        "label": "Preeclampsia correctly suspected based on clinical picture"
+      },
+      {
+        "actionId": "urinalysis-ordered",
+        "points": 75,
+        "isMandatory": true,
+        "label": "Urinalysis ordered to assess for proteinuria"
+      },
+      {
+        "actionId": "bloods-drawn",
+        "points": 50,
+        "isMandatory": false,
+        "label": "Blood tests drawn (CBC, metabolic panel, LFTs)"
+      },
+      {
+        "actionId": "severe-features-identified",
+        "points": 125,
+        "isMandatory": true,
+        "label": "Severe features of preeclampsia correctly identified"
+      },
+      {
+        "actionId": "mgso4-given",
+        "points": 200,
+        "isMandatory": true,
+        "label": "Magnesium sulphate loading dose given for eclampsia prophylaxis"
+      },
+      {
+        "actionId": "antihypertensives-given",
+        "points": 125,
+        "isMandatory": true,
+        "label": "IV antihypertensive given for acute severe hypertension (BP ≥160/110)"
+      },
+      {
+        "actionId": "ob-consult-activated",
+        "points": 150,
+        "isMandatory": true,
+        "label": "Senior obstetrics team urgently consulted"
+      },
+      {
+        "actionId": "fetal-monitoring",
+        "points": 50,
+        "isMandatory": false,
+        "label": "Fetal wellbeing assessed (CTG initiated)"
+      },
+      {
+        "actionId": "delivery-planning",
+        "points": 75,
+        "isMandatory": false,
+        "label": "Delivery planning discussion initiated with obstetric team"
+      }
+    ],
+    "modifiers": [
+      {
+        "id": "eclampsia-occurred",
+        "description": "Eclampsia (tonic-clonic seizure) occurred due to absent or delayed treatment",
+        "type": "multiplier",
+        "value": 0.5
+      },
+      {
+        "id": "mgso4-not-given",
+        "description": "MgSO₄ not initiated before OB handover — eclampsia prophylaxis omitted",
+        "type": "flat-delta",
+        "value": -150
+      },
+      {
+        "id": "antihypertensives-delayed",
+        "description": "Acute severe hypertension not treated promptly — maternal stroke risk elevated",
+        "type": "flat-delta",
+        "value": -100
+      }
+    ]
+  },
+  "nodes": {
+    "start": {
+      "id": "start",
+      "type": "presentation",
+      "text": "The community midwife calls you urgently to the assessment room:\n\n'Dr. — I need you now. I have Amara Okonkwo, 28 years old, G1P0, 34 weeks and 2 days. She walked in 20 minutes ago complaining of a headache for the past two days that paracetamol isn't touching. This morning she started seeing flashing lights and sparkles. Her face looks puffy. I'm really worried.'\n\nYou walk in. Amara is sitting upright on the examination bed, pressing her fingers to her temples. She is alert but clearly in pain. Her abdomen is gravid and appropriate for 34 weeks.\n\n'I've had this headache since Tuesday,' she says quietly. 'And now my vision keeps going sparkly on the right side. I thought it was just tiredness.'\n\nMidwife's initial observations: HR 86 | BP 162/108 | RR 16 | Temp 37.1°C | SpO₂ 99%\n\nWhat is your first priority?",
+      "effects": [],
+      "choices": [
+        {
+          "id": "start-formal-bp",
+          "text": "Lay her on her left side and formally re-assess BP with correct technique — then take a targeted obstetric history",
+          "nextNodeId": "vitals-and-history",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "bp-formally-assessed",
+              "points": 50,
+              "reason": "BP formally assessed with correct technique — essential first step in any pregnant patient presenting with headache and visual disturbances",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "vitals-formally-assessed"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "start-reassure-headache",
+          "text": "Reassure her — tension headaches and visual migraine are common in the third trimester and are usually benign",
+          "nextNodeId": "premature-dismissal",
+          "timeCost": 3,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "preeclampsia-dismissed-penalty",
+              "points": -100,
+              "reason": "Reassuring a 34-week pregnant patient with headache, visual disturbances, and BP 162/108 without further assessment is dangerous. These are classical presenting features of preeclampsia with severe features.",
+              "category": "penalty"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "start-analgesics-first",
+          "text": "Give her stronger analgesics for the headache and ask the midwife to keep monitoring",
+          "nextNodeId": "premature-dismissal",
+          "timeCost": 3,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "symptom-treatment-without-assessment",
+              "points": -75,
+              "reason": "NSAIDs are contraindicated after 20 weeks gestation. Treating the headache symptomatically without identifying the cause in a pregnant patient with BP 162/108 delays critical management and risks fetal harm.",
+              "category": "penalty"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "start-urine-dip-first",
+          "text": "Order a urine dipstick immediately while the midwife takes a history — proteinuria is the critical diagnostic test",
+          "nextNodeId": "vitals-and-history",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "order_test",
+              "testId": "urinalysis"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "urinalysis-ordered",
+              "points": 75,
+              "reason": "Urinalysis ordered immediately — excellent clinical instinct. Proteinuria combined with hypertension in pregnancy defines preeclampsia.",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "urinalysis-ordered-early"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "premature-dismissal": {
+      "id": "premature-dismissal",
+      "type": "decision",
+      "text": "You begin to reassure Amara or ask for analgesics.\n\nThe midwife steps closer and lowers her voice: 'I've been a community midwife for 14 years. I've seen preeclampsia twice before. I'm telling you — her BP was the same when I measured it 30 minutes ago, 158/106. Her feet are significantly swollen. And she has a headache that won't go with paracetamol, plus visual symptoms.\n\nWith respect, Doctor — I think you need to take her blood pressure properly yourself.'\n\nShe's right. You need to immediately reassess.",
+      "effects": [],
+      "choices": [
+        {
+          "id": "dismissal-reassess",
+          "text": "The midwife is absolutely right — formally assess BP and take a proper obstetric history",
+          "nextNodeId": "vitals-and-history",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "bp-formally-assessed",
+              "points": 50,
+              "reason": "BP formally assessed after appropriate clinical challenge",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "vitals-formally-assessed"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "vitals-and-history": {
+      "id": "vitals-and-history",
+      "type": "examination",
+      "text": "Formal Assessment — Left lateral position, 5 minutes rest, validated digital sphygmomanometer:\n\nBP measurement 1 (5 min): 162/108\nBP measurement 2 (10 min): 164/106\n\nConsistently elevated. This is NOT a single isolated reading.\n\nReflexes: Brisk bilaterally (+++). Two-beat ankle clonus present on the right — a sign of CNS irritability.\nFace: Mild periorbital puffiness.\nLegs: 2+ pitting oedema to mid-shin bilaterally.\nAbdomen: Fundus =34cm, cephalic presentation, fetal heart 148 bpm by Doppler — reassuring.\n\nHistory:\n• No hypertension prior to pregnancy (BP 118/72 at booking at 10 weeks)\n• At 28-week community review: BP 138/86 — documented, monitored, no further action taken\n• Headache: 2 days, frontal, throbbing, unremitting, 6/10. Paracetamol ineffective.\n• Visual symptoms: flashing lights and 'sparkles' in right visual field since this morning (photopsia)\n• Mild nausea today. No vomiting.\n• No right upper quadrant or epigastric pain.\n• No vaginal bleeding. Fetal movements normal today.\n• G1P0 — no prior pregnancies. No prior preeclampsia (family history: her mother had preeclampsia at term).\n• No renal disease, no lupus, no antiphospholipid syndrome. No medications other than folic acid.\n\nCLINICAL PICTURE: New hypertension after 20 weeks + headache + visual disturbance in a previously normotensive primigravida. Until proven otherwise, this is PREECLAMPSIA.",
+      "effects": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "vitals-formally-assessed"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "history-complete"
+        },
+        {
+          "type": "add_examination_finding",
+          "findingId": "ankle-clonus"
+        },
+        {
+          "type": "add_examination_finding",
+          "findingId": "brisk-reflexes"
+        },
+        {
+          "type": "add_examination_finding",
+          "findingId": "periorbital-oedema"
+        }
+      ],
+      "choices": [
+        {
+          "id": "vitals-to-investigations",
+          "text": "Preeclampsia is my working diagnosis — order urgent investigations to confirm and quantify severity",
+          "nextNodeId": "investigation-hub",
+          "timeCost": 2,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "preeclampsia-suspected",
+              "points": 75,
+              "reason": "Preeclampsia correctly identified as the working diagnosis based on clinical findings",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "preeclampsia-suspected"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "vitals-to-treatment-direct",
+          "text": "I recognise preeclampsia with severe features — start MgSO₄ and antihypertensives and call the obstetric registrar now",
+          "nextNodeId": "management-hub",
+          "timeCost": 3,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "preeclampsia-suspected",
+              "points": 75,
+              "reason": "Preeclampsia correctly identified and management initiated without delay",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "severe-features-identified",
+              "points": 125,
+              "reason": "Severe features correctly identified from clinical picture — direct to treatment without waiting for confirmatory tests",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "no-baseline-investigations",
+              "points": -25,
+              "reason": "Proceeding to treatment without baseline blood tests or urinalysis means no quantification of severity, no platelet count before MgSO₄, and no proteinuria documentation — these are needed for the clinical record and management decisions.",
+              "category": "penalty"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "preeclampsia-suspected"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "severe-features-recognised"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "investigation-hub": {
+      "id": "investigation-hub",
+      "type": "decision",
+      "text": "You have confirmed: BP 162/108 (×2), brisk reflexes, ankle clonus, headache, visual disturbances, 34+2 weeks gestation.\n\nWorking diagnosis: Preeclampsia — severity to be determined.\n\nSevere features (ANY ONE is sufficient):\n• BP ≥ 160/110 ✓\n• Persistent headache ✓\n• Visual disturbances ✓\n• Thrombocytopenia (<100)\n• Impaired renal or liver function\n• Pulmonary oedema\n\nWhat investigations do you want to order?",
+      "effects": [],
+      "choices": [
+        {
+          "id": "order-urinalysis-and-bloods",
+          "text": "Order both urinalysis AND blood tests (CBC, metabolic panel) — get the full picture simultaneously",
+          "nextNodeId": "urinalysis-result",
+          "timeCost": 15,
+          "effects": [
+            {
+              "type": "order_test",
+              "testId": "urinalysis"
+            },
+            {
+              "type": "order_test",
+              "testId": "cbc"
+            },
+            {
+              "type": "order_test",
+              "testId": "bmp"
+            },
+            {
+              "type": "order_test",
+              "testId": "crp"
+            },
+            {
+              "type": "order_test",
+              "testId": "lactate"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "urinalysis-ordered",
+              "points": 75,
+              "reason": "Urinalysis ordered — proteinuria is the key diagnostic criterion for preeclampsia",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "bloods-drawn",
+              "points": 50,
+              "reason": "Blood tests drawn — essential for severity assessment, platelet count, and renal/liver function",
+              "category": "critical-action"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "test_ordered",
+              "testId": "urinalysis"
+            }
+          }
+        },
+        {
+          "id": "order-urinalysis-only",
+          "text": "Order urinalysis first — proteinuria is the key diagnostic test",
+          "nextNodeId": "urinalysis-result",
+          "timeCost": 10,
+          "effects": [
+            {
+              "type": "order_test",
+              "testId": "urinalysis"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "urinalysis-ordered",
+              "points": 75,
+              "reason": "Urinalysis ordered — correct initial investigation for suspected preeclampsia",
+              "category": "critical-action"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "test_ordered",
+              "testId": "urinalysis"
+            }
+          }
+        },
+        {
+          "id": "order-bloods-only",
+          "text": "Order blood tests only (CBC, metabolic panel) — I'll check proteinuria later",
+          "nextNodeId": "bloods-result",
+          "timeCost": 15,
+          "effects": [
+            {
+              "type": "order_test",
+              "testId": "cbc"
+            },
+            {
+              "type": "order_test",
+              "testId": "bmp"
+            },
+            {
+              "type": "order_test",
+              "testId": "crp"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "bloods-drawn",
+              "points": 50,
+              "reason": "Blood tests drawn",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "urinalysis-skipped-penalty",
+              "points": -50,
+              "reason": "Proteinuria assessment is a mandatory component of preeclampsia diagnosis. Urinalysis should accompany any blood workup for suspected preeclampsia.",
+              "category": "penalty"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "test_ordered",
+              "testId": "cbc"
+            }
+          }
+        },
+        {
+          "id": "hub-review-urinalysis",
+          "text": "Review the urinalysis result (already sent)",
+          "nextNodeId": "urinalysis-result",
+          "timeCost": 0,
+          "effects": [],
+          "condition": {
+            "op": "test_ordered",
+            "testId": "urinalysis"
+          }
+        },
+        {
+          "id": "hub-skip-to-severity",
+          "text": "No tests needed — BP 162/108 with symptoms is sufficient for diagnosis. Assess severity now.",
+          "nextNodeId": "severity-assessment",
+          "timeCost": 2,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "investigations-skipped-penalty",
+              "points": -75,
+              "reason": "Skipping urinalysis and blood tests in suspected preeclampsia omits the proteinuria criterion, prevents platelet count assessment (clonus without thrombocytopenia changes MgSO₄ dosing), and misses HELLP syndrome. These tests take 15 minutes and must not be omitted.",
+              "category": "penalty"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "test_ordered",
+              "testId": "urinalysis"
+            }
+          }
+        }
+      ]
+    },
+    "urinalysis-result": {
+      "id": "urinalysis-result",
+      "type": "result",
+      "text": "Urinalysis Result — RESULTED:\n\nAppearance: Slightly cloudy, amber\nLeukocyte esterase: Negative (no UTI)\nNitrites: Negative\nProtein: +++ (3+) — SIGNIFICANT PROTEINURIA\nBlood: Trace (non-specific)\nGlucose: Negative\n\n[!] Protein ≥ 2+ on dipstick is significant proteinuria in the context of hypertension.\n[!] Protein 3+ represents ≥300mg/24h equivalent — meets diagnostic threshold for preeclampsia.\n\nCLINICAL SIGNIFICANCE: Hypertension (BP 162/108) + Significant Proteinuria (3+) + Symptoms (headache + visual disturbance) = PREECLAMPSIA CONFIRMED.\n\nThe urinalysis has confirmed the diagnosis. Now you must classify severity and initiate treatment.",
+      "effects": [
+        {
+          "type": "result_test",
+          "testId": "urinalysis"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "proteinuria-confirmed"
+        },
+        {
+          "type": "reveal_condition",
+          "conditionId": "preeclampsia-severe"
+        }
+      ],
+      "choices": [
+        {
+          "id": "urinalysis-to-bloods",
+          "text": "Review blood results (CBC, metabolic panel) before classifying severity",
+          "nextNodeId": "bloods-result",
+          "timeCost": 0,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "bloods-drawn",
+              "points": 50,
+              "reason": "Blood tests ordered to complete severity workup",
+              "category": "critical-action"
+            },
+            {
+              "type": "order_test",
+              "testId": "cbc"
+            },
+            {
+              "type": "order_test",
+              "testId": "bmp"
+            },
+            {
+              "type": "order_test",
+              "testId": "crp"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "test_ordered",
+              "testId": "cbc"
+            }
+          }
+        },
+        {
+          "id": "urinalysis-review-bloods",
+          "text": "Review blood results (already sent)",
+          "nextNodeId": "bloods-result",
+          "timeCost": 0,
+          "effects": [],
+          "condition": {
+            "op": "test_ordered",
+            "testId": "cbc"
+          }
+        },
+        {
+          "id": "urinalysis-to-severity",
+          "text": "I have enough — BP 162/108 plus protein 3+ plus symptoms. Assess severity and initiate treatment.",
+          "nextNodeId": "severity-assessment",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "bloods-result": {
+      "id": "bloods-result",
+      "type": "result",
+      "text": "Blood Results — RESULTED:\n\nCBC:\n  WBC: 11.2 ×10⁹/L — mildly elevated (stress response)\n  Haemoglobin: 11.4 g/dL — mildly low (dilutional in pregnancy)\n  Platelets: 112 ×10⁹/L [↓] — borderline low (reference >150)\n  • Platelets <100 would define severe features; 112 is borderline — watch closely\n\nMetabolic Panel:\n  Creatinine: 78 μmol/L — marginally elevated for pregnancy (normal in pregnancy <70)\n  Urea: 4.8 mmol/L — mildly elevated\n  Na: 136 mmol/L — normal\n  K: 3.7 mmol/L — normal\n\nAdditional Labs (you have also requested):\n  ALT: 62 U/L [↑] — elevated (reference <35 in pregnancy)\n  AST: 48 U/L [↑] — elevated\n  LDH: 420 U/L [↑] — elevated (reference <250)\n  Uric acid: elevated\n  CRP: 18 mg/L — mildly elevated\n  Lactate: 1.4 mmol/L — normal (no tissue hypoperfusion yet)\n\nSUMMARY: Borderline thrombocytopenia, mildly elevated LFTs, mild renal impairment. This laboratory picture is consistent with preeclampsia with features of developing HELLP syndrome (Haemolysis, Elevated Liver enzymes, Low Platelets). Platelet trend is critical — repeat in 4–6 hours.",
+      "effects": [
+        {
+          "type": "result_test",
+          "testId": "cbc"
+        },
+        {
+          "type": "result_test",
+          "testId": "bmp"
+        },
+        {
+          "type": "result_test",
+          "testId": "crp"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "bloods-resulted"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "hellp-features-borderline"
+        }
+      ],
+      "choices": [
+        {
+          "id": "bloods-to-severity",
+          "text": "I now have the full picture — assess severity and classify this preeclampsia",
+          "nextNodeId": "severity-assessment",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "severity-assessment": {
+      "id": "severity-assessment",
+      "type": "decision",
+      "text": "SEVERITY CLASSIFICATION — PREECLAMPSIA:\n\nYou have the following findings:\n\n• BP: 162/108 and 164/106 (×2 readings, 5 min apart)\n• Proteinuria: 3+ on dipstick\n• Headache: persistent, 2 days, unresponsive to paracetamol\n• Visual disturbances: photopsia (flashing lights, right visual field)\n• Reflexes: brisk +++, right ankle clonus 2 beats\n• Platelets: 112 (borderline low)\n• LFTs: mildly elevated\n• Gestational age: 34+2 weeks\n\nSEVERE FEATURES CRITERIA (ACOG/NICE):\n✓ BP ≥ 160/110 (patient is 162/108 — YES)\n✓ Persistent headache refractory to analgesia (YES)\n✓ Visual disturbances — photopsia (YES)\n\nShe meets THREE independent severe feature criteria.\n\nDIAGNOSTIC AMBIGUITY: 'The blood pressure is only 2mmHg above the threshold. She is awake, talking, and not in obvious distress. Perhaps this could be managed with oral antihypertensives and outpatient review?'\n\nHow do you classify this?",
+      "effects": [],
+      "choices": [
+        {
+          "id": "severity-confirm-severe",
+          "text": "SEVERE FEATURES CONFIRMED — triple criteria met (BP ≥160/110, persistent headache, visual disturbance). This requires immediate inpatient management with MgSO₄ prophylaxis and IV antihypertensives.",
+          "nextNodeId": "management-hub",
+          "timeCost": 2,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "severe-features-identified",
+              "points": 125,
+              "reason": "Severe features correctly identified — BP ≥160/110 is the threshold regardless of how close to 160 it is. Symptoms further solidify the classification.",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "severe-features-recognised"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "severity-not-severe",
+          "text": "NOT severe features — BP is only just above 160, she is alert and comfortable. Admit for monitoring, oral antihypertensives, and outpatient repeat bloods in 24 hours.",
+          "nextNodeId": "observation-delay",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "severe-features-missed-penalty",
+              "points": -150,
+              "reason": "This is a critical classification error. BP 162/108 IS ≥160/110 — the threshold is not approximate. Combined with persistent headache and visual disturbances, this patient has three independent severe feature criteria. Outpatient management of severe preeclampsia risks eclampsia, maternal stroke, and placental abruption.",
+              "category": "penalty"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "observation-delay": {
+      "id": "observation-delay",
+      "type": "event",
+      "text": "[DETERIORATION] Amara is admitted to the antenatal ward for 'monitoring.' An IV line is requested but not yet placed. No medications are started.\n\nThirty minutes pass.\n\nThe ward midwife calls you: 'Her BP is now 178/118. She's saying her head is going to explode. She's very agitated. I'm scared.'\n\nYou run to the ward.\n\nAs you push open the door, Amara suddenly goes silent. Then her eyes roll back. Her arms extend stiffly. Then — violent, rhythmic, tonic-clonic movements of her entire body.\n\nShe is seizing.\n\nYou have 90 seconds of convulsion in front of you.",
+      "effects": [
+        {
+          "type": "advance_time",
+          "minutes": 30
+        },
+        {
+          "type": "adjust_vital",
+          "vital": "bloodPressure.systolic",
+          "delta": 16
+        },
+        {
+          "type": "adjust_vital",
+          "vital": "heartRate",
+          "delta": 18
+        },
+        {
+          "type": "apply_score_modifier",
+          "modifierId": "eclampsia-occurred"
+        },
+        {
+          "type": "set_game_phase",
+          "phase": "terminal"
+        }
+      ],
+      "choices": [
+        {
+          "id": "delay-to-eclampsia",
+          "text": "Call the emergency crash team and respond to the seizure",
+          "nextNodeId": "eclampsia-event",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "eclampsia-event": {
+      "id": "eclampsia-event",
+      "type": "event",
+      "text": "[ECLAMPSIA — CODE OBSTETRIC] Amara Okonkwo is convulsing. Tonic-clonic seizure, generalised. She is not protecting her airway.\n\nThe room fills in seconds — the crash buzzer has been pressed. A crash trolley is at the door. The neonatal team has been called.\n\nThe fetal heart monitor is placed: fetal bradycardia — 92 bpm. The fetus is in distress.\n\nYou have a 78kg pregnant woman having an eclamptic seizure. You have IV access. The crash trolley is open in front of you.\n\nBP: 178/118 | HR: 104 | SpO₂: 94% (seizing, semi-obstructed airway)\n\nWhat is your immediate management?",
+      "effects": [],
+      "choices": [
+        {
+          "id": "eclampsia-mgso4-correct",
+          "text": "Left lateral position → oxygen via face mask → IV MgSO₄ 4g over 5 minutes to terminate seizure → IV labetalol 20mg for BP control → call OB/anaesthetics immediately",
+          "nextNodeId": "outcome-eclampsia-survived",
+          "timeCost": 10,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "mgso4-given",
+              "points": 200,
+              "reason": "MgSO₄ given — first-line treatment for eclampsia AND seizure termination. Both therapeutic and prophylactic.",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "antihypertensives-given",
+              "points": 125,
+              "reason": "IV labetalol given for acute severe hypertension during eclampsia",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "ob-consult-activated",
+              "points": 150,
+              "reason": "OB and anaesthetics called for eclampsia — appropriate emergency escalation",
+              "category": "critical-action"
+            },
+            {
+              "type": "adjust_vital",
+              "vital": "bloodPressure.systolic",
+              "delta": -28
+            },
+            {
+              "type": "resolve_condition",
+              "conditionId": "preeclampsia-severe"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "eclampsia-diazepam-wrong",
+          "text": "Left lateral position → IV diazepam 10mg to stop the seizure → call for help",
+          "nextNodeId": "outcome-eclampsia-survived",
+          "timeCost": 10,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "wrong-drug-eclampsia-penalty",
+              "points": -100,
+              "reason": "Diazepam is not first-line for eclampsia. MgSO₄ is the drug of choice for both treating eclampsia AND preventing recurrence. Diazepam has no role in further seizure prophylaxis. MgSO₄ must still be given.",
+              "category": "penalty"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "ob-consult-activated",
+              "points": 150,
+              "reason": "OB team called for eclampsia",
+              "category": "critical-action"
+            },
+            {
+              "type": "adjust_vital",
+              "vital": "bloodPressure.systolic",
+              "delta": -10
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "eclampsia-wait",
+          "text": "Step back — most eclamptic seizures self-terminate within 90 seconds. Wait for it to stop before intervening.",
+          "nextNodeId": "outcome-fatal",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "eclampsia-no-intervention-penalty",
+              "points": -300,
+              "reason": "An eclamptic seizure is a medical emergency. Waiting without airway protection or MgSO₄ risks maternal hypoxia, aspiration, placental abruption, and fetal hypoxic injury. Immediate intervention is mandatory.",
+              "category": "penalty"
+            },
+            {
+              "type": "set_game_phase",
+              "phase": "terminal"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "management-hub": {
+      "id": "management-hub",
+      "type": "decision",
+      "text": "SEVERE PREECLAMPSIA — IMMEDIATE TREATMENT REQUIRED.\n\nCurrent status:\n• BP: 162/108 (×2)\n• Proteinuria: 3+\n• Symptoms: Persistent headache + visual disturbance\n• Reflexes: Brisk +++, ankle clonus\n• Fetal heart: 148 bpm (reassuring at this point)\n• Gestational age: 34+2 weeks\n\nACOG / NICE guidance:\n→ MgSO₄: Give a loading dose for eclampsia prophylaxis in severe preeclampsia\n→ Antihypertensives: BP ≥160/110 requires acute treatment within 30–60 minutes to reduce maternal stroke risk. Target 140–150/90–100.\n→ Senior obstetric review: Delivery is the only definitive treatment. Timing must be decided by the specialist team.\n\nWhat is your immediate management plan?",
+      "effects": [],
+      "choices": [
+        {
+          "id": "management-full-optimal",
+          "text": "MgSO₄ 4g IV loading dose over 15 minutes + IV labetalol 20mg for BP ≥160/110 + urgent OB registrar/consultant + continuous CTG for fetal monitoring",
+          "nextNodeId": "optimal-management",
+          "timeCost": 15,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "mgso4-given",
+              "points": 200,
+              "reason": "MgSO₄ loading dose given — eclampsia prophylaxis in severe preeclampsia reduces seizure risk by 50%",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "antihypertensives-given",
+              "points": 125,
+              "reason": "IV labetalol given for acute severe hypertension — reduces maternal stroke risk",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "ob-consult-activated",
+              "points": 150,
+              "reason": "Senior obstetrics team consulted urgently — delivery planning and senior clinical review initiated",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "fetal-monitoring",
+              "points": 50,
+              "reason": "CTG initiated for continuous fetal monitoring in the context of severe preeclampsia",
+              "category": "critical-action"
+            },
+            {
+              "type": "adjust_vital",
+              "vital": "bloodPressure.systolic",
+              "delta": -22
+            },
+            {
+              "type": "resolve_condition",
+              "conditionId": "preeclampsia-severe"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "management-ob-only",
+          "text": "Call the obstetric registrar immediately and await their arrival before starting any medications",
+          "nextNodeId": "optimal-management",
+          "timeCost": 20,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "ob-consult-activated",
+              "points": 150,
+              "reason": "OB team consulted",
+              "category": "critical-action"
+            },
+            {
+              "type": "apply_score_modifier",
+              "modifierId": "mgso4-not-given"
+            },
+            {
+              "type": "apply_score_modifier",
+              "modifierId": "antihypertensives-delayed"
+            },
+            {
+              "type": "resolve_condition",
+              "conditionId": "preeclampsia-severe"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "management-antihypertensives-only",
+          "text": "IV labetalol for BP control + call OB — I'll leave the decision on MgSO₄ to the obstetrician",
+          "nextNodeId": "optimal-management",
+          "timeCost": 15,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "antihypertensives-given",
+              "points": 125,
+              "reason": "IV labetalol given for acute severe hypertension",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "ob-consult-activated",
+              "points": 150,
+              "reason": "OB team consulted",
+              "category": "critical-action"
+            },
+            {
+              "type": "apply_score_modifier",
+              "modifierId": "mgso4-not-given"
+            },
+            {
+              "type": "adjust_vital",
+              "vital": "bloodPressure.systolic",
+              "delta": -18
+            },
+            {
+              "type": "resolve_condition",
+              "conditionId": "preeclampsia-severe"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "optimal-management": {
+      "id": "optimal-management",
+      "type": "decision",
+      "text": "The on-call obstetric registrar, Dr. Yemi Adeyemi, arrives within eight minutes and reviews Amara.\n\n'Good call. This is severe preeclampsia. She meets severe feature criteria on three counts.'\n\nCurrent status after initial treatment:\nBP: 144/92 (down from 162/108 — within target)\nHR: 82 | SpO₂: 99%\nMgSO₄: Loading dose complete, maintenance infusion 1g/hour commenced\nCTG: Reactive at 148 bpm — reassuring fetal pattern\n\nDr. Adeyemi explains the plan to Amara:\n\n'Your blood pressure has been dangerously high and it has been affecting your body. We need to deliver your baby. At 34 weeks, he is very likely to do well — the neonatal team is already aware. We're going to talk about how we do that.\n\nYou could try induction of labour, or we could plan a caesarean section. I'll explain both options. But we need to be in theatre within the next few hours.'\n\nAmara nods, her headache already slightly better. 'Whatever is safest for the baby.'\n\nYour role is to confirm the handover and document the clinical management appropriately.",
+      "effects": [
+        {
+          "type": "add_score_event",
+          "actionId": "delivery-planning",
+          "points": 75,
+          "reason": "Delivery planning initiated with specialist obstetric team — appropriate definitive management of severe preeclampsia at 34+ weeks",
+          "category": "critical-action"
+        }
+      ],
+      "choices": [
+        {
+          "id": "optimal-to-excellent",
+          "text": "Confirm the handover, document fully, and ensure postnatal monitoring is arranged",
+          "nextNodeId": "outcome-excellent",
+          "timeCost": 5,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "outcome-excellent": {
+      "id": "outcome-excellent",
+      "type": "outcome",
+      "text": "Amara Okonkwo undergoes induction of labour at 34+2 weeks. After 9 hours of augmented labour, she delivers a live male infant weighing 2.12kg. Apgar scores: 8 at 1 minute, 9 at 5 minutes.\n\nThe baby is taken to the neonatal unit for monitoring — likely 2–3 weeks. He is breathing independently.\n\nMgSO₄ is continued for 24 hours postpartum.\n\nAmara's blood pressure normalises progressively over the next 48 hours. She is transferred to the postnatal ward on day 2. Antihypertensives are weaned over 6 weeks of community follow-up.\n\n--- Final Results ---\nBP at discharge (Day 4): 132/84 — improving trend\nPlatelet nadir: 108 — did not drop below 100\nLFTs: normalising at Day 3 review\nBaby: Discharged to mother at Day 19 — feeding well\n\nAmara visits the postnatal clinic at 6 weeks. 'He's beautiful,' she says, showing you the photo. 'And I feel completely normal again.'\n\n[!] Teaching Points:\n• BP ≥160/110 in pregnancy = acute severe hypertension = treat within 30–60 minutes — no debate\n• MgSO₄ reduces the risk of eclampsia by ~50% in severe preeclampsia and is FIRST-LINE for eclampsia treatment\n• Persistent headache + visual disturbances = severe features — even if the patient looks 'well'\n• Delivery is the only cure for preeclampsia. At ≥34 weeks with severe features, delivery is indicated.\n• Midwives often recognise preeclampsia early — listen to experienced clinical colleagues",
+      "outcomeId": "excellent",
+      "effects": [],
+      "choices": []
+    },
+    "outcome-eclampsia-survived": {
+      "id": "outcome-eclampsia-survived",
+      "type": "outcome",
+      "text": "The eclamptic seizure terminates after 2 minutes following MgSO₄ administration.\n\nAmara is left post-ictal — drowsy, confused, and exhausted. The fetal bradycardia resolves as her oxygenation improves.\n\nEmergency caesarean section is performed under general anaesthesia. A live male infant is delivered, 2.08kg. He requires CPAP initially but is breathing independently by 2 hours of life.\n\nAmara recovers in HDU for 48 hours. She develops a brief period of pulmonary oedema on night 1, managed with furosemide. Her renal function deteriorates mildly before recovering by Day 5.\n\n--- Results ---\nMaternal: Full recovery, discharged Day 7\nNeonatal: NICU 22 days, discharged to mother in good condition\nPlatelet nadir: 91 (×10⁹/L) — confirmed HELLP syndrome\n\nEclampsia is a life-threatening emergency that was precipitated by delayed recognition of severe features. The seizure itself caused fetal distress, altered the delivery plan, and required HDU care.\n\n[!] Teaching Points:\n• The window between 'stable severe preeclampsia' and 'eclampsia' is narrow and unpredictable\n• MgSO₄ in severe preeclampsia would have prevented this seizure in approximately 50% of cases\n• HELLP syndrome can develop rapidly once liver enzymes and platelets are trending abnormally\n• Every hour's delay in treating severe features increases maternal and fetal risk",
+      "outcomeId": "eclampsia-survived",
+      "effects": [],
+      "choices": []
+    },
+    "outcome-fatal": {
+      "id": "outcome-fatal",
+      "type": "outcome",
+      "text": "The seizure lasts 4 minutes without intervention. By the time the team assembles, Amara has aspirated and her oxygen saturation is 74%.\n\nThe fetal heart has been in sustained bradycardia at 68 bpm for 6 minutes.\n\nDespite emergency intubation, crash caesarean, and resuscitation:\n• The baby is delivered with Apgar 1 and 1 — severe hypoxic-ischaemic encephalopathy\n• Amara suffers a right MCA haemorrhagic stroke during the resuscitation, secondary to her uncontrolled blood pressure\n\nShe survives with severe right-sided weakness and aphasia. Her son survives with profound neurodisability.\n\nThe coroner's investigation identifies unrecognised and untreated preeclampsia with severe features as the avoidable precipitating cause.\n\n[!] Teaching Points:\n• Eclampsia is PREVENTABLE in most cases with timely MgSO₄\n• An eclamptic seizure without immediate intervention causes maternal hypoxia, fetal distress, and risks maternal stroke from surging blood pressure\n• 'Waiting for the seizure to stop' is not a management plan — it is an abandonment of management\n• Preeclampsia kills. The tools to prevent it are simple, cheap, and available. The barrier is recognition and timely action.",
+      "outcomeId": "fatal",
+      "effects": [],
+      "choices": []
+    }
+  }
+}

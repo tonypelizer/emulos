@@ -171,6 +171,31 @@
       ]
     }
   },
+  "preeclampsia-severe": {
+    "id": "preeclampsia-severe",
+    "name": "Preeclampsia with Severe Features",
+    "category": "obstetric",
+    "isFatal": true,
+    "vitalProgression": {
+      "bloodPressure.systolic": [
+        { "atMinute": 0, "value": 5 },
+        { "atMinute": 30, "value": 18 },
+        { "atMinute": 60, "value": 30 }
+      ],
+      "heartRate": [
+        { "atMinute": 0, "value": 3 },
+        { "atMinute": 60, "value": 8 }
+      ]
+    },
+    "thresholdEvents": [
+      {
+        "vital": "bloodPressure.systolic",
+        "operator": "gte",
+        "value": 180,
+        "eventNodeId": "eclampsia-event"
+      }
+    ]
+  },
   "early-sepsis": {
     "id": "early-sepsis",
     "name": "Early Sepsis (Sepsis-3 Criteria Met)",
