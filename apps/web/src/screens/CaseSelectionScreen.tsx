@@ -40,6 +40,16 @@ const CASES: CaseListing[] = [
       "28F — 7 weeks amenorrhoea, right pelvic pain, vaginal spotting",
     tags: ["Ectopic Pregnancy", "First Trimester", "TVUS", "β-hCG"],
   },
+  {
+    id: "confusion-001",
+    title: "Not Herself Today",
+    specialty: "Emergency Medicine",
+    difficulty: "beginner",
+    estimatedMinutes: 20,
+    chiefComplaint:
+      "78F — acute confusion, fever, not herself since yesterday, brought in by daughter",
+    tags: ["Delirium", "UTI", "Urosepsis", "Elderly", "Altered Mental Status"],
+  },
 ];
 
 const DIFFICULTY_LABEL: Record<CaseListing["difficulty"], string> = {
