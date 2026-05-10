@@ -26,7 +26,11 @@ import testsRegistry from "../../../content/tests-catalog/tests-registry.json";
 let engine: GameEngine;
 
 beforeAll(() => {
-  engine = GameEngine.fromRawJson(chestPain001, conditionsRegistry, testsRegistry);
+  engine = GameEngine.fromRawJson(
+    chestPain001,
+    conditionsRegistry,
+    testsRegistry,
+  );
 });
 
 // ─── Helper ───────────────────────────────────────────────────────────────────
@@ -83,14 +87,14 @@ describe("Integration — optimal path (ECG → STEMI recognition → full pre-P
   //   cath-lab-activated → pre-pci-complete (full-pre-pci-regimen +75+50)
   //   pre-pci-complete → outcome-excellent (transfer-to-cath-lab)
   const OPTIMAL_PATH = [
-    "immediate-ecg",           // start → ecg-ordered
+    "immediate-ecg", // start → ecg-ordered
     "interpret-stemi-correct", // ecg-ordered → stemi-confirmed
-    "give-aspirin",            // stemi-confirmed → stemi-aspirin-given
-    "asp-iv-access",           // stemi-aspirin-given → stemi-iv-established
-    "iv-proceed-treatment",    // stemi-iv-established → treatment-decision
-    "primary-pci",             // treatment-decision → cath-lab-activated
-    "full-pre-pci-regimen",    // cath-lab-activated → pre-pci-complete
-    "transfer-to-cath-lab",    // pre-pci-complete → outcome-excellent
+    "give-aspirin", // stemi-confirmed → stemi-aspirin-given
+    "asp-iv-access", // stemi-aspirin-given → stemi-iv-established
+    "iv-proceed-treatment", // stemi-iv-established → treatment-decision
+    "primary-pci", // treatment-decision → cath-lab-activated
+    "full-pre-pci-regimen", // cath-lab-activated → pre-pci-complete
+    "transfer-to-cath-lab", // pre-pci-complete → outcome-excellent
   ];
 
   it("reaches the outcome-excellent node", () => {
@@ -115,7 +119,7 @@ describe("Integration — optimal path (ECG → STEMI recognition → full pre-P
   it("reveals the anterior-stemi condition after correct ECG interpretation", () => {
     const state = playThrough(OPTIMAL_PATH);
     const revealed = state.patient.conditions.active.find(
-      (c) => c.conditionId === "anterior-stemi"
+      (c) => c.conditionId === "anterior-stemi",
     );
     expect(revealed).toBeDefined();
     expect(revealed?.revealedAt).toBeDefined();
@@ -155,11 +159,11 @@ describe("Integration — optimal path (ECG → STEMI recognition → full pre-P
 
 describe("Integration — suboptimal path (thrombolytics → rescue PCI)", () => {
   const LYTIC_PATH = [
-    "immediate-ecg",           // start → ecg-ordered
+    "immediate-ecg", // start → ecg-ordered
     "interpret-stemi-correct", // ecg-ordered → stemi-confirmed
     "go-to-treatment-decision", // stemi-confirmed → treatment-decision
-    "thrombolytics",           // treatment-decision → thrombolytics-pathway
-    "rescue-pci-after-lytic",  // thrombolytics-pathway → outcome-rescue-pci
+    "thrombolytics", // treatment-decision → thrombolytics-pathway
+    "rescue-pci-after-lytic", // thrombolytics-pathway → outcome-rescue-pci
   ];
 
   it("reaches the outcome-rescue-pci node", () => {
@@ -211,11 +215,11 @@ describe("Integration — delay path (ECG misread as benign → catastrophic del
   // The vf-arrest-event fires immediately via trigger_event.
   // The player then resuscitates and eventually reaches a terminal shock-pci outcome.
   const DELAY_PATH = [
-    "immediate-ecg",    // start → ecg-ordered
+    "immediate-ecg", // start → ecg-ordered
     "interpret-benign", // ecg-ordered → catastrophic-delay (30 min timeCost) → vf-arrest-event fires immediately (delayMinutes: 0)
-    "cpr-and-defib",    // vf-arrest-event → resuscitation
-    "shock-200j",       // resuscitation → rosc-achieved
-    "rosc-to-cath",     // rosc-achieved → outcome-complicated (TERMINAL)
+    "cpr-and-defib", // vf-arrest-event → resuscitation
+    "shock-200j", // resuscitation → rosc-achieved
+    "rosc-to-cath", // rosc-achieved → outcome-complicated (TERMINAL)
   ];
 
   it("reaches a terminal outcome", () => {
@@ -273,7 +277,7 @@ describe("Integration — error handling", () => {
   it("throws CHOICE_NOT_AVAILABLE when an invalid choice ID is provided", () => {
     const state = engine.createSession();
     expect(() => engine.processAction(state, "nonexistent-choice-id")).toThrow(
-      "not in the current active choices"
+      "not in the current active choices",
     );
   });
 
@@ -289,7 +293,7 @@ describe("Integration — error handling", () => {
       "transfer-to-cath-lab",
     ]);
     expect(() => engine.processAction(terminalState, "some-choice")).toThrow(
-      "terminal session"
+      "terminal session",
     );
   });
 
@@ -312,7 +316,9 @@ describe("Integration — serialization", () => {
     expect(restored.session.sessionId).toBe(state.session.sessionId);
     expect(restored.session.gameTime).toBe(state.session.gameTime);
     expect(restored.progress.currentNodeId).toBe(state.progress.currentNodeId);
-    expect(restored.player.orderedTests.length).toBe(state.player.orderedTests.length);
+    expect(restored.player.orderedTests.length).toBe(
+      state.player.orderedTests.length,
+    );
     expect(restored.score.events.length).toBe(state.score.events.length);
   });
 
@@ -336,7 +342,7 @@ describe("Integration — static case validation", () => {
     const result = GameEngine.validateCase(
       chestPain001,
       conditionsRegistry,
-      testsRegistry
+      testsRegistry,
     );
     expect(result.valid).toBe(true);
     expect(result.issues).toHaveLength(0);

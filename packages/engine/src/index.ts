@@ -19,7 +19,10 @@ export { serializeState, deserializeState } from "./SessionManager.js";
 export { buildScoreReport } from "./systems/ScoringEngine.js";
 
 // Condition evaluation — exposed so the UI adapter can filter hints if needed.
-export { evaluateCondition, evaluateOptionalCondition } from "./systems/RuleEngine.js";
+export {
+  evaluateCondition,
+  evaluateOptionalCondition,
+} from "./systems/RuleEngine.js";
 
 // Interpolation — exposed for charting vital progressions in a future UI.
 export { interpolate } from "./systems/VitalsEngine.js";

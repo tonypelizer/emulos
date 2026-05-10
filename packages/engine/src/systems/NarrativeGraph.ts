@@ -38,13 +38,13 @@ import { EngineError } from "@emulos/types";
 export function enterNode(
   state: GameState,
   nodeId: string,
-  caseDoc: IndexedCaseDocument
+  caseDoc: IndexedCaseDocument,
 ): GameState {
   const node = caseDoc.nodesById.get(nodeId);
   if (!node) {
     throw new EngineError(
       `Node "${nodeId}" not found in case "${caseDoc.caseData.id}"`,
-      "NODE_NOT_FOUND"
+      "NODE_NOT_FOUND",
     );
   }
 
@@ -97,7 +97,7 @@ export function enterNode(
 export function resolveChoices(
   state: GameState,
   nodeId: string,
-  caseDoc: IndexedCaseDocument
+  caseDoc: IndexedCaseDocument,
 ): GameState {
   const node = caseDoc.nodesById.get(nodeId);
   if (!node) return state;
@@ -155,7 +155,7 @@ export function resolveChoices(
  */
 function processPendingEvents(
   state: GameState,
-  caseDoc: IndexedCaseDocument
+  caseDoc: IndexedCaseDocument,
 ): GameState {
   const due = state.progress.pendingEvents
     .filter((e) => e.triggerAt <= state.session.gameTime)
@@ -166,7 +166,7 @@ function processPendingEvents(
   // Remove the due events from the queue.
   let next = produce(state, (draft) => {
     draft.progress.pendingEvents = draft.progress.pendingEvents.filter(
-      (e) => e.triggerAt > state.session.gameTime
+      (e) => e.triggerAt > state.session.gameTime,
     );
   });
 
@@ -200,7 +200,7 @@ function clearNewFlags(state: GameState): GameState {
 }
 
 function nodeTypeToNarrativeType(
-  nodeType: string
+  nodeType: string,
 ): "narrative" | "result" | "event" | "system" {
   switch (nodeType) {
     case "result":

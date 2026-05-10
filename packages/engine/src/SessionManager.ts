@@ -29,7 +29,7 @@ import { seedFromString } from "./utils/prng.js";
  */
 export function createInitialState(
   caseDoc: IndexedCaseDocument,
-  options: SessionOptions = {}
+  options: SessionOptions = {},
 ): GameState {
   const seed = options.seed ?? generateId();
   // Validate the seed can be converted — this also warms the PRNG.
@@ -137,14 +137,14 @@ export function deserializeState(serialized: string): GameState {
   } catch {
     throw new EngineError(
       "Failed to parse serialized state: invalid JSON.",
-      "DESERIALIZATION_FAILED"
+      "DESERIALIZATION_FAILED",
     );
   }
 
   if (!isGameStateShape(parsed)) {
     throw new EngineError(
       "Deserialized object does not match GameState shape.",
-      "DESERIALIZATION_FAILED"
+      "DESERIALIZATION_FAILED",
     );
   }
 

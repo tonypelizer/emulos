@@ -16,8 +16,13 @@ import type { GameState, Effect, IndexedCaseDocument } from "@emulos/types";
 function makeStubCaseDoc(
   overrides: Partial<{
     testsById: ReadonlyMap<string, unknown>;
-    modifiers: Array<{ id: string; description: string; type: "multiplier" | "flat-delta"; value: number }>;
-  }> = {}
+    modifiers: Array<{
+      id: string;
+      description: string;
+      type: "multiplier" | "flat-delta";
+      value: number;
+    }>;
+  }> = {},
 ): IndexedCaseDocument {
   return {
     caseData: {
@@ -34,7 +39,13 @@ function makeStubCaseDoc(
         requiredEngineVersion: ">=1.0.0",
       },
       patient: {
-        demographics: { name: "Test", age: 40, sex: "male", weight: 70, occupation: "Tester" },
+        demographics: {
+          name: "Test",
+          age: 40,
+          sex: "male",
+          weight: 70,
+          occupation: "Tester",
+        },
         initialVitals: {
           heartRate: 80,
           bloodPressure: { systolic: 120, diastolic: 80 },
@@ -66,7 +77,16 @@ function makeStubCaseDoc(
       },
     },
     nodesById: new Map([
-      ["start", { id: "start", type: "presentation", text: "Test", effects: [], choices: [] }],
+      [
+        "start",
+        {
+          id: "start",
+          type: "presentation",
+          text: "Test",
+          effects: [],
+          choices: [],
+        },
+      ],
     ]),
     conditionsById: new Map(),
     testsById: (overrides.testsById ??
@@ -110,15 +130,31 @@ function makeState(): GameState {
       phase: "active",
     },
     patient: {
-      demographics: { name: "P", age: 50, sex: "male", weight: 70, occupation: "T", riskFactors: [] },
+      demographics: {
+        name: "P",
+        age: 50,
+        sex: "male",
+        weight: 70,
+        occupation: "T",
+        riskFactors: [],
+      },
       baselineVitals: { ...vitals },
       vitals: { ...vitals },
       conditions: {
         active: [
-          { conditionId: "hypertension", severity: "moderate", onsetGameTime: 0, revealedAt: 0 },
+          {
+            conditionId: "hypertension",
+            severity: "moderate",
+            onsetGameTime: 0,
+            revealedAt: 0,
+          },
         ],
         hidden: [
-          { conditionId: "anterior-stemi", severity: "critical", onsetGameTime: 0 },
+          {
+            conditionId: "anterior-stemi",
+            severity: "critical",
+            onsetGameTime: 0,
+          },
         ],
         resolved: [],
       },
@@ -139,7 +175,11 @@ function makeState(): GameState {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function apply(state: GameState, effects: Effect[], caseDoc = makeStubCaseDoc()): GameState {
+function apply(
+  state: GameState,
+  effects: Effect[],
+  caseDoc = makeStubCaseDoc(),
+): GameState {
   return applyEffects(state, effects, caseDoc);
 }
 
@@ -195,11 +235,14 @@ describe("EffectProcessor — reveal_condition", () => {
     ]);
     expect(next.patient.conditions.hidden).toHaveLength(0);
     expect(
-      next.patient.conditions.active.find((c) => c.conditionId === "anterior-stemi")
+      next.patient.conditions.active.find(
+        (c) => c.conditionId === "anterior-stemi",
+      ),
     ).toBeDefined();
     expect(
-      next.patient.conditions.active.find((c) => c.conditionId === "anterior-stemi")
-        ?.revealedAt
+      next.patient.conditions.active.find(
+        (c) => c.conditionId === "anterior-stemi",
+      )?.revealedAt,
     ).toBe(10); // gameTime at time of effect
   });
 
@@ -209,7 +252,9 @@ describe("EffectProcessor — reveal_condition", () => {
       { type: "reveal_condition", conditionId: "nonexistent-condition" },
     ]);
     // No crash, no change.
-    expect(next.patient.conditions.active.length).toBe(state.patient.conditions.active.length);
+    expect(next.patient.conditions.active.length).toBe(
+      state.patient.conditions.active.length,
+    );
   });
 });
 
@@ -218,20 +263,30 @@ describe("EffectProcessor — reveal_condition", () => {
 describe("EffectProcessor — add_condition", () => {
   it("adds a new condition to active list", () => {
     const next = apply(makeState(), [
-      { type: "add_condition", conditionId: "cardiogenic-shock", severity: "critical" },
+      {
+        type: "add_condition",
+        conditionId: "cardiogenic-shock",
+        severity: "critical",
+      },
     ]);
     expect(
-      next.patient.conditions.active.find((c) => c.conditionId === "cardiogenic-shock")
+      next.patient.conditions.active.find(
+        (c) => c.conditionId === "cardiogenic-shock",
+      ),
     ).toBeDefined();
   });
 
   it("is idempotent — does not duplicate existing active condition", () => {
     const state = makeState();
     const next = apply(state, [
-      { type: "add_condition", conditionId: "hypertension", severity: "severe" },
+      {
+        type: "add_condition",
+        conditionId: "hypertension",
+        severity: "severe",
+      },
     ]);
     const count = next.patient.conditions.active.filter(
-      (c) => c.conditionId === "hypertension"
+      (c) => c.conditionId === "hypertension",
     ).length;
     expect(count).toBe(1);
   });
@@ -245,10 +300,14 @@ describe("EffectProcessor — resolve_condition", () => {
       { type: "resolve_condition", conditionId: "hypertension" },
     ]);
     expect(
-      next.patient.conditions.active.find((c) => c.conditionId === "hypertension")
+      next.patient.conditions.active.find(
+        (c) => c.conditionId === "hypertension",
+      ),
     ).toBeUndefined();
     expect(
-      next.patient.conditions.resolved.find((c) => c.conditionId === "hypertension")
+      next.patient.conditions.resolved.find(
+        (c) => c.conditionId === "hypertension",
+      ),
     ).toBeDefined();
   });
 });
@@ -265,9 +324,15 @@ describe("EffectProcessor — add_knowledge", () => {
 
   it("is idempotent — does not duplicate", () => {
     let state = makeState();
-    state = apply(state, [{ type: "add_knowledge", knowledgeId: "stemi-confirmed" }]);
-    state = apply(state, [{ type: "add_knowledge", knowledgeId: "stemi-confirmed" }]);
-    expect(state.player.knowledge.filter((k) => k === "stemi-confirmed").length).toBe(1);
+    state = apply(state, [
+      { type: "add_knowledge", knowledgeId: "stemi-confirmed" },
+    ]);
+    state = apply(state, [
+      { type: "add_knowledge", knowledgeId: "stemi-confirmed" },
+    ]);
+    expect(
+      state.player.knowledge.filter((k) => k === "stemi-confirmed").length,
+    ).toBe(1);
   });
 });
 
@@ -306,7 +371,9 @@ describe("EffectProcessor — order_test", () => {
   it("is idempotent — does not duplicate", () => {
     let state = apply(makeState(), [{ type: "order_test", testId: "ecg" }]);
     state = apply(state, [{ type: "order_test", testId: "ecg" }]);
-    expect(state.player.orderedTests.filter((t) => t.testId === "ecg").length).toBe(1);
+    expect(
+      state.player.orderedTests.filter((t) => t.testId === "ecg").length,
+    ).toBe(1);
   });
 });
 
@@ -358,12 +425,19 @@ describe("EffectProcessor — apply_score_modifier", () => {
   it("applies a defined modifier to the score modifiers list", () => {
     const caseDoc = makeStubCaseDoc({
       modifiers: [
-        { id: "patient-harmed", description: "Patient harmed", type: "multiplier", value: 0.5 },
+        {
+          id: "patient-harmed",
+          description: "Patient harmed",
+          type: "multiplier",
+          value: 0.5,
+        },
       ],
     });
-    const next = apply(makeState(), [
-      { type: "apply_score_modifier", modifierId: "patient-harmed" },
-    ], caseDoc);
+    const next = apply(
+      makeState(),
+      [{ type: "apply_score_modifier", modifierId: "patient-harmed" }],
+      caseDoc,
+    );
     expect(next.score.modifiers).toHaveLength(1);
     expect(next.score.modifiers[0]?.type).toBe("multiplier");
     expect(next.score.modifiers[0]?.value).toBe(0.5);
@@ -372,15 +446,24 @@ describe("EffectProcessor — apply_score_modifier", () => {
   it("is idempotent — same modifier applied twice only appears once", () => {
     const caseDoc = makeStubCaseDoc({
       modifiers: [
-        { id: "patient-harmed", description: "Patient harmed", type: "multiplier", value: 0.5 },
+        {
+          id: "patient-harmed",
+          description: "Patient harmed",
+          type: "multiplier",
+          value: 0.5,
+        },
       ],
     });
-    let state = apply(makeState(), [
-      { type: "apply_score_modifier", modifierId: "patient-harmed" },
-    ], caseDoc);
-    state = apply(state, [
-      { type: "apply_score_modifier", modifierId: "patient-harmed" },
-    ], caseDoc);
+    let state = apply(
+      makeState(),
+      [{ type: "apply_score_modifier", modifierId: "patient-harmed" }],
+      caseDoc,
+    );
+    state = apply(
+      state,
+      [{ type: "apply_score_modifier", modifierId: "patient-harmed" }],
+      caseDoc,
+    );
     expect(state.score.modifiers.length).toBe(1);
   });
 });
@@ -409,7 +492,9 @@ describe("EffectProcessor — trigger_event", () => {
 
 describe("EffectProcessor — set_game_phase", () => {
   it("updates the session phase", () => {
-    const next = apply(makeState(), [{ type: "set_game_phase", phase: "terminal" }]);
+    const next = apply(makeState(), [
+      { type: "set_game_phase", phase: "terminal" },
+    ]);
     expect(next.session.phase).toBe("terminal");
   });
 });
@@ -419,7 +504,11 @@ describe("EffectProcessor — set_game_phase", () => {
 describe("EffectProcessor — append_narrative", () => {
   it("appends a narrative entry with correct type and text", () => {
     const next = apply(makeState(), [
-      { type: "append_narrative", text: "An alarm sounds.", narrativeType: "event" },
+      {
+        type: "append_narrative",
+        text: "An alarm sounds.",
+        narrativeType: "event",
+      },
     ]);
     expect(next.progress.narrativeLog).toHaveLength(1);
     expect(next.progress.narrativeLog[0]?.text).toBe("An alarm sounds.");
@@ -447,7 +536,7 @@ describe("EffectProcessor — conditional effects (condition guard)", () => {
     const state = applyEffects(
       makeState(),
       [{ type: "add_knowledge", knowledgeId: "prerequisite" }],
-      makeStubCaseDoc()
+      makeStubCaseDoc(),
     );
     const next = apply(state, [
       {

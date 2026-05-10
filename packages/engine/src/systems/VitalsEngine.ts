@@ -32,7 +32,7 @@ import type { ConditionDefinition } from "@emulos/types";
  */
 export function recalculateVitals(
   state: GameState,
-  caseDoc: IndexedCaseDocument
+  caseDoc: IndexedCaseDocument,
 ): GameState {
   const updatedVitals = computeVitals(state, caseDoc);
   let nextState = produce(state, (draft) => {
@@ -48,7 +48,7 @@ export function recalculateVitals(
  */
 function computeVitals(
   state: GameState,
-  caseDoc: IndexedCaseDocument
+  caseDoc: IndexedCaseDocument,
 ): PatientVitals {
   // Start from the immutable baseline.
   const baseline = state.patient.baselineVitals;
@@ -73,25 +73,18 @@ function computeVitals(
   // Apply accumulated deltas to baseline.
   return {
     ...baseline,
-    heartRate: Math.max(
-      0,
-      baseline.heartRate + (deltas.heartRate ?? 0)
-    ),
+    heartRate: Math.max(0, baseline.heartRate + (deltas.heartRate ?? 0)),
     respiratoryRate: Math.max(
       0,
-      baseline.respiratoryRate + (deltas.respiratoryRate ?? 0)
+      baseline.respiratoryRate + (deltas.respiratoryRate ?? 0),
     ),
     temperature: baseline.temperature + (deltas.temperature ?? 0),
     oxygenSaturation: clamp(
       baseline.oxygenSaturation + (deltas.oxygenSaturation ?? 0),
       0,
-      100
+      100,
     ),
-    painScore: clamp(
-      baseline.painScore + (deltas.painScore ?? 0),
-      0,
-      10
-    ),
+    painScore: clamp(baseline.painScore + (deltas.painScore ?? 0), 0, 10),
   };
 }
 
@@ -105,7 +98,7 @@ function computeVitals(
 function checkThresholds(
   state: GameState,
   caseDoc: IndexedCaseDocument,
-  previousVitals: PatientVitals
+  previousVitals: PatientVitals,
 ): GameState {
   const newEvents: Array<{ eventNodeId: string; triggerAt: number }> = [];
 
@@ -123,18 +116,18 @@ function checkThresholds(
       const wasTriggered = evaluateThreshold(
         threshold.operator,
         oldValue,
-        threshold.value
+        threshold.value,
       );
       const isTriggered = evaluateThreshold(
         threshold.operator,
         newValue,
-        threshold.value
+        threshold.value,
       );
 
       if (isTriggered && !wasTriggered) {
         // Check the event isn't already queued.
         const alreadyQueued = state.progress.pendingEvents.some(
-          (e) => e.eventNodeId === threshold.eventNodeId
+          (e) => e.eventNodeId === threshold.eventNodeId,
         );
         if (!alreadyQueued) {
           newEvents.push({
@@ -156,15 +149,21 @@ function checkThresholds(
 function evaluateThreshold(
   operator: "lte" | "gte" | "lt" | "gt" | "eq",
   value: number,
-  threshold: number
+  threshold: number,
 ): boolean {
   switch (operator) {
-    case "lte": return value <= threshold;
-    case "gte": return value >= threshold;
-    case "lt":  return value < threshold;
-    case "gt":  return value > threshold;
-    case "eq":  return value === threshold;
-    default:    return false;
+    case "lte":
+      return value <= threshold;
+    case "gte":
+      return value >= threshold;
+    case "lt":
+      return value < threshold;
+    case "gt":
+      return value > threshold;
+    case "eq":
+      return value === threshold;
+    default:
+      return false;
   }
 }
 
@@ -176,7 +175,7 @@ function evaluateThreshold(
  */
 export function interpolate(
   points: Array<{ atMinute: number; value: number }>,
-  elapsed: number
+  elapsed: number,
 ): number {
   if (points.length === 0) return 0;
 

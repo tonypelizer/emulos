@@ -7,23 +7,52 @@
  */
 
 import { describe, it, expect } from "vitest";
-import { computeFinalScore, buildScoreReport } from "../src/systems/ScoringEngine.js";
-import type { GameState, IndexedCaseDocument, ScoreEvent, ScoreModifier } from "@emulos/types";
+import {
+  computeFinalScore,
+  buildScoreReport,
+} from "../src/systems/ScoringEngine.js";
+import type {
+  GameState,
+  IndexedCaseDocument,
+  ScoreEvent,
+  ScoreModifier,
+} from "@emulos/types";
 
 // ─── Stubs ────────────────────────────────────────────────────────────────────
 
-function makeScoring(overrides: {
-  maxScore?: number;
-  passingScore?: number;
-  gradeThresholds?: { S: number; A: number; B: number; C: number };
-  timeBonuses?: Array<{ gameTimeThreshold: number; bonus: number; label: string }>;
-  criticalActions?: Array<{ actionId: string; points: number; isMandatory: boolean; label: string }>;
-  modifiers?: Array<{ id: string; description: string; type: "multiplier" | "flat-delta"; value: number }>;
-} = {}) {
+function makeScoring(
+  overrides: {
+    maxScore?: number;
+    passingScore?: number;
+    gradeThresholds?: { S: number; A: number; B: number; C: number };
+    timeBonuses?: Array<{
+      gameTimeThreshold: number;
+      bonus: number;
+      label: string;
+    }>;
+    criticalActions?: Array<{
+      actionId: string;
+      points: number;
+      isMandatory: boolean;
+      label: string;
+    }>;
+    modifiers?: Array<{
+      id: string;
+      description: string;
+      type: "multiplier" | "flat-delta";
+      value: number;
+    }>;
+  } = {},
+) {
   return {
     maxScore: overrides.maxScore ?? 1000,
     passingScore: overrides.passingScore ?? 600,
-    gradeThresholds: overrides.gradeThresholds ?? { S: 950, A: 850, B: 700, C: 600 },
+    gradeThresholds: overrides.gradeThresholds ?? {
+      S: 950,
+      A: 850,
+      B: 700,
+      C: 600,
+    },
     timeBonuses: overrides.timeBonuses ?? [],
     criticalActions: overrides.criticalActions ?? [],
     modifiers: overrides.modifiers ?? [],
@@ -31,7 +60,7 @@ function makeScoring(overrides: {
 }
 
 function makeCaseDoc(
-  scoringOverrides: Parameters<typeof makeScoring>[0] = {}
+  scoringOverrides: Parameters<typeof makeScoring>[0] = {},
 ): IndexedCaseDocument {
   return {
     caseData: {
@@ -48,7 +77,13 @@ function makeCaseDoc(
         requiredEngineVersion: ">=1.0.0",
       },
       patient: {
-        demographics: { name: "P", age: 40, sex: "male", weight: 70, occupation: "T" },
+        demographics: {
+          name: "P",
+          age: 40,
+          sex: "male",
+          weight: 70,
+          occupation: "T",
+        },
         initialVitals: {
           heartRate: 80,
           bloodPressure: { systolic: 120, diastolic: 80 },
@@ -63,7 +98,13 @@ function makeCaseDoc(
       },
       scoring: makeScoring(scoringOverrides),
       nodes: {
-        start: { id: "start", type: "presentation", text: "Test", effects: [], choices: [] },
+        start: {
+          id: "start",
+          type: "presentation",
+          text: "Test",
+          effects: [],
+          choices: [],
+        },
       },
     },
     nodesById: new Map(),
@@ -72,11 +113,13 @@ function makeCaseDoc(
   } as unknown as IndexedCaseDocument;
 }
 
-function makeState(overrides: {
-  gameTime?: number;
-  events?: Array<Partial<ScoreEvent>>;
-  modifiers?: Array<Partial<ScoreModifier>>;
-} = {}): GameState {
+function makeState(
+  overrides: {
+    gameTime?: number;
+    events?: Array<Partial<ScoreEvent>>;
+    modifiers?: Array<Partial<ScoreModifier>>;
+  } = {},
+): GameState {
   const vitals: GameState["patient"]["vitals"] = {
     heartRate: 80,
     bloodPressure: { systolic: 120, diastolic: 80 },
@@ -97,7 +140,14 @@ function makeState(overrides: {
       phase: "terminal" as const,
     },
     patient: {
-      demographics: { name: "P", age: 40, sex: "male", weight: 70, occupation: "T", riskFactors: [] },
+      demographics: {
+        name: "P",
+        age: 40,
+        sex: "male",
+        weight: 70,
+        occupation: "T",
+        riskFactors: [],
+      },
       baselineVitals: { ...vitals },
       vitals: { ...vitals },
       conditions: { active: [], hidden: [], resolved: [] },
@@ -210,8 +260,8 @@ describe("ScoringEngine — multiplier modifier", () => {
     const state = makeState({
       events: [{ points: 500 }],
       modifiers: [
-        { type: "flat-delta", value: 100 },   // 500 + 100 = 600
-        { type: "multiplier", value: 0.5 },    // 600 × 0.5 = 300
+        { type: "flat-delta", value: 100 }, // 500 + 100 = 600
+        { type: "multiplier", value: 0.5 }, // 600 × 0.5 = 300
       ],
     });
     const result = computeFinalScore(state, makeCaseDoc());
@@ -267,7 +317,14 @@ describe("ScoringEngine — clamping", () => {
 describe("ScoringEngine — grade derivation", () => {
   const thresholds = { S: 950, A: 850, B: 700, C: 600 };
 
-  const cases: Array<[number, GameState["score"]["computed"] extends null ? never : NonNullable<GameState["score"]["computed"]>["grade"]]> = [
+  const cases: Array<
+    [
+      number,
+      GameState["score"]["computed"] extends null
+        ? never
+        : NonNullable<GameState["score"]["computed"]>["grade"],
+    ]
+  > = [
     [950, "S"],
     [900, "A"],
     [850, "A"],
@@ -276,13 +333,16 @@ describe("ScoringEngine — grade derivation", () => {
     [620, "C"],
     [600, "C"],
     [599, "F"],
-    [0,   "F"],
+    [0, "F"],
   ];
 
   for (const [score, expectedGrade] of cases) {
     it(`score ${score} → grade ${expectedGrade}`, () => {
       const state = makeState({ events: [{ points: score }] });
-      const result = computeFinalScore(state, makeCaseDoc({ gradeThresholds: thresholds }));
+      const result = computeFinalScore(
+        state,
+        makeCaseDoc({ gradeThresholds: thresholds }),
+      );
       expect(result.score.computed?.grade).toBe(expectedGrade);
     });
   }
@@ -304,9 +364,24 @@ describe("ScoringEngine — grade derivation", () => {
 
 describe("ScoringEngine — critical action tracking", () => {
   const criticalActions = [
-    { actionId: "order-ecg", points: 100, isMandatory: true, label: "ECG obtained" },
-    { actionId: "activate-cath-lab", points: 250, isMandatory: true, label: "Cath lab activated" },
-    { actionId: "administer-aspirin", points: 100, isMandatory: true, label: "Aspirin given" },
+    {
+      actionId: "order-ecg",
+      points: 100,
+      isMandatory: true,
+      label: "ECG obtained",
+    },
+    {
+      actionId: "activate-cath-lab",
+      points: 250,
+      isMandatory: true,
+      label: "Cath lab activated",
+    },
+    {
+      actionId: "administer-aspirin",
+      points: 100,
+      isMandatory: true,
+      label: "Aspirin given",
+    },
   ];
 
   it("identifies which critical actions were hit via matching actionId", () => {
@@ -318,7 +393,9 @@ describe("ScoringEngine — critical action tracking", () => {
     });
     const result = computeFinalScore(state, makeCaseDoc({ criticalActions }));
     expect(result.score.computed?.criticalActionsHit).toContain("ECG obtained");
-    expect(result.score.computed?.criticalActionsHit).toContain("Cath lab activated");
+    expect(result.score.computed?.criticalActionsHit).toContain(
+      "Cath lab activated",
+    );
   });
 
   it("identifies which critical actions were missed", () => {
@@ -326,8 +403,12 @@ describe("ScoringEngine — critical action tracking", () => {
       events: [{ actionId: "order-ecg", points: 100 }],
     });
     const result = computeFinalScore(state, makeCaseDoc({ criticalActions }));
-    expect(result.score.computed?.criticalActionsMissed).toContain("Cath lab activated");
-    expect(result.score.computed?.criticalActionsMissed).toContain("Aspirin given");
+    expect(result.score.computed?.criticalActionsMissed).toContain(
+      "Cath lab activated",
+    );
+    expect(result.score.computed?.criticalActionsMissed).toContain(
+      "Aspirin given",
+    );
   });
 
   it("all actions hit → criticalActionsMissed is empty", () => {
@@ -350,7 +431,11 @@ describe("buildScoreReport", () => {
     const state = makeState({
       events: [
         { actionId: "order-ecg", points: 100, reason: "ECG ordered" },
-        { actionId: "activate-cath-lab", points: 250, reason: "Cath lab activated" },
+        {
+          actionId: "activate-cath-lab",
+          points: 250,
+          reason: "Cath lab activated",
+        },
       ],
     });
     const stateWithScore = computeFinalScore(state, makeCaseDoc());
@@ -363,7 +448,9 @@ describe("buildScoreReport", () => {
   it("includes applied modifiers in the report", () => {
     const state = makeState({
       events: [{ points: 800 }],
-      modifiers: [{ type: "multiplier", value: 0.5, description: "Patient harmed" }],
+      modifiers: [
+        { type: "multiplier", value: 0.5, description: "Patient harmed" },
+      ],
     });
     const stateWithScore = computeFinalScore(state, makeCaseDoc());
     const report = buildScoreReport(stateWithScore, makeCaseDoc());

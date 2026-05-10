@@ -26,7 +26,7 @@ import { generateId } from "../utils/id.js";
 export function applyEffects(
   state: GameState,
   effects: readonly Effect[],
-  caseDoc: IndexedCaseDocument
+  caseDoc: IndexedCaseDocument,
 ): GameState {
   return effects.reduce<GameState>((current, effect) => {
     // Guard: skip effects whose condition is unmet.
@@ -42,7 +42,7 @@ export function applyEffects(
 function applySingleEffect(
   state: GameState,
   effect: Effect,
-  caseDoc: IndexedCaseDocument
+  caseDoc: IndexedCaseDocument,
 ): GameState {
   return produce(state, (draft) => {
     switch (effect.type) {
@@ -54,7 +54,7 @@ function applySingleEffect(
           // Blood pressure is a nested object — expect JSON string "120/80"
           // For a single numeric value use heartRate / etc.
           console.warn(
-            "[EffectProcessor] Use set_vital with individual vital keys, not bloodPressure."
+            "[EffectProcessor] Use set_vital with individual vital keys, not bloodPressure.",
           );
           return;
         }
@@ -69,7 +69,7 @@ function applySingleEffect(
           vitals[effect.vital] = current + effect.delta;
         } else {
           console.warn(
-            `[EffectProcessor] Cannot adjust_vital "${effect.vital}": not a number`
+            `[EffectProcessor] Cannot adjust_vital "${effect.vital}": not a number`,
           );
         }
         break;
@@ -79,17 +79,20 @@ function applySingleEffect(
 
       case "reveal_condition": {
         const hiddenIdx = draft.patient.conditions.hidden.findIndex(
-          (c) => c.conditionId === effect.conditionId
+          (c) => c.conditionId === effect.conditionId,
         );
         if (hiddenIdx !== -1) {
-          const [removed] = draft.patient.conditions.hidden.splice(hiddenIdx, 1);
+          const [removed] = draft.patient.conditions.hidden.splice(
+            hiddenIdx,
+            1,
+          );
           if (removed) {
             removed.revealedAt = draft.session.gameTime;
             draft.patient.conditions.active.push(removed);
           }
         } else {
           console.warn(
-            `[EffectProcessor] reveal_condition: "${effect.conditionId}" not in hidden list`
+            `[EffectProcessor] reveal_condition: "${effect.conditionId}" not in hidden list`,
           );
         }
         break;
@@ -98,7 +101,7 @@ function applySingleEffect(
       case "add_condition": {
         // Idempotent: don't add a condition that is already active.
         const alreadyActive = draft.patient.conditions.active.some(
-          (c) => c.conditionId === effect.conditionId
+          (c) => c.conditionId === effect.conditionId,
         );
         if (!alreadyActive) {
           draft.patient.conditions.active.push({
@@ -113,18 +116,24 @@ function applySingleEffect(
 
       case "resolve_condition": {
         const activeIdx = draft.patient.conditions.active.findIndex(
-          (c) => c.conditionId === effect.conditionId
+          (c) => c.conditionId === effect.conditionId,
         );
         if (activeIdx !== -1) {
-          const [removed] = draft.patient.conditions.active.splice(activeIdx, 1);
+          const [removed] = draft.patient.conditions.active.splice(
+            activeIdx,
+            1,
+          );
           if (removed) draft.patient.conditions.resolved.push(removed);
         } else {
           // Also check hidden — a condition can be resolved before revealed.
           const hiddenIdx = draft.patient.conditions.hidden.findIndex(
-            (c) => c.conditionId === effect.conditionId
+            (c) => c.conditionId === effect.conditionId,
           );
           if (hiddenIdx !== -1) {
-            const [removed] = draft.patient.conditions.hidden.splice(hiddenIdx, 1);
+            const [removed] = draft.patient.conditions.hidden.splice(
+              hiddenIdx,
+              1,
+            );
             if (removed) draft.patient.conditions.resolved.push(removed);
           }
         }
@@ -160,7 +169,7 @@ function applySingleEffect(
 
       case "order_test": {
         const alreadyOrdered = draft.player.orderedTests.some(
-          (t) => t.testId === effect.testId
+          (t) => t.testId === effect.testId,
         );
         if (!alreadyOrdered) {
           draft.player.orderedTests.push({
@@ -175,7 +184,7 @@ function applySingleEffect(
 
       case "result_test": {
         const test = draft.player.orderedTests.find(
-          (t) => t.testId === effect.testId
+          (t) => t.testId === effect.testId,
         );
         if (test) {
           test.resultedAt = draft.session.gameTime;
@@ -189,7 +198,7 @@ function applySingleEffect(
           };
         } else {
           console.warn(
-            `[EffectProcessor] result_test: test "${effect.testId}" was not ordered yet`
+            `[EffectProcessor] result_test: test "${effect.testId}" was not ordered yet`,
           );
         }
         break;
@@ -218,12 +227,12 @@ function applySingleEffect(
 
       case "apply_score_modifier": {
         const modifierDef = caseDoc.caseData.scoring.modifiers?.find(
-          (m) => m.id === effect.modifierId
+          (m) => m.id === effect.modifierId,
         );
         if (modifierDef) {
           // Idempotent: don't apply the same modifier twice.
           const alreadyApplied = draft.score.modifiers.some(
-            (m) => m.id === effect.modifierId
+            (m) => m.id === effect.modifierId,
           );
           if (!alreadyApplied) {
             draft.score.modifiers.push({
@@ -236,7 +245,7 @@ function applySingleEffect(
           }
         } else {
           console.warn(
-            `[EffectProcessor] apply_score_modifier: modifier "${effect.modifierId}" not found in scoring definition`
+            `[EffectProcessor] apply_score_modifier: modifier "${effect.modifierId}" not found in scoring definition`,
           );
         }
         break;
@@ -248,7 +257,7 @@ function applySingleEffect(
         const triggerAt = draft.session.gameTime + effect.delayMinutes;
         // Idempotent: don't queue the same event twice at the same time.
         const alreadyQueued = draft.progress.pendingEvents.some(
-          (e) => e.eventNodeId === effect.eventId && e.triggerAt === triggerAt
+          (e) => e.eventNodeId === effect.eventId && e.triggerAt === triggerAt,
         );
         if (!alreadyQueued) {
           draft.progress.pendingEvents.push({
@@ -284,7 +293,7 @@ function applySingleEffect(
       default: {
         const exhaustiveCheck: never = effect;
         console.error(
-          `[EffectProcessor] Unhandled effect type: ${(exhaustiveCheck as Effect).type}`
+          `[EffectProcessor] Unhandled effect type: ${(exhaustiveCheck as Effect).type}`,
         );
       }
     }

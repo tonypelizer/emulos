@@ -15,9 +15,9 @@
  */
 
 // JSON imports — Vite/Vitest resolve these natively. Node ≥ 22 uses --experimental-import-meta-resolve.
-import chestPain001 from '../cases/general/chest-pain-001.json';
-import conditionsRegistryJson from '../conditions/conditions-registry.json';
-import testsRegistryJson from '../tests-catalog/tests-registry.json';
+import chestPain001 from "../cases/general/chest-pain-001.json";
+import conditionsRegistryJson from "../conditions/conditions-registry.json";
+import testsRegistryJson from "../tests-catalog/tests-registry.json";
 
 // ─── Registry exports ─────────────────────────────────────────────────────────
 
@@ -31,7 +31,7 @@ export const testsRegistry: unknown = testsRegistryJson;
 
 /** Map of caseId → raw case JSON. Add new cases here as they are authored. */
 const CASE_REGISTRY: Record<string, unknown> = {
-  'chest-pain-001': chestPain001,
+  "chest-pain-001": chestPain001,
 };
 
 /**
@@ -41,9 +41,9 @@ const CASE_REGISTRY: Record<string, unknown> = {
 export function getCase(id: string): unknown {
   const caseJson = CASE_REGISTRY[id];
   if (caseJson === undefined) {
-    const available = Object.keys(CASE_REGISTRY).join(', ');
+    const available = Object.keys(CASE_REGISTRY).join(", ");
     throw new Error(
-      `Case "${id}" not found in content registry. Available cases: ${available}`
+      `Case "${id}" not found in content registry. Available cases: ${available}`,
     );
   }
   return caseJson;

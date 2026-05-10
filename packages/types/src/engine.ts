@@ -6,7 +6,11 @@
  * state) and CaseDocument (content schema).
  */
 
-import type { CaseDocument, ConditionDefinition, TestDefinition } from "./case.js";
+import type {
+  CaseDocument,
+  ConditionDefinition,
+  TestDefinition,
+} from "./case.js";
 import type { ComputedScore } from "./state.js";
 
 // ─── Indexed case document ────────────────────────────────────────────────────
@@ -42,7 +46,7 @@ export interface SessionOptions {
 export class EngineError extends Error {
   constructor(
     message: string,
-    public readonly code: EngineErrorCode
+    public readonly code: EngineErrorCode,
   ) {
     super(message);
     this.name = "EngineError";

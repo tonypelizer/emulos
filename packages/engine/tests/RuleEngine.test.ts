@@ -26,7 +26,7 @@ function makeState(
     orderedTests?: { testId: string; resulted: boolean }[];
     activeConditions?: string[];
     revealedConditions?: string[];
-  } = {}
+  } = {},
 ): GameState {
   const {
     gameTime = 0,
@@ -73,7 +73,11 @@ function makeState(
         active: [
           ...activeConditions
             .filter((id) => !revealedConditions.includes(id))
-            .map((id) => ({ conditionId: id, severity: "moderate" as const, onsetGameTime: 0 })),
+            .map((id) => ({
+              conditionId: id,
+              severity: "moderate" as const,
+              onsetGameTime: 0,
+            })),
           ...revealedConditions.map((id) => ({
             conditionId: id,
             severity: "moderate" as const,
@@ -173,9 +177,9 @@ describe("RuleEngine — or", () => {
   });
 
   it("returns false for empty or", () => {
-    expect(
-      evaluateCondition({ op: "or", conditions: [] }, makeState())
-    ).toBe(false);
+    expect(evaluateCondition({ op: "or", conditions: [] }, makeState())).toBe(
+      false,
+    );
   });
 });
 
@@ -202,7 +206,10 @@ describe("RuleEngine — not", () => {
     const state = makeState({ knowledge: ["x"] });
     const expr: ConditionExpr = {
       op: "not",
-      condition: { op: "not", condition: { op: "has_knowledge", knowledgeId: "x" } },
+      condition: {
+        op: "not",
+        condition: { op: "has_knowledge", knowledgeId: "x" },
+      },
     };
     expect(evaluateCondition(expr, state)).toBe(true);
   });
@@ -216,8 +223,8 @@ describe("RuleEngine — eq", () => {
     expect(
       evaluateCondition(
         { op: "eq", path: "patient.vitals.heartRate", value: 72 },
-        state
-      )
+        state,
+      ),
     ).toBe(true);
   });
 
@@ -226,8 +233,8 @@ describe("RuleEngine — eq", () => {
     expect(
       evaluateCondition(
         { op: "eq", path: "patient.vitals.heartRate", value: 80 },
-        state
-      )
+        state,
+      ),
     ).toBe(false);
   });
 
@@ -236,8 +243,8 @@ describe("RuleEngine — eq", () => {
     expect(
       evaluateCondition(
         { op: "eq", path: "session.phase", value: "terminal" },
-        state
-      )
+        state,
+      ),
     ).toBe(true);
   });
 
@@ -246,8 +253,8 @@ describe("RuleEngine — eq", () => {
     expect(
       evaluateCondition(
         { op: "eq", path: "deeply.nonexistent.path", value: 42 },
-        state
-      )
+        state,
+      ),
     ).toBe(false);
   });
 });
@@ -258,8 +265,8 @@ describe("RuleEngine — neq", () => {
     expect(
       evaluateCondition(
         { op: "neq", path: "session.phase", value: "terminal" },
-        state
-      )
+        state,
+      ),
     ).toBe(true);
   });
 
@@ -268,8 +275,8 @@ describe("RuleEngine — neq", () => {
     expect(
       evaluateCondition(
         { op: "neq", path: "session.phase", value: "active" },
-        state
-      )
+        state,
+      ),
     ).toBe(false);
   });
 });
@@ -280,8 +287,8 @@ describe("RuleEngine — numeric comparisons (gt/gte/lt/lte)", () => {
     expect(
       evaluateCondition(
         { op: "gt", path: "patient.vitals.heartRate", value: 90 },
-        state
-      )
+        state,
+      ),
     ).toBe(true);
   });
 
@@ -290,8 +297,8 @@ describe("RuleEngine — numeric comparisons (gt/gte/lt/lte)", () => {
     expect(
       evaluateCondition(
         { op: "gt", path: "patient.vitals.heartRate", value: 90 },
-        state
-      )
+        state,
+      ),
     ).toBe(false);
   });
 
@@ -300,8 +307,8 @@ describe("RuleEngine — numeric comparisons (gt/gte/lt/lte)", () => {
     expect(
       evaluateCondition(
         { op: "gte", path: "patient.vitals.heartRate", value: 90 },
-        state
-      )
+        state,
+      ),
     ).toBe(true);
   });
 
@@ -310,8 +317,8 @@ describe("RuleEngine — numeric comparisons (gt/gte/lt/lte)", () => {
     expect(
       evaluateCondition(
         { op: "lt", path: "patient.vitals.oxygenSaturation", value: 90 },
-        state
-      )
+        state,
+      ),
     ).toBe(true);
   });
 
@@ -320,18 +327,15 @@ describe("RuleEngine — numeric comparisons (gt/gte/lt/lte)", () => {
     expect(
       evaluateCondition(
         { op: "lte", path: "patient.vitals.oxygenSaturation", value: 90 },
-        state
-      )
+        state,
+      ),
     ).toBe(true);
   });
 
   it("returns false for non-numeric path", () => {
     const state = makeState({ phase: "active" });
     expect(
-      evaluateCondition(
-        { op: "gt", path: "session.phase", value: 0 },
-        state
-      )
+      evaluateCondition({ op: "gt", path: "session.phase", value: 0 }, state),
     ).toBe(false);
   });
 });
@@ -344,8 +348,8 @@ describe("RuleEngine — has_knowledge", () => {
     expect(
       evaluateCondition(
         { op: "has_knowledge", knowledgeId: "stemi-confirmed-ecg" },
-        state
-      )
+        state,
+      ),
     ).toBe(true);
   });
 
@@ -354,8 +358,8 @@ describe("RuleEngine — has_knowledge", () => {
     expect(
       evaluateCondition(
         { op: "has_knowledge", knowledgeId: "stemi-confirmed-ecg" },
-        state
-      )
+        state,
+      ),
     ).toBe(false);
   });
 });
@@ -364,16 +368,18 @@ describe("RuleEngine — has_knowledge", () => {
 
 describe("RuleEngine — test_ordered", () => {
   it("returns true when test has been ordered", () => {
-    const state = makeState({ orderedTests: [{ testId: "12-lead-ecg", resulted: false }] });
+    const state = makeState({
+      orderedTests: [{ testId: "12-lead-ecg", resulted: false }],
+    });
     expect(
-      evaluateCondition({ op: "test_ordered", testId: "12-lead-ecg" }, state)
+      evaluateCondition({ op: "test_ordered", testId: "12-lead-ecg" }, state),
     ).toBe(true);
   });
 
   it("returns false when test has not been ordered", () => {
     const state = makeState({ orderedTests: [] });
     expect(
-      evaluateCondition({ op: "test_ordered", testId: "12-lead-ecg" }, state)
+      evaluateCondition({ op: "test_ordered", testId: "12-lead-ecg" }, state),
     ).toBe(false);
   });
 });
@@ -384,7 +390,7 @@ describe("RuleEngine — test_resulted", () => {
       orderedTests: [{ testId: "12-lead-ecg", resulted: true }],
     });
     expect(
-      evaluateCondition({ op: "test_resulted", testId: "12-lead-ecg" }, state)
+      evaluateCondition({ op: "test_resulted", testId: "12-lead-ecg" }, state),
     ).toBe(true);
   });
 
@@ -393,14 +399,14 @@ describe("RuleEngine — test_resulted", () => {
       orderedTests: [{ testId: "12-lead-ecg", resulted: false }],
     });
     expect(
-      evaluateCondition({ op: "test_resulted", testId: "12-lead-ecg" }, state)
+      evaluateCondition({ op: "test_resulted", testId: "12-lead-ecg" }, state),
     ).toBe(false);
   });
 
   it("returns false when test is not even ordered", () => {
     const state = makeState({ orderedTests: [] });
     expect(
-      evaluateCondition({ op: "test_resulted", testId: "troponin-i" }, state)
+      evaluateCondition({ op: "test_resulted", testId: "troponin-i" }, state),
     ).toBe(false);
   });
 });
@@ -413,8 +419,8 @@ describe("RuleEngine — condition_active", () => {
     expect(
       evaluateCondition(
         { op: "condition_active", conditionId: "hypertension" },
-        state
-      )
+        state,
+      ),
     ).toBe(true);
   });
 
@@ -423,8 +429,8 @@ describe("RuleEngine — condition_active", () => {
     expect(
       evaluateCondition(
         { op: "condition_active", conditionId: "anterior-stemi" },
-        state
-      )
+        state,
+      ),
     ).toBe(false);
   });
 });
@@ -435,8 +441,8 @@ describe("RuleEngine — condition_revealed", () => {
     expect(
       evaluateCondition(
         { op: "condition_revealed", conditionId: "anterior-stemi" },
-        state
-      )
+        state,
+      ),
     ).toBe(true);
   });
 
@@ -446,7 +452,7 @@ describe("RuleEngine — condition_revealed", () => {
     const state = makeState({ activeConditions: ["anterior-stemi"] });
     // Find the condition and remove revealedAt if it was set.
     const cond = state.patient.conditions.active.find(
-      (c) => c.conditionId === "anterior-stemi"
+      (c) => c.conditionId === "anterior-stemi",
     );
     if (cond) {
       // activeConditions fixture sets revealedAt = undefined (no reveal).
@@ -457,8 +463,8 @@ describe("RuleEngine — condition_revealed", () => {
     expect(
       evaluateCondition(
         { op: "condition_revealed", conditionId: "anterior-stemi" },
-        state
-      )
+        state,
+      ),
     ).toBe(false);
   });
 });
@@ -469,21 +475,21 @@ describe("RuleEngine — time_elapsed_gte", () => {
   it("returns true when gameTime meets the threshold", () => {
     const state = makeState({ gameTime: 30 });
     expect(
-      evaluateCondition({ op: "time_elapsed_gte", minutes: 30 }, state)
+      evaluateCondition({ op: "time_elapsed_gte", minutes: 30 }, state),
     ).toBe(true);
   });
 
   it("returns true when gameTime exceeds the threshold", () => {
     const state = makeState({ gameTime: 45 });
     expect(
-      evaluateCondition({ op: "time_elapsed_gte", minutes: 30 }, state)
+      evaluateCondition({ op: "time_elapsed_gte", minutes: 30 }, state),
     ).toBe(true);
   });
 
   it("returns false when gameTime is below threshold", () => {
     const state = makeState({ gameTime: 15 });
     expect(
-      evaluateCondition({ op: "time_elapsed_gte", minutes: 30 }, state)
+      evaluateCondition({ op: "time_elapsed_gte", minutes: 30 }, state),
     ).toBe(false);
   });
 });
@@ -492,14 +498,14 @@ describe("RuleEngine — game_phase", () => {
   it("returns true when phase matches", () => {
     const state = makeState({ phase: "terminal" });
     expect(
-      evaluateCondition({ op: "game_phase", phase: "terminal" }, state)
+      evaluateCondition({ op: "game_phase", phase: "terminal" }, state),
     ).toBe(true);
   });
 
   it("returns false when phase does not match", () => {
     const state = makeState({ phase: "active" });
     expect(
-      evaluateCondition({ op: "game_phase", phase: "terminal" }, state)
+      evaluateCondition({ op: "game_phase", phase: "terminal" }, state),
     ).toBe(false);
   });
 });
@@ -548,8 +554,8 @@ describe("evaluateOptionalCondition", () => {
     expect(
       evaluateOptionalCondition(
         { op: "has_knowledge", knowledgeId: "x" },
-        state
-      )
+        state,
+      ),
     ).toBe(true);
   });
 });

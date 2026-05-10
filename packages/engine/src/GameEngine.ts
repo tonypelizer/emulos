@@ -34,12 +34,19 @@ import type {
 } from "@emulos/types";
 import { EngineError } from "@emulos/types";
 import { loadCase, validateCase } from "./CaseLoader.js";
-import { createInitialState, serializeState, deserializeState } from "./SessionManager.js";
+import {
+  createInitialState,
+  serializeState,
+  deserializeState,
+} from "./SessionManager.js";
 import { applyEffects } from "./systems/EffectProcessor.js";
 import { advanceTime } from "./systems/TimeEngine.js";
 import { recalculateVitals } from "./systems/VitalsEngine.js";
 import { enterNode } from "./systems/NarrativeGraph.js";
-import { computeFinalScore, buildScoreReport } from "./systems/ScoringEngine.js";
+import {
+  computeFinalScore,
+  buildScoreReport,
+} from "./systems/ScoringEngine.js";
 
 // ─── GameEngine ───────────────────────────────────────────────────────────────
 
@@ -59,7 +66,7 @@ export class GameEngine {
   static fromRawJson(
     rawCase: unknown,
     rawConditions: unknown,
-    rawTests: unknown
+    rawTests: unknown,
   ): GameEngine {
     const caseDoc = loadCase(rawCase, rawConditions, rawTests);
     return new GameEngine(caseDoc);
@@ -109,27 +116,29 @@ export class GameEngine {
     this.assertNotTerminal(state);
 
     const activeChoice = state.progress.activeChoices.find(
-      (c) => c.id === choiceId
+      (c) => c.id === choiceId,
     );
     if (!activeChoice) {
       throw new EngineError(
         `Choice "${choiceId}" is not in the current active choices.`,
-        "CHOICE_NOT_AVAILABLE"
+        "CHOICE_NOT_AVAILABLE",
       );
     }
     if (activeChoice.disabled) {
       throw new EngineError(
         `Choice "${choiceId}" is present but disabled.`,
-        "CHOICE_NOT_AVAILABLE"
+        "CHOICE_NOT_AVAILABLE",
       );
     }
 
     // Look up the full choice definition from the current node.
-    const currentNode = this.caseDoc.nodesById.get(state.progress.currentNodeId);
+    const currentNode = this.caseDoc.nodesById.get(
+      state.progress.currentNodeId,
+    );
     if (!currentNode) {
       throw new EngineError(
         `Current node "${state.progress.currentNodeId}" not found.`,
-        "NODE_NOT_FOUND"
+        "NODE_NOT_FOUND",
       );
     }
 
@@ -137,7 +146,7 @@ export class GameEngine {
     if (!choice) {
       throw new EngineError(
         `Choice "${choiceId}" not found in node "${currentNode.id}".`,
-        "NODE_NOT_FOUND"
+        "NODE_NOT_FOUND",
       );
     }
 
@@ -187,8 +196,7 @@ export class GameEngine {
   /** Returns true if the session has reached a terminal state. */
   isTerminal(state: GameState): boolean {
     return (
-      state.session.phase === "terminal" ||
-      state.session.phase === "complete"
+      state.session.phase === "terminal" || state.session.phase === "complete"
     );
   }
 
@@ -225,7 +233,7 @@ export class GameEngine {
   static validateCase(
     rawCase: unknown,
     rawConditions: unknown,
-    rawTests: unknown
+    rawTests: unknown,
   ): ValidationResult {
     return validateCase(rawCase, rawConditions, rawTests);
   }
@@ -236,7 +244,7 @@ export class GameEngine {
     if (this.isTerminal(state)) {
       throw new EngineError(
         `Cannot process actions on a terminal session (phase: ${state.session.phase}).`,
-        "INVALID_STATE"
+        "INVALID_STATE",
       );
     }
   }

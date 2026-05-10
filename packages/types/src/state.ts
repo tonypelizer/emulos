@@ -27,7 +27,11 @@ export interface SessionState {
 
 // ─── Patient vitals ───────────────────────────────────────────────────────────
 
-export type ConsciousnessLevel = "alert" | "confused" | "drowsy" | "unresponsive";
+export type ConsciousnessLevel =
+  | "alert"
+  | "confused"
+  | "drowsy"
+  | "unresponsive";
 
 export interface BloodPressure {
   systolic: number;

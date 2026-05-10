@@ -72,7 +72,7 @@ export const ConditionExprSchema: z.ZodType<ConditionExpr> = z.lazy(() =>
     }),
     z.object({ op: z.literal("time_elapsed_gte"), minutes: z.number() }),
     z.object({ op: z.literal("game_phase"), phase: z.string() }),
-  ])
+  ]),
 );
 
 // ─── Effects ──────────────────────────────────────────────────────────────────
@@ -392,7 +392,7 @@ export type ConditionDefinition = z.infer<typeof ConditionDefinitionSchema>;
 
 export const ConditionsRegistrySchema = z.record(
   z.string(),
-  ConditionDefinitionSchema
+  ConditionDefinitionSchema,
 );
 export type ConditionsRegistry = z.infer<typeof ConditionsRegistrySchema>;
 
@@ -421,8 +421,5 @@ export const TestDefinitionSchema = z.object({
 
 export type TestDefinition = z.infer<typeof TestDefinitionSchema>;
 
-export const TestsRegistrySchema = z.record(
-  z.string(),
-  TestDefinitionSchema
-);
+export const TestsRegistrySchema = z.record(z.string(), TestDefinitionSchema);
 export type TestsRegistry = z.infer<typeof TestsRegistrySchema>;

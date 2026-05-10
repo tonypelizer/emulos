@@ -30,7 +30,7 @@ import type {
  */
 export function computeFinalScore(
   state: GameState,
-  caseDoc: IndexedCaseDocument
+  caseDoc: IndexedCaseDocument,
 ): GameState {
   const computed = calculateScore(state, caseDoc);
   return produce(state, (draft) => {
@@ -46,7 +46,7 @@ export function computeFinalScore(
  */
 export function buildScoreReport(
   state: GameState,
-  caseDoc: IndexedCaseDocument
+  caseDoc: IndexedCaseDocument,
 ): ScoreReport {
   const score = state.score.computed ?? calculateScore(state, caseDoc);
 
@@ -70,7 +70,7 @@ export function buildScoreReport(
 
 function calculateScore(
   state: GameState,
-  caseDoc: IndexedCaseDocument
+  caseDoc: IndexedCaseDocument,
 ): ComputedScore {
   const { scoring } = caseDoc.caseData;
 
@@ -81,7 +81,7 @@ function calculateScore(
   //    Time bonuses are thresholds: if game-time <= threshold, bonus applies.
   //    Sort ascending so the smallest (tightest) qualifying threshold wins first.
   const sortedBonuses = [...(scoring.timeBonuses ?? [])].sort(
-    (a, b) => a.gameTimeThreshold - b.gameTimeThreshold
+    (a, b) => a.gameTimeThreshold - b.gameTimeThreshold,
   );
   let timeBonusEarned = 0;
   for (const tb of sortedBonuses) {
@@ -105,7 +105,10 @@ function calculateScore(
   }
 
   // 4. Clamp to [0, maxScore] and round.
-  const final = Math.max(0, Math.min(scoring.maxScore, Math.round(afterModifiers)));
+  const final = Math.max(
+    0,
+    Math.min(scoring.maxScore, Math.round(afterModifiers)),
+  );
 
   // 5. Derive percentage and grade.
   const percentage =
@@ -140,7 +143,7 @@ function calculateScore(
 
 function deriveGrade(
   score: number,
-  thresholds: { S: number; A: number; B: number; C: number }
+  thresholds: { S: number; A: number; B: number; C: number },
 ): Grade {
   if (score >= thresholds.S) return "S";
   if (score >= thresholds.A) return "A";

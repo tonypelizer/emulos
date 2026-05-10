@@ -6,14 +6,7 @@
     "specialty": "emergency",
     "difficulty": "intermediate",
     "estimatedMinutes": 20,
-    "tags": [
-      "STEMI",
-      "ACS",
-      "ECG",
-      "reperfusion",
-      "cardiology",
-      "ACLS"
-    ],
+    "tags": ["STEMI", "ACS", "ECG", "reperfusion", "cardiology", "ACLS"],
     "author": "emulos-content-team",
     "expansionPack": null,
     "requiredEngineVersion": ">=1.0.0"

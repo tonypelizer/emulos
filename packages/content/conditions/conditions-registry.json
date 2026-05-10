@@ -24,21 +24,21 @@
     "isFatal": true,
     "vitalProgression": {
       "heartRate": [
-        { "atMinute": 0,   "value": 5 },
-        { "atMinute": 30,  "value": 15 },
-        { "atMinute": 60,  "value": 20 },
-        { "atMinute": 90,  "value": 10 },
+        { "atMinute": 0, "value": 5 },
+        { "atMinute": 30, "value": 15 },
+        { "atMinute": 60, "value": 20 },
+        { "atMinute": 90, "value": 10 },
         { "atMinute": 120, "value": -50 }
       ],
       "oxygenSaturation": [
-        { "atMinute": 0,   "value": 0 },
-        { "atMinute": 60,  "value": -4 },
-        { "atMinute": 90,  "value": -8 },
+        { "atMinute": 0, "value": 0 },
+        { "atMinute": 60, "value": -4 },
+        { "atMinute": 90, "value": -8 },
         { "atMinute": 120, "value": -15 }
       ],
       "painScore": [
-        { "atMinute": 0,   "value": 0 },
-        { "atMinute": 60,  "value": 1 },
+        { "atMinute": 0, "value": 0 },
+        { "atMinute": 60, "value": 1 },
         { "atMinute": 120, "value": 2 }
       ]
     },
@@ -64,7 +64,7 @@
     "isFatal": false,
     "vitalProgression": {
       "heartRate": [
-        { "atMinute": 0,   "value": 2 },
+        { "atMinute": 0, "value": 2 },
         { "atMinute": 120, "value": 8 }
       ]
     }
@@ -76,12 +76,12 @@
     "isFatal": true,
     "vitalProgression": {
       "heartRate": [
-        { "atMinute": 0,  "value": 20 },
+        { "atMinute": 0, "value": 20 },
         { "atMinute": 30, "value": 40 },
         { "atMinute": 60, "value": -60 }
       ],
       "oxygenSaturation": [
-        { "atMinute": 0,  "value": -5 },
+        { "atMinute": 0, "value": -5 },
         { "atMinute": 30, "value": -12 },
         { "atMinute": 60, "value": -25 }
       ]

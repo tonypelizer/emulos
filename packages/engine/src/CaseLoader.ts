@@ -41,7 +41,7 @@ import { ZodError } from "zod";
 export function loadCase(
   rawCase: unknown,
   rawConditions: unknown,
-  rawTests: unknown
+  rawTests: unknown,
 ): IndexedCaseDocument {
   const issues: ValidationIssue[] = [];
 
@@ -50,7 +50,7 @@ export function loadCase(
   const conditionsResult = safeParse(
     ConditionsRegistrySchema,
     rawConditions,
-    "conditionsRegistry"
+    "conditionsRegistry",
   );
   const testsResult = safeParse(TestsRegistrySchema, rawTests, "testsRegistry");
 
@@ -68,17 +68,24 @@ export function loadCase(
   const nodesById = new Map(Object.entries(caseData.nodes));
   const conditionsById = new Map(
     Object.entries(
-      conditionsResult.data as ReturnType<typeof ConditionsRegistrySchema.parse>
-    )
+      conditionsResult.data as ReturnType<
+        typeof ConditionsRegistrySchema.parse
+      >,
+    ),
   );
   const testsById = new Map(
     Object.entries(
-      testsResult.data as ReturnType<typeof TestsRegistrySchema.parse>
-    )
+      testsResult.data as ReturnType<typeof TestsRegistrySchema.parse>,
+    ),
   );
 
   // ── Step 3: Reference integrity ───────────────────────────────────────────
-  const refIssues = validateReferences(caseData, nodesById, conditionsById, testsById);
+  const refIssues = validateReferences(
+    caseData,
+    nodesById,
+    conditionsById,
+    testsById,
+  );
   if (refIssues.length > 0) {
     throw buildValidationError(refIssues);
   }
@@ -93,7 +100,7 @@ export function loadCase(
 export function validateCase(
   rawCase: unknown,
   rawConditions: unknown,
-  rawTests: unknown
+  rawTests: unknown,
 ): ValidationResult {
   try {
     loadCase(rawCase, rawConditions, rawTests);
@@ -102,13 +109,21 @@ export function validateCase(
     if (err instanceof EngineError && err.code === "CASE_VALIDATION_FAILED") {
       // Extract issues from the error message (serialized as JSON).
       try {
-        const payload = JSON.parse(err.message) as { issues: ValidationIssue[] };
+        const payload = JSON.parse(err.message) as {
+          issues: ValidationIssue[];
+        };
         return { valid: false, issues: payload.issues };
       } catch {
-        return { valid: false, issues: [{ path: "unknown", message: err.message }] };
+        return {
+          valid: false,
+          issues: [{ path: "unknown", message: err.message }],
+        };
       }
     }
-    return { valid: false, issues: [{ path: "unknown", message: String(err) }] };
+    return {
+      valid: false,
+      issues: [{ path: "unknown", message: String(err) }],
+    };
   }
 }
 
@@ -118,7 +133,7 @@ function validateReferences(
   caseData: CaseDocument,
   nodesById: Map<string, CaseDocument["nodes"][string]>,
   conditionsById: Map<string, unknown>,
-  testsById: Map<string, unknown>
+  testsById: Map<string, unknown>,
 ): ValidationIssue[] {
   const issues: ValidationIssue[] = [];
 
@@ -150,7 +165,10 @@ function validateReferences(
             });
           }
         }
-        if (effect.type === "reveal_condition" || effect.type === "add_condition") {
+        if (
+          effect.type === "reveal_condition" ||
+          effect.type === "add_condition"
+        ) {
           if (!conditionsById.has(effect.conditionId)) {
             issues.push({
               path: `nodes.${nodeId}.choices.${choice.id}.effects`,
@@ -212,7 +230,7 @@ type SafeParseResult<T> =
 function safeParse<T>(
   schema: { parse: (v: unknown) => T },
   value: unknown,
-  label: string
+  label: string,
 ): SafeParseResult<T> {
   try {
     return { data: schema.parse(value), issues: [] };
@@ -234,8 +252,5 @@ function safeParse<T>(
 }
 
 function buildValidationError(issues: ValidationIssue[]): EngineError {
-  return new EngineError(
-    JSON.stringify({ issues }),
-    "CASE_VALIDATION_FAILED"
-  );
+  return new EngineError(JSON.stringify({ issues }), "CASE_VALIDATION_FAILED");
 }

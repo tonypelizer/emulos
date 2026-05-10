@@ -21,7 +21,7 @@ import { resolvePath } from "../utils/paths.js";
  */
 export function evaluateCondition(
   expr: ConditionExpr,
-  state: GameState
+  state: GameState,
 ): boolean {
   switch (expr.op) {
     // ── Logical combinators ────────────────────────────────────────────────
@@ -60,7 +60,7 @@ export function evaluateCondition(
       const resolved = resolvePath(state, expr.path);
       if (typeof resolved !== "number") {
         console.warn(
-          `[RuleEngine] Expected number at path "${expr.path}", got ${typeof resolved}`
+          `[RuleEngine] Expected number at path "${expr.path}", got ${typeof resolved}`,
         );
         return false;
       }
@@ -80,20 +80,19 @@ export function evaluateCondition(
 
     case "test_resulted":
       return state.player.orderedTests.some(
-        (t) => t.testId === expr.testId && t.result !== null
+        (t) => t.testId === expr.testId && t.result !== null,
       );
 
     // ── Condition checks ───────────────────────────────────────────────────
     case "condition_active":
       return state.patient.conditions.active.some(
-        (c) => c.conditionId === expr.conditionId
+        (c) => c.conditionId === expr.conditionId,
       );
 
     case "condition_revealed":
       // Revealed = in the active list AND revealedAt is set
       return state.patient.conditions.active.some(
-        (c) =>
-          c.conditionId === expr.conditionId && c.revealedAt !== undefined
+        (c) => c.conditionId === expr.conditionId && c.revealedAt !== undefined,
       );
 
     // ── Time checks ────────────────────────────────────────────────────────
@@ -109,7 +108,7 @@ export function evaluateCondition(
       // TypeScript exhaustiveness: this branch should never be reached.
       const exhaustiveCheck: never = expr;
       console.warn(
-        `[RuleEngine] Unknown condition operator: ${(exhaustiveCheck as { op: string }).op}`
+        `[RuleEngine] Unknown condition operator: ${(exhaustiveCheck as { op: string }).op}`,
       );
       return false;
     }
@@ -122,7 +121,7 @@ export function evaluateCondition(
  */
 export function evaluateOptionalCondition(
   expr: ConditionExpr | null | undefined,
-  state: GameState
+  state: GameState,
 ): boolean {
   if (expr === null || expr === undefined) return true;
   return evaluateCondition(expr, state);
