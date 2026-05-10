@@ -1,0 +1,1240 @@
+{
+  "id": "confusion-001",
+  "version": "1.0.0",
+  "metadata": {
+    "title": "Not Herself Today",
+    "specialty": "emergency",
+    "difficulty": "beginner",
+    "estimatedMinutes": 20,
+    "tags": [
+      "delirium",
+      "UTI",
+      "altered mental status",
+      "confusion",
+      "elderly",
+      "infection",
+      "metabolic"
+    ],
+    "author": "emulos-content-team",
+    "expansionPack": null,
+    "requiredEngineVersion": ">=1.0.0"
+  },
+  "patient": {
+    "demographics": {
+      "name": "Margaret Osei",
+      "age": 78,
+      "sex": "female",
+      "weight": 61,
+      "occupation": "Retired schoolteacher"
+    },
+    "initialVitals": {
+      "heartRate": 102,
+      "bloodPressure": {
+        "systolic": 114,
+        "diastolic": 70
+      },
+      "respiratoryRate": 18,
+      "temperature": 38.3,
+      "oxygenSaturation": 97,
+      "consciousness": "confused",
+      "painScore": 2
+    },
+    "conditions": {
+      "active": [
+        {
+          "conditionId": "hypertension",
+          "severity": "mild"
+        },
+        {
+          "conditionId": "type2-diabetes",
+          "severity": "mild"
+        }
+      ],
+      "hidden": [
+        {
+          "conditionId": "early-sepsis",
+          "severity": "moderate"
+        }
+      ]
+    },
+    "riskFactors": [
+      "elderly",
+      "polypharmacy",
+      "baseline-mild-cognitive-impairment",
+      "type2-diabetes",
+      "recurrent-uti-history"
+    ]
+  },
+  "scoring": {
+    "maxScore": 1000,
+    "passingScore": 600,
+    "gradeThresholds": {
+      "S": 950,
+      "A": 850,
+      "B": 700,
+      "C": 600
+    },
+    "timeBonuses": [
+      {
+        "gameTimeThreshold": 40,
+        "bonus": 150,
+        "label": "Diagnosis confirmed and antibiotics given within 40 minutes — Exceptional"
+      },
+      {
+        "gameTimeThreshold": 70,
+        "bonus": 75,
+        "label": "Treatment within 70 minutes of assessment"
+      }
+    ],
+    "criticalActions": [
+      {
+        "actionId": "collateral-history",
+        "points": 75,
+        "isMandatory": true,
+        "label": "Collateral history obtained from family member"
+      },
+      {
+        "actionId": "glucose-checked",
+        "points": 100,
+        "isMandatory": true,
+        "label": "Blood glucose checked early to rule out hypoglycaemia"
+      },
+      {
+        "actionId": "urinalysis-ordered",
+        "points": 100,
+        "isMandatory": true,
+        "label": "Urinalysis ordered as first-line infectious screen"
+      },
+      {
+        "actionId": "bloods-drawn",
+        "points": 75,
+        "isMandatory": true,
+        "label": "Blood tests drawn (CBC, BMP, blood cultures)"
+      },
+      {
+        "actionId": "delirium-recognised",
+        "points": 100,
+        "isMandatory": true,
+        "label": "Acute delirium correctly identified (not dementia, not stroke)"
+      },
+      {
+        "actionId": "uti-diagnosis-confirmed",
+        "points": 150,
+        "isMandatory": true,
+        "label": "UTI-associated delirium correctly identified as primary diagnosis"
+      },
+      {
+        "actionId": "antibiotics-given",
+        "points": 200,
+        "isMandatory": true,
+        "label": "Appropriate antibiotics administered for UTI / urosepsis"
+      },
+      {
+        "actionId": "iv-fluids-given",
+        "points": 50,
+        "isMandatory": false,
+        "label": "IV fluid resuscitation initiated for tachycardia and likely dehydration"
+      },
+      {
+        "actionId": "medications-reviewed",
+        "points": 50,
+        "isMandatory": false,
+        "label": "Medication list reviewed for contributing causes"
+      }
+    ],
+    "modifiers": [
+      {
+        "id": "ct-before-metabolic-workup",
+        "description": "CT head ordered before completing basic metabolic and infectious workup — premature neurological investigation",
+        "type": "flat-delta",
+        "value": -100
+      },
+      {
+        "id": "antibiotics-delayed-over-60min",
+        "description": "Antibiotics delayed beyond 60 minutes — sepsis progressed unnecessarily",
+        "type": "flat-delta",
+        "value": -150
+      },
+      {
+        "id": "discharged-without-treatment",
+        "description": "Patient discharged or left without treatment for UTI delirium",
+        "type": "multiplier",
+        "value": 0.3
+      }
+    ]
+  },
+  "nodes": {
+    "start": {
+      "id": "start",
+      "type": "presentation",
+      "text": "The nursing handover at bay 4:\n\n'Mrs. Margaret Osei, 78, brought in by her daughter at 09:15. Daughter says Mum has been \"not herself\" since yesterday morning — confused, not making sense, very drowsy. She lives alone but her daughter visits daily. No falls, no head injury. No complaint of pain. She has hypertension and Type 2 diabetes. Takes several medications.'\n\nYou approach the bay. Mrs. Osei is sitting up in bed, looking at the ceiling. She glances at you when you speak but her answers are muddled and she can't tell you what day it is or where she is. She does not appear to be in distress.\n\nVitals: HR 102 | BP 114/70 | RR 18 | Temp 38.3°C | SpO₂ 97% | GCS 13 (E3 V4 M6)\n\nThe daughter is sitting beside her, looking worried.\n\nWhat is your first priority?",
+      "effects": [],
+      "choices": [
+        {
+          "id": "start-collateral-history",
+          "text": "Speak to the daughter immediately — collateral history is essential in any confused elderly patient",
+          "nextNodeId": "collateral-history",
+          "timeCost": 8,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "collateral-history",
+              "points": 75,
+              "reason": "Collateral history obtained early — essential in a patient who cannot give a reliable history",
+              "category": "critical-action"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "start-glucose-first",
+          "text": "Check a bedside blood glucose immediately — hypoglycaemia must be ruled out first",
+          "nextNodeId": "glucose-result",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "glucose-checked",
+              "points": 100,
+              "reason": "Blood glucose checked immediately — hypoglycaemia is a reversible and dangerous cause of acute confusion that must be excluded before anything else",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "glucose-checked"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "start-ct-head-immediately",
+          "text": "Order an urgent CT head — she could be having a stroke",
+          "nextNodeId": "premature-ct-node",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "ct-before-workup-penalty",
+              "points": -75,
+              "reason": "CT head ordered before any metabolic or infectious workup — premature. Acute confusion in an elderly patient is far more likely to be metabolic or infectious in origin. Stroke is certainly possible but should not be the first test.",
+              "category": "penalty"
+            },
+            {
+              "type": "apply_score_modifier",
+              "modifierId": "ct-before-metabolic-workup"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "start-examine-first",
+          "text": "Perform a focused neurological and physical examination",
+          "nextNodeId": "physical-exam",
+          "timeCost": 8,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "collateral-history": {
+      "id": "collateral-history",
+      "type": "history",
+      "text": "Mrs. Osei's daughter, Abena, tells you:\n\n'She's been different since yesterday. She kept asking where Dad was — he died six years ago. Last night she didn't sleep at all, she was calling out and she got up twice not knowing where she was. This morning she couldn't finish a sentence.\n\nShe was completely normal four days ago — we had lunch together. I noticed she had been drinking less water because it's been cold. She mentioned her urine smelled strange two days ago but said it was nothing.\n\nHer medications are: Amlodipine 5mg, Metformin 500mg BD, Lisinopril 5mg, and she was given Trimethoprim last month for a water infection but I'm not sure if she finished the course.'\n\nBASELINE: She is sharp and independent normally. This is ACUTE onset over 24–48 hours. She has no prior psychiatric history.",
+      "effects": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "collateral-obtained"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "acute-onset-confirmed"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "urinary-symptoms-reported"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "medications-known"
+        },
+        {
+          "type": "add_history_item",
+          "itemId": "collateral-acute-confusion"
+        },
+        {
+          "type": "add_history_item",
+          "itemId": "offensive-urine-reported"
+        }
+      ],
+      "choices": [
+        {
+          "id": "collateral-to-glucose",
+          "text": "Check a bedside blood glucose immediately",
+          "nextNodeId": "glucose-result",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "glucose-checked",
+              "points": 100,
+              "reason": "Blood glucose checked after collateral history — excellent structured approach",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "glucose-checked"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "glucose-checked"
+            }
+          }
+        },
+        {
+          "id": "collateral-to-exam",
+          "text": "Perform a focused physical and neurological examination",
+          "nextNodeId": "physical-exam",
+          "timeCost": 8,
+          "effects": [],
+          "condition": null
+        },
+        {
+          "id": "collateral-to-workup",
+          "text": "Proceed directly to investigations — urinary symptoms and fever point toward UTI",
+          "nextNodeId": "investigation-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "glucose-result": {
+      "id": "glucose-result",
+      "type": "result",
+      "text": "Bedside blood glucose: 6.2 mmol/L (112 mg/dL)\n\nWithin normal range. Hypoglycaemia is excluded as a cause of Mrs. Osei's confusion.\n\nThis is an important first step — in a diabetic patient on Metformin, hypoglycaemia or hyperglycaemia can present with acute confusion. Neither is the cause here.\n\nYour differential now needs to account for:\n• Infection (she has a fever and reported offensive urine)\n• Dehydration / electrolyte disturbance\n• Medication effects\n• Neurological cause (less likely given acute onset and fever — but not yet excluded)",
+      "effects": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "hypoglycaemia-excluded"
+        }
+      ],
+      "choices": [
+        {
+          "id": "glucose-to-collateral",
+          "text": "Speak to the daughter — I need collateral history",
+          "nextNodeId": "collateral-history",
+          "timeCost": 8,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "collateral-history",
+              "points": 75,
+              "reason": "Collateral history obtained — essential in a patient who cannot give a reliable history",
+              "category": "critical-action"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "collateral-obtained"
+            }
+          }
+        },
+        {
+          "id": "glucose-to-exam",
+          "text": "Perform a focused physical and neurological examination",
+          "nextNodeId": "physical-exam",
+          "timeCost": 8,
+          "effects": [],
+          "condition": null
+        },
+        {
+          "id": "glucose-to-workup",
+          "text": "Proceed to investigations",
+          "nextNodeId": "investigation-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "premature-ct-node": {
+      "id": "premature-ct-node",
+      "type": "decision",
+      "text": "The radiographer takes Mrs. Osei for a CT head. The scan takes 35 minutes.\n\nCT Head Report: No acute intracranial pathology. No haemorrhage. No large infarct. Age-appropriate cortical atrophy. No midline shift.\n\nThe scan is NORMAL.\n\nWhile she was in radiology, the nurse noted a urine sample in the bedpan — concentrated and cloudy with an offensive smell. Temperature has now risen to 38.7°C.\n\nYou have spent 35 minutes on a test that was negative. The infectious workup has not yet begun.\n\nThe nursing consultant walks past and raises an eyebrow. 'In a febrile 78-year-old with acute confusion — did the CT change your management?'",
+      "effects": [
+        {
+          "type": "advance_time",
+          "minutes": 35
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "ct-done-normal"
+        },
+        {
+          "type": "adjust_vital",
+          "vital": "temperature",
+          "delta": 0.4
+        }
+      ],
+      "choices": [
+        {
+          "id": "ct-to-workup",
+          "text": "Order urinalysis and bloods — CT was normal, infection now seems most likely",
+          "nextNodeId": "investigation-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        },
+        {
+          "id": "ct-to-collateral",
+          "text": "Take collateral history from the daughter before ordering more tests",
+          "nextNodeId": "collateral-history",
+          "timeCost": 8,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "collateral-history",
+              "points": 75,
+              "reason": "Collateral history obtained",
+              "category": "critical-action"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "collateral-obtained"
+            }
+          }
+        }
+      ]
+    },
+    "physical-exam": {
+      "id": "physical-exam",
+      "type": "examination",
+      "text": "Physical and Neurological Examination:\n\nGeneral: Elderly woman, flushed, mildly diaphoretic. Answers questions inconsistently. Cannot state the date, month, or where she is. Intermittently picks at the bedsheet. Fluctuating attention — she drifts mid-sentence.\n\nHands: No clubbing, no asterixis (no hepatic/uraemic flap).\nNeck: Supple — no neck stiffness, no photophobia (meningitis less likely).\nChest: Clear to auscultation bilaterally. No wheeze or crackles.\nAbdomen: Soft. Mild suprapubic tenderness on deep palpation. No guarding. Mild right costovertebral angle tenderness.\nSkin: No petechiae or purpuric rash. No jaundice.\n\nNeurological: Cranial nerves grossly intact. No focal motor or sensory deficit. No facial droop. No dysarthria. Arms and legs move symmetrically.\n\nKEY FINDINGS:\n• Acute FLUCTUATING confusion — not a fixed deficit\n• Suprapubic tenderness and right CVA tenderness\n• No focal neurological signs\n• Fever\n\nThis is a delirium picture with a strong localising clue pointing to a urinary source.",
+      "effects": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "exam-done"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "no-focal-neuro-signs"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "cva-tenderness-found"
+        },
+        {
+          "type": "add_examination_finding",
+          "findingId": "suprapubic-tenderness"
+        },
+        {
+          "type": "add_examination_finding",
+          "findingId": "cva-tenderness"
+        },
+        {
+          "type": "add_examination_finding",
+          "findingId": "fluctuating-confusion"
+        }
+      ],
+      "choices": [
+        {
+          "id": "exam-to-delirium-recognition",
+          "text": "This is an acute delirium — the fluctuating confusion, fever, and urinary symptoms together point to a medical cause",
+          "nextNodeId": "delirium-recognised",
+          "timeCost": 2,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "delirium-recognised",
+              "points": 100,
+              "reason": "Acute delirium correctly identified — not stroke, not baseline dementia. Fluctuating onset, no focal neurology, and fever all point to a reversible medical cause.",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "delirium-identified"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "exam-jump-to-stroke",
+          "text": "No focal deficit but I'm concerned about a stroke — I want a CT head",
+          "nextNodeId": "stroke-concern-node",
+          "timeCost": 0,
+          "effects": [],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "ct-done-normal"
+            }
+          }
+        },
+        {
+          "id": "exam-to-workup",
+          "text": "Proceed straight to investigations — I want urinalysis and bloods",
+          "nextNodeId": "investigation-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "stroke-concern-node": {
+      "id": "stroke-concern-node",
+      "type": "decision",
+      "text": "You are concerned about stroke as a cause of Mrs. Osei's confusion.\n\nThe ED consultant walks over and reviews your assessment.\n\n'Let's think through this. She has a fever, acute-onset fluctuating confusion, is 78 years old, and her daughter reports she smelled abnormal urine two days ago. There are no focal neurological findings on your exam. No facial droop, no arm weakness, no dysarthria.\n\nStroke absolutely belongs on the differential. But in an elderly patient with fever, fluctuating confusion, and possible urinary symptoms — what is the far more common cause?'\n\nShe's prompting you to think about base rates: delirium secondary to infection is vastly more common than new stroke presenting as isolated confusion without focal deficits.",
+      "effects": [],
+      "choices": [
+        {
+          "id": "stroke-reconsider-infection",
+          "text": "You're right — I'll rule out metabolic and infectious causes first before imaging",
+          "nextNodeId": "investigation-hub",
+          "timeCost": 0,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "delirium-recognised",
+              "points": 100,
+              "reason": "Correctly prioritised infectious/metabolic workup over premature neuroimaging after clinical prompting",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "delirium-identified"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "stroke-insist-ct",
+          "text": "I still want the CT head first — stroke can't wait",
+          "nextNodeId": "premature-ct-node",
+          "timeCost": 0,
+          "effects": [
+            {
+              "type": "apply_score_modifier",
+              "modifierId": "ct-before-metabolic-workup"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "ct-done-normal"
+            }
+          }
+        }
+      ]
+    },
+    "delirium-recognised": {
+      "id": "delirium-recognised",
+      "type": "decision",
+      "text": "ACUTE DELIRIUM IDENTIFIED.\n\nYour working differential for the CAUSE:\n1. Urinary tract infection / urosepsis — most likely (fever, CVA tenderness, offensive urine reported)\n2. Dehydration / electrolyte disturbance — likely contributing\n3. Medication side effect — possible (Lisinopril, Metformin; trimethoprim course possibly incomplete)\n4. Stroke — possible but no focal signs; less likely without lateralising findings\n\nDelirium is always medical until proven otherwise.\n\nKey teaching: Never attribute acute confusion to 'dementia' or 'baseline' without ruling out a reversible medical cause — especially in a patient whose daughter confirms this is acutely different from normal.\n\nWhat is your next priority?",
+      "effects": [],
+      "choices": [
+        {
+          "id": "delirium-to-investigation",
+          "text": "Order urinalysis, blood glucose, and a blood panel immediately",
+          "nextNodeId": "investigation-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        },
+        {
+          "id": "delirium-medications-review",
+          "text": "Review her medications carefully for contributing drug effects",
+          "nextNodeId": "medication-review",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "medications-reviewed",
+              "points": 50,
+              "reason": "Medications reviewed for contributing causes — important step in elderly confusion workup",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "medications-reviewed"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "medications-reviewed"
+            }
+          }
+        }
+      ]
+    },
+    "medication-review": {
+      "id": "medication-review",
+      "type": "history",
+      "text": "Medication review with the daughter's input:\n\n• Amlodipine 5mg OD — calcium channel blocker for hypertension. Can occasionally cause peripheral vasodilation and headache. Not a significant cause of delirium.\n• Metformin 500mg BD — can rarely cause lactic acidosis but this requires impaired renal function. Not a primary delirium cause at this dose.\n• Lisinopril 5mg OD — ACE inhibitor. Well tolerated. Unlikely to cause confusion.\n• Trimethoprim (incomplete course) — prescribed last month for urinary tract infection. The daughter is not sure if she completed the course. This is highly significant.\n\nCONCLUSION: No medication is primarily responsible for the delirium, but the incomplete antibiotic course is a red flag. It suggests a previous UTI that may not have been fully treated, with bacterial persistence or resistance now driving urosepsis.\n\nThis strongly reinforces UTI as the primary diagnosis.",
+      "effects": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "incomplete-antibiotic-course"
+        },
+        {
+          "type": "add_history_item",
+          "itemId": "prior-uti-incomplete-treatment"
+        }
+      ],
+      "choices": [
+        {
+          "id": "medreview-to-investigations",
+          "text": "Proceed to investigations — urinalysis and bloods",
+          "nextNodeId": "investigation-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "investigation-hub": {
+      "id": "investigation-hub",
+      "type": "decision",
+      "text": "What investigations do you want to order for Mrs. Osei?\n\nCurrent working differential:\n1. UTI / urosepsis causing delirium (most likely)\n2. Electrolyte disturbance / dehydration\n3. Medication effects\n4. Stroke (less likely — no focal signs)\n\nChoose wisely — time matters and her temperature is 38.3°C with HR 102.",
+      "effects": [],
+      "choices": [
+        {
+          "id": "order-urinalysis",
+          "text": "Order urinalysis with microscopy — first-line infectious screen for UTI",
+          "nextNodeId": "urinalysis-result",
+          "timeCost": 20,
+          "effects": [
+            {
+              "type": "order_test",
+              "testId": "urinalysis"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "urinalysis-ordered",
+              "points": 100,
+              "reason": "Urinalysis ordered as first-line infectious workup — exactly right in a febrile elderly patient with confusion and urinary symptoms",
+              "category": "critical-action"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "test_ordered",
+              "testId": "urinalysis"
+            }
+          }
+        },
+        {
+          "id": "order-bloods-panel",
+          "text": "Draw bloods: CBC, BMP, CRP, blood cultures ×2, lactate",
+          "nextNodeId": "bloods-result",
+          "timeCost": 15,
+          "effects": [
+            {
+              "type": "order_test",
+              "testId": "cbc"
+            },
+            {
+              "type": "order_test",
+              "testId": "bmp"
+            },
+            {
+              "type": "order_test",
+              "testId": "crp"
+            },
+            {
+              "type": "order_test",
+              "testId": "blood-cultures"
+            },
+            {
+              "type": "order_test",
+              "testId": "lactate"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "bloods-drawn",
+              "points": 75,
+              "reason": "Blood panel drawn — essential for assessing severity of infection, renal function, and electrolyte status",
+              "category": "critical-action"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "test_ordered",
+              "testId": "cbc"
+            }
+          }
+        },
+        {
+          "id": "order-glucose-from-hub",
+          "text": "Check bedside blood glucose",
+          "nextNodeId": "glucose-result",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "order_test",
+              "testId": "bmp"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "glucose-checked",
+              "points": 100,
+              "reason": "Blood glucose checked — essential first-line test in any confused diabetic patient",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "glucose-checked"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "glucose-checked"
+            }
+          }
+        },
+        {
+          "id": "order-ct-from-hub",
+          "text": "Order CT head — rule out structural cause",
+          "nextNodeId": "premature-ct-node",
+          "timeCost": 0,
+          "effects": [
+            {
+              "type": "apply_score_modifier",
+              "modifierId": "ct-before-metabolic-workup"
+            }
+          ],
+          "condition": {
+            "op": "and",
+            "conditions": [
+              {
+                "op": "not",
+                "condition": {
+                  "op": "has_knowledge",
+                  "knowledgeId": "ct-done-normal"
+                }
+              },
+              {
+                "op": "not",
+                "condition": {
+                  "op": "test_ordered",
+                  "testId": "urinalysis"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "workup-to-uti-diagnosis",
+          "text": "I have enough — this is a UTI causing delirium. Start treatment.",
+          "nextNodeId": "uti-diagnosis",
+          "timeCost": 0,
+          "effects": [],
+          "condition": {
+            "op": "and",
+            "conditions": [
+              {
+                "op": "test_resulted",
+                "testId": "urinalysis"
+              },
+              {
+                "op": "test_resulted",
+                "testId": "cbc"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "urinalysis-result": {
+      "id": "urinalysis-result",
+      "type": "result",
+      "text": "Urinalysis with Microscopy — RESULTED:\n\nAppearance: Cloudy, dark amber, offensive odour\nLeukocyte esterase: POSITIVE (++)\nNitrites: POSITIVE\nWBC: >50 per high-power field\nRed blood cells: 8 per hpf\nBacteria: Many\npH: 6.5 | Protein: Trace\n\nCONCLUSION: This is a highly positive urinalysis with multiple markers of significant urinary tract infection.\n\n[!] Leukocyte esterase and nitrites BOTH positive in a symptomatic patient is highly specific for UTI.\n[!] WBC >50/hpf indicates significant pyuria consistent with urosepsis.\n\nThis result, in the context of Mrs. Osei's fever (38.3°C), tachycardia (HR 102), and acute confusion, satisfies criteria for UROSEPSIS — a systemic response to urinary tract infection.\n\nYou now have your diagnosis.",
+      "effects": [
+        {
+          "type": "result_test",
+          "testId": "urinalysis"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "uti-confirmed-urinalysis"
+        },
+        {
+          "type": "reveal_condition",
+          "conditionId": "early-sepsis"
+        }
+      ],
+      "choices": [
+        {
+          "id": "urinalysis-to-diagnosis",
+          "text": "This is UTI-associated delirium / urosepsis — proceed to treatment",
+          "nextNodeId": "uti-diagnosis",
+          "timeCost": 0,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "uti-diagnosis-confirmed",
+              "points": 150,
+              "reason": "UTI-associated delirium correctly identified as the primary diagnosis",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "uti-diagnosed"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "urinalysis-order-bloods-also",
+          "text": "Draw bloods before treating — I want to check severity and renal function",
+          "nextNodeId": "bloods-result",
+          "timeCost": 15,
+          "effects": [
+            {
+              "type": "order_test",
+              "testId": "cbc"
+            },
+            {
+              "type": "order_test",
+              "testId": "bmp"
+            },
+            {
+              "type": "order_test",
+              "testId": "crp"
+            },
+            {
+              "type": "order_test",
+              "testId": "blood-cultures"
+            },
+            {
+              "type": "order_test",
+              "testId": "lactate"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "bloods-drawn",
+              "points": 75,
+              "reason": "Blood panel drawn to assess severity of urosepsis and guide antibiotic choice",
+              "category": "critical-action"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "test_ordered",
+              "testId": "cbc"
+            }
+          }
+        }
+      ]
+    },
+    "bloods-result": {
+      "id": "bloods-result",
+      "type": "result",
+      "text": "Blood Results — RESULTED:\n\nCBC:\n  WBC: 16.8 ×10⁹/L [↑] (reference 4.0–11.0) — leukocytosis, neutrophil predominance\n  Haemoglobin: 11.4 g/dL [↓ mild] — consistent with chronic mild anaemia of age\n  Platelets: 198 ×10⁹/L — normal\n\nBMP:\n  Na: 131 mmol/L [↓] — mild hyponatraemia (likely dehydration)\n  K: 3.9 mmol/L — normal\n  Creatinine: 128 μmol/L [↑] — mildly elevated (baseline unknown; possible AKI superimposed)\n  Urea: 11.4 mmol/L [↑] — raised, consistent with dehydration\n  Glucose: 7.1 mmol/L — mildly elevated, no hypoglycaemia\n\nCRP: 142 mg/L [↑↑] — significantly elevated, strongly suggestive of bacterial infection\nLactate: 2.3 mmol/L [↑ borderline] — borderline elevated; suggests early metabolic stress\n\nBlood cultures: ×2 sets sent — pending 48–72h\n\nSUMMARY: Leukocytosis, elevated CRP, mild AKI, hyponatraemia, and borderline lactate in the context of a highly positive urinalysis confirms UROSEPSIS. Renal function must be considered when choosing antibiotics.",
+      "effects": [
+        {
+          "type": "result_test",
+          "testId": "cbc"
+        },
+        {
+          "type": "result_test",
+          "testId": "bmp"
+        },
+        {
+          "type": "result_test",
+          "testId": "crp"
+        },
+        {
+          "type": "result_test",
+          "testId": "blood-cultures"
+        },
+        {
+          "type": "result_test",
+          "testId": "lactate"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "bloods-resulted"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "aki-noted"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "hyponatraemia-noted"
+        }
+      ],
+      "choices": [
+        {
+          "id": "bloods-to-diagnosis",
+          "text": "This confirms urosepsis — proceed to treatment",
+          "nextNodeId": "uti-diagnosis",
+          "timeCost": 0,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "uti-diagnosis-confirmed",
+              "points": 150,
+              "reason": "Urosepsis correctly identified from combined clinical picture and blood results",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "uti-diagnosed"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "uti-diagnosed"
+            }
+          }
+        },
+        {
+          "id": "bloods-order-urinalysis-also",
+          "text": "Order urinalysis now to confirm infectious source",
+          "nextNodeId": "urinalysis-result",
+          "timeCost": 20,
+          "effects": [
+            {
+              "type": "order_test",
+              "testId": "urinalysis"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "urinalysis-ordered",
+              "points": 100,
+              "reason": "Urinalysis ordered to localise infection source",
+              "category": "critical-action"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "test_ordered",
+              "testId": "urinalysis"
+            }
+          }
+        },
+        {
+          "id": "bloods-to-treatment-direct",
+          "text": "The bloods confirm sepsis — start antibiotics now, urine culture already sent",
+          "nextNodeId": "uti-diagnosis",
+          "timeCost": 0,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "uti-diagnosis-confirmed",
+              "points": 150,
+              "reason": "Urosepsis recognised from blood results and clinical context",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "uti-diagnosed"
+            }
+          ],
+          "condition": {
+            "op": "has_knowledge",
+            "knowledgeId": "uti-diagnosed"
+          }
+        }
+      ]
+    },
+    "uti-diagnosis": {
+      "id": "uti-diagnosis",
+      "type": "decision",
+      "text": "DIAGNOSIS: Urosepsis causing acute delirium.\n\nMrs. Osei meets sepsis criteria:\n• Suspected infection source confirmed (urinalysis positive)\n• Acute organ dysfunction: confusion (new), borderline AKI, lactate 2.3 mmol/L\n\nShe is haemodynamically borderline — HR 102, BP 114/70. Not yet in shock, but the trend is concerning, especially in an elderly patient with limited physiological reserve.\n\nHer prior trimethoprim course appears to have been incomplete, which may have selected for resistant organisms.\n\nWhat treatment do you want to initiate?",
+      "effects": [],
+      "choices": [
+        {
+          "id": "treatment-iv-abx-fluids",
+          "text": "IV co-amoxiclav (or local empirical antibiotic) + IV fluids 500 mL sodium chloride + urine culture sent",
+          "nextNodeId": "treatment-optimal",
+          "timeCost": 10,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "antibiotics-given",
+              "points": 200,
+              "reason": "Appropriate broad-spectrum IV antibiotics initiated for urosepsis — correct agent and route",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "iv-fluids-given",
+              "points": 50,
+              "reason": "IV fluid resuscitation initiated for tachycardia, dehydration, and borderline haemodynamics",
+              "category": "critical-action"
+            },
+            {
+              "type": "order_test",
+              "testId": "urine-culture"
+            },
+            {
+              "type": "adjust_vital",
+              "vital": "heartRate",
+              "delta": -12
+            },
+            {
+              "type": "resolve_condition",
+              "conditionId": "early-sepsis"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "treatment-oral-abx-only",
+          "text": "Oral trimethoprim — she had it before and it worked",
+          "nextNodeId": "oral-abx-suboptimal",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "oral-abx-urosepsis-penalty",
+              "points": -100,
+              "reason": "Oral trimethoprim is inappropriate for urosepsis: (1) IV route required for reliable bioavailability in a confused patient who may not swallow reliably, (2) prior incomplete trimethoprim course raises concern for resistance",
+              "category": "penalty"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "treatment-wait-cultures",
+          "text": "Wait for culture results before prescribing antibiotics",
+          "nextNodeId": "delayed-treatment-node",
+          "timeCost": 0,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "delayed-abx-cultures",
+              "points": -150,
+              "reason": "Waiting for culture results before treating urosepsis is dangerous — cultures take 48–72 hours and sepsis can progress to shock within hours. Empirical treatment should begin immediately.",
+              "category": "penalty"
+            },
+            {
+              "type": "apply_score_modifier",
+              "modifierId": "antibiotics-delayed-over-60min"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "oral-abx-suboptimal": {
+      "id": "oral-abx-suboptimal",
+      "type": "decision",
+      "text": "You prescribe oral trimethoprim.\n\nThe pharmacist on the ward flags your prescription: 'Doctor — she had trimethoprim last month and may not have finished the course. She is also confused, which makes reliable oral absorption uncertain. And her HR is 102 with a temperature of 38.3°C — this is urosepsis, not an uncomplicated UTI. IV route is recommended.'\n\nDo you want to revise your antibiotic plan?",
+      "effects": [],
+      "choices": [
+        {
+          "id": "oral-switch-to-iv",
+          "text": "Switch to IV co-amoxiclav and add IV fluids — the pharmacist is right",
+          "nextNodeId": "treatment-optimal",
+          "timeCost": 10,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "antibiotics-given",
+              "points": 200,
+              "reason": "IV antibiotics initiated after clinical prompting — timely correction",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "iv-fluids-given",
+              "points": 50,
+              "reason": "IV fluids initiated",
+              "category": "critical-action"
+            },
+            {
+              "type": "order_test",
+              "testId": "urine-culture"
+            },
+            {
+              "type": "adjust_vital",
+              "vital": "heartRate",
+              "delta": -10
+            },
+            {
+              "type": "resolve_condition",
+              "conditionId": "early-sepsis"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "oral-insist",
+          "text": "Stick with oral — she can swallow, I've seen her drink water",
+          "nextNodeId": "delayed-treatment-node",
+          "timeCost": 0,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "oral-abx-insist-penalty",
+              "points": -100,
+              "reason": "Persisting with oral trimethoprim in urosepsis despite pharmacist advice — inappropriate",
+              "category": "penalty"
+            },
+            {
+              "type": "apply_score_modifier",
+              "modifierId": "antibiotics-delayed-over-60min"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "delayed-treatment-node": {
+      "id": "delayed-treatment-node",
+      "type": "event",
+      "text": "[DETERIORATION] One hour passes. Mrs. Osei has received no IV antibiotics.\n\nThe nurse calls urgently: 'Doctor — she is worse. Very drowsy now, only opens her eyes to voice. HR 124, BP 96/58. Temperature 39.1°C. She looks grey.'\n\nShe is developing septic shock.\n\nThe senior consultant has been called. She walks in, takes one look, and starts issuing orders while looking at you: 'IV access — now. Fluids — now. Broad-spectrum antibiotics — now. What have we been doing for the last hour?'\n\nYou have lost critical time.",
+      "effects": [
+        {
+          "type": "advance_time",
+          "minutes": 60
+        },
+        {
+          "type": "adjust_vital",
+          "vital": "heartRate",
+          "delta": 22
+        },
+        {
+          "type": "adjust_vital",
+          "vital": "bloodPressure.systolic",
+          "delta": -18
+        },
+        {
+          "type": "adjust_vital",
+          "vital": "temperature",
+          "delta": 0.8
+        },
+        {
+          "type": "set_game_phase",
+          "phase": "terminal"
+        }
+      ],
+      "choices": [
+        {
+          "id": "delayed-now-treat",
+          "text": "Immediately start IV co-amoxiclav, IV fluids, and arrange HDU admission",
+          "nextNodeId": "outcome-complicated",
+          "timeCost": 10,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "antibiotics-given",
+              "points": 200,
+              "reason": "IV antibiotics finally started — but septic shock has already developed due to delay",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "iv-fluids-given",
+              "points": 50,
+              "reason": "IV fluids given",
+              "category": "critical-action"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "treatment-optimal": {
+      "id": "treatment-optimal",
+      "type": "decision",
+      "text": "IV co-amoxiclav commenced. 500 mL 0.9% NaCl running. Urine culture sent.\n\nMrs. Osei's observations after 20 minutes: HR 90 (↓ from 102), BP 118/72 (improved). Temperature 38.1°C.\n\nShe is starting to make more sense: 'Where is Abena?' — her daughter is right there. She recognises her.\n\nAbena grips her mother's hand. 'Mum — you're back.'\n\nRemaining to do:\n• Safe disposition — ward admission (not discharge)\n• Consider urine culture results for antibiotic de-escalation after 24–48h\n• Recheck renal function in 24h (mild AKI noted)\n• Ensure blood cultures resulted\n• Safety: falls risk, delirium precautions\n\nWhat is your disposition decision?",
+      "effects": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "treatment-initiated"
+        },
+        {
+          "type": "adjust_vital",
+          "vital": "temperature",
+          "delta": -0.2
+        }
+      ],
+      "choices": [
+        {
+          "id": "disposition-admit-medicine",
+          "text": "Admit to general medical ward — IV antibiotics, monitoring, renal recheck, delirium precautions",
+          "nextNodeId": "outcome-excellent",
+          "timeCost": 10,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "correct-admission",
+              "points": 50,
+              "reason": "Correctly admitted to medical ward — urosepsis in an elderly delirious patient cannot be managed at home",
+              "category": "critical-action"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "disposition-discharge-oral",
+          "text": "She looks better — discharge with oral antibiotics and GP follow-up",
+          "nextNodeId": "outcome-discharge-error",
+          "timeCost": 0,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "inappropriate-discharge-penalty",
+              "points": -200,
+              "reason": "Discharging an elderly urosepsis patient who presented with delirium, AKI, and borderline haemodynamics is unsafe — ongoing IV therapy, monitoring, and renal function tracking are required",
+              "category": "penalty"
+            },
+            {
+              "type": "apply_score_modifier",
+              "modifierId": "discharged-without-treatment"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "outcome-excellent": {
+      "id": "outcome-excellent",
+      "type": "outcome",
+      "text": "Mrs. Osei is admitted to the general medicine ward on bay 3. IV co-amoxiclav continues for 48 hours. She is kept hydrated with IV fluids until she can tolerate reliable oral intake.\n\nBy the following morning: she is sitting up, fully oriented, asking for tea and a biscuit. 'I'm sorry I caused such a fuss,' she tells Abena. 'I must have been confused.'\n\nAbena is crying.\n\n--- Results ---\nUrine culture: E. coli sensitive to co-amoxiclav — antibiotic de-escalated to oral amoxicillin-clavulanate at 48h\nRenal function (Day 2): Creatinine 101 μmol/L — AKI resolved with hydration\nSodium (Day 2): 137 mmol/L — hyponatraemia corrected\nDischarge: Day 3 with 5-day oral antibiotic course and GP letter\n\n[!] Teaching Point: Acute delirium in the elderly is a medical emergency. The most common reversible causes are infection, metabolic disturbance, and medications. Always take collateral history, check glucose first, and never attribute acute confusion to 'baseline dementia' without a full workup.",
+      "outcomeId": "excellent",
+      "effects": [],
+      "choices": []
+    },
+    "outcome-complicated": {
+      "id": "outcome-complicated",
+      "type": "outcome",
+      "text": "Mrs. Osei is transferred to the High Dependency Unit.\n\nSeptic shock is treated aggressively: IV co-amoxiclav, 30 mL/kg fluid resuscitation over 3 hours, vasopressor support initiated as BP continues to fall.\n\n--- Results ---\nBlood culture: E. coli — confirmed urosepsis\nAKI worsened to Stage 2 — nephrology review requested\nICU: 2 days, HDU: 3 further days\nDischarge: Day 8, requiring outpatient renal follow-up\n\nShe survives, but with impaired renal function that persists at discharge. The fall into septic shock was entirely preventable.\n\n[!] Teaching Point: One hour of delay in antibiotic therapy for sepsis is associated with a measurable increase in mortality and organ dysfunction. In an elderly patient with limited reserve, urosepsis escalates rapidly. Empirical treatment should not wait for culture results.",
+      "outcomeId": "complicated",
+      "effects": [],
+      "choices": []
+    },
+    "outcome-discharge-error": {
+      "id": "outcome-discharge-error",
+      "type": "outcome",
+      "text": "Mrs. Osei is discharged with a prescription for oral trimethoprim.\n\n14 hours later, Abena calls an ambulance. Her mother is unresponsive on the kitchen floor.\n\nShe is brought back to the ED in septic shock: BP 72/40, HR 136, GCS 9. She is intubated and transferred to ICU.\n\nBlood culture: E. coli — trimethoprim resistant (predicated by the incomplete prior course).\n\n--- Results ---\nICU: 9 days, intubated\nPost-ICU: Severe functional decline\nDischarge: care facility required; independent living no longer possible\nRenal function: chronic AKI — remains on fluid restriction\n\nShe survives, but the woman who walked into the ED today will not walk out of hospital.\n\n[!] Teaching Point: An elderly patient with urosepsis, AKI, delirium, and tachycardia is NEVER safe for discharge. Clinical improvement after IV fluids and initial antibiotics is not cure — it is stabilisation. Discharge must never be the easy option.",
+      "outcomeId": "discharge-error",
+      "effects": [],
+      "choices": []
+    }
+  }
+}
