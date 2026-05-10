@@ -105,5 +105,71 @@
       "values": { "EF_percent": 60 },
       "narrative": "Normal left ventricular function. Ejection fraction 60%. No significant valvular abnormality."
     }
+  },
+  "urine-pregnancy-test": {
+    "id": "urine-pregnancy-test",
+    "name": "Urine Pregnancy Test (hCG)",
+    "category": "obstetric",
+    "defaultResultTime": 5,
+    "genericResult": {
+      "summary": "Urine hCG: Positive",
+      "values": { "result": "positive" },
+      "narrative": "Urine pregnancy test is positive, confirming the presence of hCG. Sensitivity threshold ~25 mIU/mL."
+    }
+  },
+  "serum-beta-hcg": {
+    "id": "serum-beta-hcg",
+    "name": "Serum β-hCG (Quantitative)",
+    "category": "obstetric",
+    "defaultResultTime": 45,
+    "genericResult": {
+      "summary": "Serum β-hCG resulted",
+      "values": { "hCG_mIU_mL": 1800 },
+      "narrative": "Quantitative serum β-hCG is 1,800 mIU/mL. This is below the typical transvaginal ultrasound discriminatory zone (~3,000 mIU/mL), but a gestational sac should be visible at this level with TVUS if IUP."
+    }
+  },
+  "transvaginal-ultrasound": {
+    "id": "transvaginal-ultrasound",
+    "name": "Transvaginal Ultrasound (TVUS)",
+    "category": "obstetric",
+    "defaultResultTime": 30,
+    "genericResult": {
+      "summary": "TVUS resulted",
+      "values": {},
+      "narrative": "Transvaginal ultrasound has been performed."
+    }
+  },
+  "transabdominal-ultrasound": {
+    "id": "transabdominal-ultrasound",
+    "name": "Transabdominal Ultrasound (TAUS)",
+    "category": "obstetric",
+    "defaultResultTime": 20,
+    "genericResult": {
+      "summary": "TAUS resulted",
+      "values": {},
+      "narrative": "Transabdominal ultrasound has been performed."
+    }
+  },
+  "rh-blood-type": {
+    "id": "rh-blood-type",
+    "name": "Blood Type and Rh Factor",
+    "category": "hematology",
+    "defaultResultTime": 30,
+    "genericResult": {
+      "summary": "Blood type and Rh: O negative",
+      "values": { "bloodType": "O", "Rh": "negative" },
+      "narrative": "Patient is O negative. Rh immunisation prophylaxis (Rho(D) immune globulin) is indicated after any bleeding event in an Rh-negative pregnancy."
+    }
+  },
+  "progesterone-level": {
+    "id": "progesterone-level",
+    "name": "Serum Progesterone",
+    "category": "obstetric",
+    "defaultResultTime": 60,
+    "genericResult": {
+      "summary": "Progesterone resulted",
+      "values": { "progesterone_ng_mL": 8 },
+      "narrative": "Serum progesterone 8 ng/mL. Levels <5 ng/mL suggest non-viable pregnancy; >25 ng/mL strongly suggests viable IUP. This intermediate value is non-diagnostic alone."
+    }
   }
 }

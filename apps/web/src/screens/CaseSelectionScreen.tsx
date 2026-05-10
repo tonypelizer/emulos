@@ -20,6 +20,16 @@ const CASES: CaseListing[] = [
     chiefComplaint: "54M — crushing chest pain, diaphoresis, radiation to jaw",
     tags: ["STEMI", "ACS", "ECG", "Reperfusion"],
   },
+  {
+    id: "ectopic-pregnancy-001",
+    title: "Pain at 7 Weeks",
+    specialty: "OB/GYN",
+    difficulty: "intermediate",
+    estimatedMinutes: 25,
+    chiefComplaint:
+      "28F — 7 weeks amenorrhoea, right pelvic pain, vaginal spotting",
+    tags: ["Ectopic Pregnancy", "First Trimester", "TVUS", "β-hCG"],
+  },
 ];
 
 const DIFFICULTY_LABEL: Record<CaseListing["difficulty"], string> = {

@@ -16,6 +16,7 @@
 
 // JSON imports — Vite/Vitest resolve these natively. Node ≥ 22 uses --experimental-import-meta-resolve.
 import chestPain001 from "../cases/general/chest-pain-001.json";
+import ectopicPregnancy001 from "../cases/obgyn/ectopic-pregnancy-001.json";
 import conditionsRegistryJson from "../conditions/conditions-registry.json";
 import testsRegistryJson from "../tests-catalog/tests-registry.json";
 
@@ -32,6 +33,7 @@ export const testsRegistry: unknown = testsRegistryJson;
 /** Map of caseId → raw case JSON. Add new cases here as they are authored. */
 const CASE_REGISTRY: Record<string, unknown> = {
   "chest-pain-001": chestPain001,
+  "ectopic-pregnancy-001": ectopicPregnancy001,
 };
 
 /**

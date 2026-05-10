@@ -94,5 +94,59 @@
         "eventNodeId": "vf-arrest-event"
       }
     ]
+  },
+  "ectopic-pregnancy": {
+    "id": "ectopic-pregnancy",
+    "name": "Ectopic Pregnancy (Tubal)",
+    "category": "obstetric",
+    "isFatal": true,
+    "vitalProgression": {
+      "heartRate": [
+        { "atMinute": 0, "value": 10 },
+        { "atMinute": 30, "value": 20 },
+        { "atMinute": 60, "value": 35 }
+      ],
+      "bloodPressure.systolic": [
+        { "atMinute": 0, "value": -8 },
+        { "atMinute": 30, "value": -20 },
+        { "atMinute": 60, "value": -45 }
+      ],
+      "oxygenSaturation": [
+        { "atMinute": 0, "value": 0 },
+        { "atMinute": 30, "value": -2 },
+        { "atMinute": 60, "value": -6 }
+      ],
+      "painScore": [
+        { "atMinute": 0, "value": 0 },
+        { "atMinute": 30, "value": 2 },
+        { "atMinute": 60, "value": 4 }
+      ]
+    },
+    "thresholdEvents": [
+      {
+        "vital": "bloodPressure.systolic",
+        "operator": "lte",
+        "value": 80,
+        "eventNodeId": "haemorrhagic-shock-event"
+      }
+    ]
+  },
+  "intraperitoneal-haemorrhage": {
+    "id": "intraperitoneal-haemorrhage",
+    "name": "Intraperitoneal Haemorrhage",
+    "category": "obstetric",
+    "isFatal": true,
+    "vitalProgression": {
+      "heartRate": [
+        { "atMinute": 0, "value": 25 },
+        { "atMinute": 20, "value": 50 },
+        { "atMinute": 40, "value": -80 }
+      ],
+      "bloodPressure.systolic": [
+        { "atMinute": 0, "value": -20 },
+        { "atMinute": 20, "value": -50 },
+        { "atMinute": 40, "value": -80 }
+      ]
+    }
   }
 }
