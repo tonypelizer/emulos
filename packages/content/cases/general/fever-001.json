@@ -47,10 +47,7 @@
         }
       ]
     },
-    "riskFactors": [
-      "active-smoker",
-      "asthma-mild-intermittent"
-    ]
+    "riskFactors": ["active-smoker", "asthma-mild-intermittent"]
   },
   "scoring": {
     "maxScore": 1000,
@@ -575,7 +572,7 @@
               "actionId": "viral-panel-ordered",
               "points": 25,
               "reason": "Viral panel is reasonable to help guide antibiotic stewardship \u2014 but should not delay CXR or bloods",
-              "category": "bonus"
+              "category": "optional-bonus"
             }
           ],
           "condition": {
@@ -954,7 +951,7 @@
               "actionId": "sputum-culture-sent",
               "points": 30,
               "reason": "Sputum culture sent before handover \u2014 good antibiotic stewardship to enable de-escalation if culture returns with sensitivities",
-              "category": "bonus"
+              "category": "optional-bonus"
             }
           ],
           "condition": null
