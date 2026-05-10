@@ -21,6 +21,16 @@ const CASES: CaseListing[] = [
     tags: ["STEMI", "ACS", "ECG", "Reperfusion"],
   },
   {
+    id: "fever-001",
+    title: "Not Just a Cold",
+    specialty: "General Medicine",
+    difficulty: "beginner",
+    estimatedMinutes: 20,
+    chiefComplaint:
+      "34M — 3-day fever, productive cough, pleuritic chest pain, SpO₂ 94%",
+    tags: ["Pneumonia", "CAP", "Fever", "Antibiotics", "Sepsis"],
+  },
+  {
     id: "ectopic-pregnancy-001",
     title: "Pain at 7 Weeks",
     specialty: "OB/GYN",

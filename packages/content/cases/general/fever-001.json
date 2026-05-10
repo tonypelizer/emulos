@@ -1,0 +1,1108 @@
+{
+  "id": "fever-001",
+  "version": "1.0.0",
+  "metadata": {
+    "title": "Not Just a Cold",
+    "specialty": "general",
+    "difficulty": "beginner",
+    "estimatedMinutes": 20,
+    "tags": [
+      "pneumonia",
+      "fever",
+      "infection",
+      "antibiotics",
+      "chest X-ray",
+      "sepsis"
+    ],
+    "author": "emulos-content-team",
+    "expansionPack": null,
+    "requiredEngineVersion": ">=1.0.0"
+  },
+  "patient": {
+    "demographics": {
+      "name": "Daniel Okafor",
+      "age": 34,
+      "sex": "male",
+      "weight": 78,
+      "occupation": "Secondary school teacher"
+    },
+    "initialVitals": {
+      "heartRate": 104,
+      "bloodPressure": {
+        "systolic": 118,
+        "diastolic": 76
+      },
+      "respiratoryRate": 22,
+      "temperature": 38.9,
+      "oxygenSaturation": 94,
+      "consciousness": "alert",
+      "painScore": 4
+    },
+    "conditions": {
+      "active": [],
+      "hidden": [
+        {
+          "conditionId": "community-acquired-pneumonia",
+          "severity": "moderate"
+        }
+      ]
+    },
+    "riskFactors": [
+      "active-smoker",
+      "asthma-mild-intermittent"
+    ]
+  },
+  "scoring": {
+    "maxScore": 1000,
+    "passingScore": 600,
+    "gradeThresholds": {
+      "S": 950,
+      "A": 850,
+      "B": 700,
+      "C": 600
+    },
+    "timeBonuses": [
+      {
+        "gameTimeThreshold": 40,
+        "bonus": 150,
+        "label": "Antibiotics within 40 minutes of triage \u2014 Exceptional"
+      },
+      {
+        "gameTimeThreshold": 60,
+        "bonus": 75,
+        "label": "Antibiotics within 60 minutes \u2014 within local CAP guideline target"
+      }
+    ],
+    "criticalActions": [
+      {
+        "actionId": "cxr-ordered",
+        "points": 150,
+        "isMandatory": true,
+        "label": "Chest X-ray obtained"
+      },
+      {
+        "actionId": "cxr-interpreted-correctly",
+        "points": 75,
+        "isMandatory": true,
+        "label": "CXR correctly interpreted as consolidation / pneumonia"
+      },
+      {
+        "actionId": "oxygen-given",
+        "points": 50,
+        "isMandatory": true,
+        "label": "Supplemental oxygen applied for SpO\u2082 < 95%"
+      },
+      {
+        "actionId": "bloods-drawn",
+        "points": 75,
+        "isMandatory": true,
+        "label": "Blood tests drawn (CBC, CMP, blood cultures)"
+      },
+      {
+        "actionId": "blood-cultures-before-abx",
+        "points": 100,
+        "isMandatory": true,
+        "label": "Blood cultures collected before antibiotics administered"
+      },
+      {
+        "actionId": "severity-scored",
+        "points": 75,
+        "isMandatory": false,
+        "label": "CAP severity assessed (CURB-65 or clinical equivalent)"
+      },
+      {
+        "actionId": "antibiotics-given",
+        "points": 300,
+        "isMandatory": true,
+        "label": "Appropriate antibiotics administered"
+      },
+      {
+        "actionId": "iv-fluids-given",
+        "points": 50,
+        "isMandatory": false,
+        "label": "IV fluids given for tachycardia and dehydration"
+      },
+      {
+        "actionId": "admission-decision",
+        "points": 75,
+        "isMandatory": true,
+        "label": "Correct disposition decision (admit for IV antibiotics)"
+      }
+    ],
+    "modifiers": [
+      {
+        "id": "antibiotics-without-cultures",
+        "description": "Antibiotics administered before blood cultures were drawn \u2014 cultures rendered non-diagnostic",
+        "type": "flat-delta",
+        "value": -150
+      },
+      {
+        "id": "discharged-inappropriately",
+        "description": "Patient discharged with moderate CAP and SpO\u2082 94% without adequate treatment",
+        "type": "multiplier",
+        "value": 0.4
+      },
+      {
+        "id": "sepsis-developed",
+        "description": "Sepsis developed due to delayed recognition or treatment",
+        "type": "flat-delta",
+        "value": -200
+      }
+    ]
+  },
+  "nodes": {
+    "start": {
+      "id": "start",
+      "type": "presentation",
+      "text": "Triage handover:\n\nDaniel Okafor, 34, a secondary school teacher, walks into the ED. He looks unwell \u2014 flushed, slightly hunched, and breathing a little harder than normal.\n\nHe tells triage: 'I've had a fever for three days and a really bad cough. I thought it was just a cold but I'm not getting better.'\n\nTriage vitals:\nHR 104 | BP 118/76 | RR 22 | Temp 38.9\u00b0C | SpO\u2082 94% | Pain 4/10\n\nHe is placed in an acute bay. You are the ED registrar.\n\nWhat is your first priority?",
+      "effects": [],
+      "choices": [
+        {
+          "id": "start-oxygen-then-hx",
+          "text": "Apply oxygen immediately (SpO\u2082 94%), then take a focused history",
+          "nextNodeId": "history-hub",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "oxygen-given",
+              "points": 50,
+              "reason": "Supplemental oxygen applied promptly for SpO\u2082 94% \u2014 correct first step",
+              "category": "critical-action"
+            },
+            {
+              "type": "adjust_vital",
+              "vital": "oxygenSaturation",
+              "delta": 2
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "oxygen-applied"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "start-history-only",
+          "text": "Take a focused history first before doing anything else",
+          "nextNodeId": "history-hub",
+          "timeCost": 0,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "oxygen-delayed",
+              "points": -25,
+              "reason": "A patient with SpO\u2082 94% and RR 22 should receive supplemental oxygen before you start the history",
+              "category": "penalty"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "start-order-cxr-immediately",
+          "text": "Order a chest X-ray immediately \u2014 the clinical picture suggests a pulmonary cause",
+          "nextNodeId": "history-hub",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "order_test",
+              "testId": "chest-xray"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "cxr-ordered",
+              "points": 150,
+              "reason": "Chest X-ray ordered on first presentation \u2014 the most important initial test in undifferentiated fever + respiratory symptoms",
+              "category": "critical-action"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "start-bloods-only",
+          "text": "Draw bloods and request an FBC and CRP immediately",
+          "nextNodeId": "history-hub",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "order_test",
+              "testId": "cbc"
+            },
+            {
+              "type": "order_test",
+              "testId": "crp"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "bloods-only-no-o2-cxr",
+              "points": -30,
+              "reason": "Bloods are appropriate but oxygen (SpO\u2082 94%) and a CXR should take priority in a patient with fever and respiratory compromise",
+              "category": "penalty"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "history-hub": {
+      "id": "history-hub",
+      "type": "history",
+      "text": "Daniel is cooperative. He has been sick for 3 days and is clearly not well.\n\nYou need a focused history. What do you want to explore?",
+      "effects": [],
+      "choices": [
+        {
+          "id": "ask-respiratory",
+          "text": "Respiratory symptoms \u2014 cough, sputum, pleuritic pain, dyspnoea",
+          "nextNodeId": "history-respiratory",
+          "timeCost": 4,
+          "effects": [],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "resp-hx-gathered"
+            }
+          }
+        },
+        {
+          "id": "ask-systemic",
+          "text": "Systemic illness \u2014 fever pattern, rigors, sweats, myalgia, recent travel or contacts",
+          "nextNodeId": "history-systemic",
+          "timeCost": 4,
+          "effects": [],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "systemic-hx-gathered"
+            }
+          }
+        },
+        {
+          "id": "ask-urinary",
+          "text": "Urinary symptoms \u2014 dysuria, frequency, loin pain (to screen for UTI/pyelonephritis)",
+          "nextNodeId": "history-urinary",
+          "timeCost": 3,
+          "effects": [],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "urinary-hx-gathered"
+            }
+          }
+        },
+        {
+          "id": "ask-pmhx",
+          "text": "Past medical history, medications, allergies, smoking",
+          "nextNodeId": "history-pmhx",
+          "timeCost": 3,
+          "effects": [],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "pmhx-gathered"
+            }
+          }
+        },
+        {
+          "id": "history-to-workup",
+          "text": "I have enough history \u2014 proceed to investigations",
+          "nextNodeId": "investigation-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "history-respiratory": {
+      "id": "history-respiratory",
+      "type": "history",
+      "text": "Daniel's respiratory history:\n\n\u2022 Productive cough for 3 days \u2014 initially dry, now producing yellow-green sputum\n\u2022 Right-sided sharp chest pain that worsens with deep breathing and coughing (pleuritic)\n\u2022 Progressively worsening breathlessness \u2014 he's been winded walking to the bathroom\n\u2022 No haemoptysis\n\u2022 No wheeze (his asthma has been well-controlled for years)\n\nThis history is strongly suggestive of a lower respiratory tract infection \u2014 the pleuritic component and productive purulent sputum raise concern for pneumonia over viral bronchitis.",
+      "effects": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "resp-hx-gathered"
+        },
+        {
+          "type": "add_history_item",
+          "itemId": "pleuritic-chest-pain"
+        },
+        {
+          "type": "add_history_item",
+          "itemId": "purulent-sputum"
+        }
+      ],
+      "choices": [
+        {
+          "id": "resp-to-hub",
+          "text": "Continue history",
+          "nextNodeId": "history-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "history-systemic": {
+      "id": "history-systemic",
+      "type": "history",
+      "text": "Systemic history:\n\n\u2022 Fever started 72 hours ago \u2014 initially 37.8\u00b0C, now 38.9\u00b0C at triage\n\u2022 One episode of rigors on night 1\n\u2022 Moderate sweats, particularly at night\n\u2022 Significant myalgia and fatigue \u2014 he could not go to work yesterday\n\u2022 No recent travel (never left the country)\n\u2022 No sick contacts that he is aware of\n\u2022 Loss of appetite, very poor oral intake over 2 days\n\nNo rash, no neck stiffness, no headache \u2014 making meningitis less likely. The fever duration and rigors are more characteristic of bacterial than purely viral illness.",
+      "effects": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "systemic-hx-gathered"
+        },
+        {
+          "type": "add_history_item",
+          "itemId": "fever-3-days-rigors"
+        }
+      ],
+      "choices": [
+        {
+          "id": "systemic-to-hub",
+          "text": "Continue history",
+          "nextNodeId": "history-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "history-urinary": {
+      "id": "history-urinary",
+      "type": "history",
+      "text": "Urinary history:\n\n\u2022 No dysuria\n\u2022 No frequency or urgency\n\u2022 No haematuria\n\u2022 No loin or flank pain\n\u2022 Urine looks normal coloured (though slightly dark \u2014 he admits he has been drinking less)\n\nThis makes a urinary source (UTI, pyelonephritis) significantly less likely. The absence of urinary symptoms in a male with fever and respiratory symptoms should shift your differential firmly toward a respiratory cause.",
+      "effects": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "urinary-hx-gathered"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "uti-unlikely"
+        }
+      ],
+      "choices": [
+        {
+          "id": "urinary-to-hub",
+          "text": "Continue history",
+          "nextNodeId": "history-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "history-pmhx": {
+      "id": "history-pmhx",
+      "type": "history",
+      "text": "Past medical and social history:\n\n\u2022 Mild intermittent asthma \u2014 last used salbutamol inhaler 3 months ago, well-controlled\n\u2022 No other significant medical history\n\u2022 Medications: salbutamol PRN (not taken recently)\n\u2022 NKDA\n\u2022 Smoker \u2014 10 cigarettes/day for 12 years (approximately 6 pack-years)\n\u2022 No alcohol or recreational drug use\n\u2022 Lives alone in a flat; has not had flu vaccination this year\n\nSmoking is a significant risk factor for pneumococcal pneumonia. His asthma, while mild, means respiratory compromise from pneumonia could escalate quickly.",
+      "effects": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "pmhx-gathered"
+        },
+        {
+          "type": "add_history_item",
+          "itemId": "smoker-asthma-background"
+        }
+      ],
+      "choices": [
+        {
+          "id": "pmhx-to-hub",
+          "text": "Continue history",
+          "nextNodeId": "history-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "exam-node": {
+      "id": "exam-node",
+      "type": "examination",
+      "text": "Examination findings:\n\nGeneral: Alert but flushed, mildly distressed, splinting respirations on the right\nHands: No clubbing, no peripheral cyanosis\nNeck: No cervical lymphadenopathy, no meningism\n\nChest:\n\u2022 Inspection: Reduced expansion on the right\n\u2022 Percussion: Dull in the right lower zone\n\u2022 Auscultation: Bronchial breath sounds and increased vocal resonance in the right lower zone; fine inspiratory crackles at the right base; reduced air entry right lower lobe\n\u2022 No wheeze\n\nAbdomen: Soft, non-tender\nNo skin rash; no peripheral oedema\n\nCLINICAL IMPRESSION: Right lower lobe consolidation \u2014 this is a classic examination for pneumonia. You need imaging to confirm.",
+      "effects": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "exam-done"
+        },
+        {
+          "type": "add_examination_finding",
+          "findingId": "right-lower-lobe-consolidation"
+        }
+      ],
+      "choices": [
+        {
+          "id": "exam-to-investigations",
+          "text": "Proceed to investigations",
+          "nextNodeId": "investigation-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "investigation-hub": {
+      "id": "investigation-hub",
+      "type": "decision",
+      "text": "You have enough clinical information to direct your investigation. Daniel remains on supplemental oxygen if you applied it. SpO\u2082 94\u201396% on air.\n\nCurrent working differential:\n1. Community-acquired pneumonia (most likely)\n2. Viral LRTI / bronchitis (possible but less likely given purulent sputum, rigors, exam)\n3. Urinary source (very unlikely \u2014 no urinary symptoms)\n\nWhat investigations do you want to order?",
+      "effects": [],
+      "choices": [
+        {
+          "id": "order-cxr",
+          "text": "Order a chest X-ray (PA erect)",
+          "nextNodeId": "cxr-result",
+          "timeCost": 30,
+          "effects": [
+            {
+              "type": "order_test",
+              "testId": "chest-xray"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "cxr-ordered",
+              "points": 150,
+              "reason": "Chest X-ray ordered \u2014 essential investigation in fever with respiratory symptoms",
+              "category": "critical-action"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "test_ordered",
+              "testId": "chest-xray"
+            }
+          }
+        },
+        {
+          "id": "order-bloods-package",
+          "text": "Draw bloods: CBC, BMP, CRP, blood cultures \u00d72, procalcitonin, lactate",
+          "nextNodeId": "bloods-result",
+          "timeCost": 15,
+          "effects": [
+            {
+              "type": "order_test",
+              "testId": "cbc"
+            },
+            {
+              "type": "order_test",
+              "testId": "bmp"
+            },
+            {
+              "type": "order_test",
+              "testId": "crp"
+            },
+            {
+              "type": "order_test",
+              "testId": "blood-cultures"
+            },
+            {
+              "type": "order_test",
+              "testId": "procalcitonin"
+            },
+            {
+              "type": "order_test",
+              "testId": "lactate"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "bloods-drawn",
+              "points": 75,
+              "reason": "Comprehensive bloods drawn including blood cultures \u2014 essential workup for fever with possible bacterial infection",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "blood-cultures-before-abx",
+              "points": 100,
+              "reason": "Blood cultures collected before antibiotics \u2014 correct practice that preserves microbiological data",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "blood-cultures-drawn"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "blood-cultures-drawn"
+            }
+          }
+        },
+        {
+          "id": "order-urinalysis",
+          "text": "Order a urinalysis (to exclude urinary source)",
+          "nextNodeId": "urinalysis-result",
+          "timeCost": 20,
+          "effects": [
+            {
+              "type": "order_test",
+              "testId": "urinalysis"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "urinalysis-low-yield",
+              "points": -20,
+              "reason": "Urinalysis has very low yield in a male with no urinary symptoms and a clear respiratory history \u2014 this delays the higher-priority workup",
+              "category": "penalty"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "test_ordered",
+              "testId": "urinalysis"
+            }
+          }
+        },
+        {
+          "id": "order-viral-panel",
+          "text": "Order a respiratory viral panel (influenza, COVID-19)",
+          "nextNodeId": "viral-panel-result",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "order_test",
+              "testId": "respiratory-viral-panel"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "viral-panel-ordered",
+              "points": 25,
+              "reason": "Viral panel is reasonable to help guide antibiotic stewardship \u2014 but should not delay CXR or bloods",
+              "category": "bonus"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "test_ordered",
+              "testId": "respiratory-viral-panel"
+            }
+          }
+        },
+        {
+          "id": "go-to-treatment-early",
+          "text": "I have enough information \u2014 proceed to treatment decisions",
+          "nextNodeId": "treatment-decision",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "urinalysis-result": {
+      "id": "urinalysis-result",
+      "type": "result",
+      "text": "URINALYSIS RESULT\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\nColour: Amber (concentrated)\nLeukocyte esterase: NEGATIVE\nNitrites: NEGATIVE\nWBC: 0\u20132 per high-power field (normal)\nNo casts, no blood, no protein of significance\n\nThis is a NORMAL urinalysis. There is no evidence of urinary tract infection.\n\nAs expected from the history, the urinary source has been excluded. The fever and systemic illness must be attributed elsewhere \u2014 your clinical suspicion should remain firmly on the respiratory tract.",
+      "effects": [
+        {
+          "type": "result_test",
+          "testId": "urinalysis"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "uti-excluded-on-ua"
+        }
+      ],
+      "choices": [
+        {
+          "id": "ua-back-to-investigations",
+          "text": "Return to investigations",
+          "nextNodeId": "investigation-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "viral-panel-result": {
+      "id": "viral-panel-result",
+      "type": "result",
+      "text": "RESPIRATORY VIRAL PANEL (Multiplex PCR)\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\nInfluenza A: NEGATIVE\nInfluenza B: NEGATIVE\nRSV: NEGATIVE\nSARS-CoV-2: NEGATIVE\nRhinovirus/enterovirus: NEGATIVE\n\nNo common respiratory viruses detected.\n\nThis result further supports a bacterial aetiology. With purulent sputum, pleuritic chest pain, rigors, and now a negative viral panel, community-acquired pneumonia should be your leading diagnosis. A chest X-ray remains essential to confirm and characterise the disease.",
+      "effects": [
+        {
+          "type": "result_test",
+          "testId": "respiratory-viral-panel"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "viral-causes-excluded"
+        }
+      ],
+      "choices": [
+        {
+          "id": "viral-back-to-investigations",
+          "text": "Return to investigations",
+          "nextNodeId": "investigation-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "bloods-result": {
+      "id": "bloods-result",
+      "type": "result",
+      "text": "BLOOD RESULTS\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\nCBC:\n  WBC: 14.8 \u00d710\u2079/L \u2191 (ref 4\u201311) \u2014 Neutrophilia: 12.1 \u00d710\u2079/L \u2191\n  Haemoglobin: 143 g/L (normal)\n  Platelets: 198 \u00d710\u2079/L (normal)\n\nBMP:\n  Na 136 mEq/L | K 3.9 mEq/L | Cr 104 \u03bcmol/L (mild \u2191, likely pre-renal)\n  Glucose 6.1 mmol/L\n\nCRP: 142 mg/L \u2191\u2191 (ref <5) \u2014 significantly elevated, bacterial infection likely\nProcalcitonin: 2.8 ng/mL \u2191 \u2014 supports bacterial source, consider sepsis workup\nLactate: 1.9 mmol/L (normal < 2.0) \u2014 No active tissue hypoperfusion at this time\n\nBlood cultures: \u00d72 sets collected. Preliminary pending (final result 48\u201372h).\n\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\nINTERPRETATION:\nSignificant leukocytosis with neutrophilia and markedly elevated CRP strongly support a bacterial infection. PCT 2.8 ng/mL indicates a significant bacterial systemic response \u2014 this is NOT a simple viral illness.\n\nCreatinine mildly elevated \u2014 likely dehydration (poor PO intake). Monitor closely.\nLactate is reassuring \u2014 no septic shock at this time \u2014 but this must be rechecked if he deteriorates.",
+      "effects": [
+        {
+          "type": "result_test",
+          "testId": "cbc"
+        },
+        {
+          "type": "result_test",
+          "testId": "bmp"
+        },
+        {
+          "type": "result_test",
+          "testId": "crp"
+        },
+        {
+          "type": "result_test",
+          "testId": "procalcitonin"
+        },
+        {
+          "type": "result_test",
+          "testId": "lactate"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "bloods-resulted"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "bacterial-markers-high"
+        }
+      ],
+      "choices": [
+        {
+          "id": "bloods-to-cxr",
+          "text": "Order a chest X-ray now (if not already done)",
+          "nextNodeId": "cxr-result",
+          "timeCost": 30,
+          "effects": [
+            {
+              "type": "order_test",
+              "testId": "chest-xray"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "cxr-ordered",
+              "points": 150,
+              "reason": "Chest X-ray ordered \u2014 confirms the location and extent of suspected pneumonia",
+              "category": "critical-action"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "test_ordered",
+              "testId": "chest-xray"
+            }
+          }
+        },
+        {
+          "id": "bloods-to-treatment",
+          "text": "I have enough \u2014 proceed to treatment",
+          "nextNodeId": "treatment-decision",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "cxr-result": {
+      "id": "cxr-result",
+      "type": "result",
+      "text": "CHEST X-RAY \u2014 PA ERECT\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\nLungs: RIGHT LOWER LOBE CONSOLIDATION \u2014 dense, homogeneous opacity in the right lower zone with air bronchograms visible. No pneumothorax. No pleural effusion (small effusion cannot be excluded on PA).\nLeft lung: clear\nHeart size: Normal\nMediastinum: Normal\nNo bony abnormality\n\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\nREPORT: Right lower lobe consolidation \u2014 consistent with lobar pneumonia.\nClinical correlation recommended.\n\nThis confirms your clinical diagnosis. Combined with:\n\u2022 Fever, rigors, purulent sputum, pleuritic pain\n\u2022 Examination: dullness, bronchial breathing, crackles in right lower zone\n\u2022 CXR: right lower lobe consolidation\n\nDiagnosis: Community-Acquired Pneumonia (CAP) \u2014 right lower lobe\n\nYour next step is to assess severity and determine appropriate treatment and disposition.",
+      "effects": [
+        {
+          "type": "result_test",
+          "testId": "chest-xray"
+        },
+        {
+          "type": "reveal_condition",
+          "conditionId": "community-acquired-pneumonia"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "cxr-consolidation-confirmed"
+        },
+        {
+          "type": "add_score_event",
+          "actionId": "cxr-interpreted-correctly",
+          "points": 75,
+          "reason": "CXR correctly identified right lower lobe consolidation \u2014 confirms CAP diagnosis",
+          "category": "critical-action"
+        }
+      ],
+      "choices": [
+        {
+          "id": "cxr-to-severity",
+          "text": "Assess severity using CURB-65 scoring",
+          "nextNodeId": "severity-assessment",
+          "timeCost": 3,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "severity-scored",
+              "points": 75,
+              "reason": "CURB-65 severity assessment performed \u2014 guides admission vs discharge decision and antibiotic route",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "severity-assessed"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "cxr-to-treatment-direct",
+          "text": "I have enough \u2014 start treatment now",
+          "nextNodeId": "treatment-decision",
+          "timeCost": 0,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "skipped-formal-severity",
+              "points": -15,
+              "reason": "Formal severity scoring (CURB-65) is recommended and helps guide antibiotic route and disposition \u2014 skipping it is a minor omission",
+              "category": "penalty"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "severity-assessment": {
+      "id": "severity-assessment",
+      "type": "decision",
+      "text": "CURB-65 SEVERITY ASSESSMENT\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\nC \u2014 Confusion (new): No \u2192 0\nU \u2014 Urea >7 mmol/L: Borderline (creatinine mildly elevated, urea not checked) \u2192 0\nR \u2014 Respiratory rate \u226530/min: No (RR 22) \u2192 0\nB \u2014 BP systolic <90 or diastolic <60: No \u2192 0\n6 \u2014 Age \u226565: No \u2192 0\n\nCURB-65 score: 0\n\nScore 0\u20131: Mild CAP \u2014 consider home treatment\nScore 2: Moderate CAP \u2014 consider admission\nScore \u22653: Severe CAP \u2014 hospital admission, ICU consideration\n\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\nHowever \u2014 CURB-65 alone does not tell the full story:\n\u2022 SpO\u2082 94% on air \u2014 clinically significant hypoxaemia\n\u2022 PCT 2.8, WBC 14.8, CRP 142 \u2014 significant systemic response\n\u2022 Moderate dehydration\n\u2022 Lives alone \u2014 poor social support if deteriorates\n\u2022 Pre-existing asthma\n\nClinical judgment here is essential. A CURB-65 of 0 with SpO\u2082 94% and these inflammatory markers warrants admission for IV antibiotics and monitoring \u2014 the score alone underestimates severity in this case.",
+      "effects": [],
+      "choices": [
+        {
+          "id": "severity-to-treatment",
+          "text": "Proceed to treatment \u2014 decision is admission for IV antibiotics",
+          "nextNodeId": "treatment-decision",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "treatment-decision": {
+      "id": "treatment-decision",
+      "type": "decision",
+      "text": "Daniel is sitting in the acute bay. SpO\u2082 95% on 2L O\u2082 via nasal prongs. He is comfortable enough to answer questions. RR 22.\n\nYou have confirmed:\n\u2022 Right lower lobe pneumonia on CXR\n\u2022 Significant inflammatory response (WBC 14.8, CRP 142, PCT 2.8)\n\u2022 SpO\u2082 94% on air \u2192 95% on supplemental oxygen\n\u2022 Mild renal impairment likely from dehydration\n\nWhat is your treatment plan?",
+      "effects": [],
+      "choices": [
+        {
+          "id": "correct-treatment",
+          "text": "IV amoxicillin-clavulanate + oral doxycycline, IV fluids, admit to medical ward",
+          "nextNodeId": "treatment-given",
+          "timeCost": 10,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "antibiotics-given",
+              "points": 300,
+              "reason": "Correct dual-agent CAP regimen: beta-lactam + atypical cover (doxycycline) per IDSA/ATS guidelines. IV route appropriate for moderate severity + hypoxaemia.",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "iv-fluids-given",
+              "points": 50,
+              "reason": "IV fluids appropriate for dehydration and mild pre-renal creatinine elevation",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "admission-decision",
+              "points": 75,
+              "reason": "Admission to medical ward \u2014 appropriate for moderate CAP with hypoxaemia",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "antibiotics-given"
+            },
+            {
+              "type": "adjust_vital",
+              "vital": "heartRate",
+              "delta": -8
+            },
+            {
+              "type": "adjust_vital",
+              "vital": "oxygenSaturation",
+              "delta": 2
+            },
+            {
+              "type": "adjust_vital",
+              "vital": "painScore",
+              "delta": -1
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "oral-abx-and-discharge",
+          "text": "Oral amoxicillin and discharge with GP follow-up (CURB-65 is 0 after all)",
+          "nextNodeId": "inappropriate-discharge",
+          "timeCost": 5,
+          "effects": [],
+          "condition": null
+        },
+        {
+          "id": "antibiotics-without-cultures",
+          "text": "Give IV amoxicillin-clavulanate immediately \u2014 cultures can wait",
+          "nextNodeId": "abx-without-cultures-path",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "apply_score_modifier",
+              "modifierId": "antibiotics-without-cultures"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "antibiotics-given",
+              "points": 300,
+              "reason": "Antibiotics administered \u2014 but blood cultures were not drawn first, which reduces the yield of microbiological data",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "antibiotics-given"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "blood-cultures-drawn"
+            }
+          }
+        },
+        {
+          "id": "watchful-waiting",
+          "text": "Hold antibiotics and await culture/viral results before committing to a treatment",
+          "nextNodeId": "delayed-treatment-path",
+          "timeCost": 60,
+          "effects": [
+            {
+              "type": "adjust_vital",
+              "vital": "heartRate",
+              "delta": 14
+            },
+            {
+              "type": "adjust_vital",
+              "vital": "bloodPressure.systolic",
+              "delta": -12
+            },
+            {
+              "type": "adjust_vital",
+              "vital": "oxygenSaturation",
+              "delta": -3
+            },
+            {
+              "type": "adjust_vital",
+              "vital": "temperature",
+              "delta": 0.4
+            },
+            {
+              "type": "apply_score_modifier",
+              "modifierId": "sepsis-developed"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "treatment-given": {
+      "id": "treatment-given",
+      "type": "decision",
+      "text": "Treatment initiated:\n\u2022 IV amoxicillin-clavulanate 1.2g q8h commenced\n\u2022 Doxycycline 100mg BD PO (atypical cover: Mycoplasma, Legionella, Chlamydophila)\n\u2022 IV normal saline 1L over 4 hours\n\u2022 Supplemental oxygen titrated to maintain SpO\u2082 \u226594%\n\u2022 Analgesia: paracetamol 1g q6h for pleuritic pain and fever\n\nDaniel is being prepared for admission to the respiratory medicine ward.\n\nOne final question before handover \u2014 is there anything else you need to address?",
+      "effects": [],
+      "choices": [
+        {
+          "id": "complete-handover",
+          "text": "Complete a clear handover to the ward team and document the management plan",
+          "nextNodeId": "outcome-excellent",
+          "timeCost": 5,
+          "effects": [],
+          "condition": null
+        },
+        {
+          "id": "order-sputum-before-handover",
+          "text": "Send a sputum sample for culture and gram stain before handover (good practice)",
+          "nextNodeId": "outcome-excellent-with-sputum",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "order_test",
+              "testId": "sputum-culture"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "sputum-culture-sent",
+              "points": 30,
+              "reason": "Sputum culture sent before handover \u2014 good antibiotic stewardship to enable de-escalation if culture returns with sensitivities",
+              "category": "bonus"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "delayed-treatment-path": {
+      "id": "delayed-treatment-path",
+      "type": "event",
+      "text": "One hour later \u2014 URGENT\n\nThe nurse calls you urgently. Daniel has deteriorated:\n\nHR 122 | BP 96/58 | RR 28 | SpO\u2082 88% on 2L O\u2082 | Temp 39.8\u00b0C\n\nHe is now confused \u2014 he cannot tell you the correct date.\n\nHe meets Sepsis-3 criteria:\n\u2022 Suspected infection \u2713\n\u2022 Acute organ dysfunction: SOFA score increased \u22652\n  \u2014 New confusion (CNS)\n  \u2014 SpO\u2082 88% despite supplemental O\u2082 (respiratory)\n  \u2014 BP 96/58 (cardiovascular)\n\nThis patient is in SEPSIS. The delay in antibiotics has allowed systemic progression. The Surviving Sepsis Campaign recommends antibiotics within 1 hour of sepsis recognition.\n\nYou must act immediately.",
+      "effects": [
+        {
+          "type": "add_condition",
+          "conditionId": "early-sepsis",
+          "severity": "moderate"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "sepsis-developed"
+        }
+      ],
+      "choices": [
+        {
+          "id": "crash-intervention",
+          "text": "Sepsis bundle: blood cultures NOW, IV antibiotics, IV fluid bolus, high-flow O\u2082, urgent bloods, escalate",
+          "nextNodeId": "sepsis-rescue",
+          "timeCost": 15,
+          "effects": [
+            {
+              "type": "order_test",
+              "testId": "blood-cultures"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "antibiotics-given",
+              "points": 300,
+              "reason": "Antibiotics finally administered \u2014 but late recognition of sepsis has complicated the course",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "blood-cultures-before-abx",
+              "points": 100,
+              "reason": "Blood cultures collected before antibiotics, even in the emergency",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "antibiotics-given"
+            },
+            {
+              "type": "adjust_vital",
+              "vital": "heartRate",
+              "delta": -12
+            },
+            {
+              "type": "adjust_vital",
+              "vital": "bloodPressure.systolic",
+              "delta": 12
+            },
+            {
+              "type": "adjust_vital",
+              "vital": "oxygenSaturation",
+              "delta": 4
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "inappropriate-discharge": {
+      "id": "inappropriate-discharge",
+      "type": "outcome",
+      "outcomeId": "outcome-discharged-inappropriately",
+      "text": "Daniel is discharged with: oral amoxicillin 500mg TDS for 5 days and advice to return if he worsens.\n\nHe deteriorates at home overnight. His partner calls an ambulance at 03:00.\n\nOn arrival: HR 128 | BP 88/52 | RR 32 | SpO\u2082 82% on air | Temp 40.1\u00b0C\n\nHe is admitted to the ICU with septic shock requiring non-invasive ventilation and vasopressors.\n\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\nDEBRIEF\n\nCURB-65 = 0 does not always mean safe to discharge. Clinical context always overrides scoring tools:\n\u2022 SpO\u2082 94% on air is clinically significant and requires O\u2082 \u2014 this alone warrants admission for monitoring\n\u2022 PCT 2.8 ng/mL indicates significant systemic bacterial response\n\u2022 Mild renal impairment from dehydration requires IV fluids\n\u2022 Lives alone \u2014 poor social support\n\nOral antibiotics and outpatient follow-up are appropriate for mild CAP (CURB-65 0\u20131, no hypoxaemia, no comorbidities). This case did not meet that threshold.",
+      "effects": []
+    },
+    "abx-without-cultures-path": {
+      "id": "abx-without-cultures-path",
+      "type": "decision",
+      "text": "IV amoxicillin-clavulanate is now running.\n\nNursing staff realise blood cultures were never drawn before the antibiotics started. They ask if you want them drawn now.\n\nNote: Once antibiotics are in the bloodstream, blood cultures have significantly reduced yield. The opportunity to identify the causative organism has likely passed.\n\nWhat do you do next?",
+      "effects": [],
+      "choices": [
+        {
+          "id": "abx-cultures-now-too-late",
+          "text": "Draw blood cultures now anyway \u2014 even low yield is better than none",
+          "nextNodeId": "treatment-given",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "order_test",
+              "testId": "blood-cultures"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "blood-cultures-late",
+              "points": -30,
+              "reason": "Blood cultures drawn after antibiotics are started \u2014 significantly reduced diagnostic yield",
+              "category": "penalty"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "abx-admit-proceed",
+          "text": "Proceed with admission \u2014 add atypical cover (doxycycline) and IV fluids",
+          "nextNodeId": "treatment-given",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "iv-fluids-given",
+              "points": 50,
+              "reason": "IV fluids initiated \u2014 appropriate",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "admission-decision",
+              "points": 75,
+              "reason": "Correct admission decision",
+              "category": "critical-action"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "sepsis-rescue": {
+      "id": "sepsis-rescue",
+      "type": "outcome",
+      "outcomeId": "outcome-sepsis-rescued",
+      "text": "The sepsis bundle is initiated promptly once you recognise the deterioration:\n\u2022 Blood cultures \u00d72 drawn\n\u2022 IV piperacillin-tazobactam commenced (broader spectrum given sepsis)\n\u2022 IV doxycycline added for atypical cover\n\u2022 500 mL IV crystalloid bolus over 30 minutes\n\u2022 High-flow oxygen via non-rebreather mask\n\u2022 Urgent repeat bloods including lactate (2.8 mmol/L \u2014 elevated)\n\nDaniel is transferred to the High Dependency Unit (HDU) for monitoring.\n\nOver the next 24 hours he improves: fevers resolve, SpO\u2082 stabilises on 4L O\u2082, blood pressure normalises. He is stepped down to the ward on day 2 and discharged on day 5.\n\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\nDEBRIEF\n\nWithholding antibiotics to await culture results is not justified in a patient with confirmed pneumonia, hypoxaemia, and elevated PCT. This approach caused preventable deterioration to sepsis. While the outcome was ultimately good, the delay added patient risk, ICU resource utilisation, and a longer hospital stay.\n\nKey teaching: In moderate-to-severe CAP, antibiotics should be administered within 1 hour of diagnosis. Culture results inform de-escalation \u2014 not the initial decision.",
+      "effects": []
+    },
+    "outcome-excellent": {
+      "id": "outcome-excellent",
+      "type": "outcome",
+      "outcomeId": "outcome-excellent",
+      "text": "Daniel Okafor is admitted to the respiratory medicine ward under the general medicine team.\n\nTreatment summary:\n\u2022 IV amoxicillin-clavulanate 1.2g q8h\n\u2022 Oral doxycycline 100mg BD\n\u2022 IV normal saline 1L over 4 hours (for rehydration)\n\u2022 Supplemental O\u2082 via nasal prongs, titrated \u226594%\n\u2022 Paracetamol 1g q6h (antipyretic and analgesia)\n\u2022 Thromboprophylaxis: low-molecular-weight heparin per protocol\n\nClinical course:\nDay 1: Fevers reduce, feels slightly better\nDay 2: Oral intake improving, SpO\u2082 96% on air\nDay 3: Apyrexial, SpO\u2082 97% on room air, switched to oral antibiotics\nDay 4: Discharged home with 5 days of oral amoxicillin-clavulanate and doxycycline\n\nBlood cultures: No growth after 5 days \u2014 common in CAP (organism identified in only ~25% of hospitalised CAP cases).\n\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\nDEBRIEF\n\nExcellent work. This was a textbook approach to moderate community-acquired pneumonia:\n\n\u2713 Early oxygen for SpO\u2082 94%\n\u2713 CXR confirming right lower lobe consolidation\n\u2713 Blood cultures before antibiotics (antibiotic stewardship)\n\u2713 Dual-agent therapy (beta-lactam + atypical cover)\n\u2713 IV route for moderate severity + hypoxaemia\n\u2713 IV fluids for mild pre-renal impairment\n\u2713 Admission decision with clinical judgment beyond CURB-65",
+      "effects": []
+    },
+    "outcome-excellent-with-sputum": {
+      "id": "outcome-excellent-with-sputum",
+      "type": "outcome",
+      "outcomeId": "outcome-excellent",
+      "text": "Daniel is admitted to the respiratory medicine ward.\n\nSputum gram stain: Gram-positive diplococci \u2014 consistent with Streptococcus pneumoniae.\nSputum culture (day 2): S. pneumoniae sensitive to penicillin \u2014 de-escalation to IV amoxicillin alone on day 2.\n\nTreatment course:\nDay 1\u20132: IV amoxicillin-clavulanate + doxycycline\nDay 2 onwards: IV amoxicillin (de-escalated based on sensitivities)\nDay 4: Switched to oral amoxicillin and discharged\n\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\nDEBRIEF\n\nExceptional performance. Your sputum culture enabled antibiotic de-escalation \u2014 a hallmark of good antibiotic stewardship. This reduces adverse effects, Clostridioides difficile risk, and selection pressure for resistant organisms.\n\nA small but meaningful clinical win that reflects the habits of an excellent clinician.",
+      "effects": []
+    }
+  }
+}

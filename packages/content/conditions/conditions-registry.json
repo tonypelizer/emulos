@@ -148,5 +148,64 @@
         { "atMinute": 40, "value": -80 }
       ]
     }
+  },
+  "community-acquired-pneumonia": {
+    "id": "community-acquired-pneumonia",
+    "name": "Community-Acquired Pneumonia (Bacterial)",
+    "category": "respiratory",
+    "isFatal": false,
+    "vitalProgression": {
+      "heartRate": [
+        { "atMinute": 0, "value": 5 },
+        { "atMinute": 60, "value": 10 },
+        { "atMinute": 120, "value": 15 }
+      ],
+      "oxygenSaturation": [
+        { "atMinute": 0, "value": 0 },
+        { "atMinute": 60, "value": -2 },
+        { "atMinute": 120, "value": -4 }
+      ],
+      "painScore": [
+        { "atMinute": 0, "value": 0 },
+        { "atMinute": 60, "value": 1 }
+      ]
+    }
+  },
+  "early-sepsis": {
+    "id": "early-sepsis",
+    "name": "Early Sepsis (Sepsis-3 Criteria Met)",
+    "category": "infectious",
+    "isFatal": true,
+    "vitalProgression": {
+      "heartRate": [
+        { "atMinute": 0, "value": 10 },
+        { "atMinute": 30, "value": 20 },
+        { "atMinute": 60, "value": 35 },
+        { "atMinute": 90, "value": -60 }
+      ],
+      "bloodPressure.systolic": [
+        { "atMinute": 0, "value": -5 },
+        { "atMinute": 30, "value": -15 },
+        { "atMinute": 60, "value": -30 },
+        { "atMinute": 90, "value": -50 }
+      ],
+      "oxygenSaturation": [
+        { "atMinute": 0, "value": -2 },
+        { "atMinute": 30, "value": -5 },
+        { "atMinute": 60, "value": -10 }
+      ],
+      "temperature": [
+        { "atMinute": 0, "value": 0.3 },
+        { "atMinute": 60, "value": 0.5 }
+      ]
+    },
+    "thresholdEvents": [
+      {
+        "vital": "bloodPressure.systolic",
+        "operator": "lte",
+        "value": 90,
+        "eventNodeId": "septic-shock-event"
+      }
+    ]
   }
 }

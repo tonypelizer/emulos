@@ -171,5 +171,102 @@
       "values": { "progesterone_ng_mL": 8 },
       "narrative": "Serum progesterone 8 ng/mL. Levels <5 ng/mL suggest non-viable pregnancy; >25 ng/mL strongly suggests viable IUP. This intermediate value is non-diagnostic alone."
     }
+  },
+  "urinalysis": {
+    "id": "urinalysis",
+    "name": "Urinalysis with Microscopy",
+    "category": "microbiology",
+    "defaultResultTime": 20,
+    "genericResult": {
+      "summary": "Urinalysis resulted",
+      "values": {
+        "leukocyteEsterase": "negative",
+        "nitrites": "negative",
+        "WBC_per_hpf": 2
+      },
+      "narrative": "Urinalysis: clear urine, no leukocyte esterase, no nitrites, WBC 0-2/hpf. No evidence of urinary tract infection."
+    }
+  },
+  "urine-culture": {
+    "id": "urine-culture",
+    "name": "Urine Culture and Sensitivity",
+    "category": "microbiology",
+    "defaultResultTime": 2880,
+    "genericResult": {
+      "summary": "Urine culture pending (48-72h)",
+      "values": {},
+      "narrative": "Urine culture sent. Preliminary result pending — final sensitivity results in 48–72 hours."
+    }
+  },
+  "blood-cultures": {
+    "id": "blood-cultures",
+    "name": "Blood Cultures (2 sets)",
+    "category": "microbiology",
+    "defaultResultTime": 2880,
+    "genericResult": {
+      "summary": "Blood cultures sent (×2 sets)",
+      "values": {},
+      "narrative": "Two sets of blood cultures collected from separate sites before antibiotic administration. Preliminary results pending 48–72 hours."
+    }
+  },
+  "sputum-culture": {
+    "id": "sputum-culture",
+    "name": "Sputum Culture and Gram Stain",
+    "category": "microbiology",
+    "defaultResultTime": 1440,
+    "genericResult": {
+      "summary": "Sputum culture sent",
+      "values": {},
+      "narrative": "Sputum sent for gram stain and culture. Preliminary report: gram-positive diplococci — consistent with Streptococcus pneumoniae. Full sensitivity pending."
+    }
+  },
+  "crp": {
+    "id": "crp",
+    "name": "C-Reactive Protein (CRP)",
+    "category": "chemistries",
+    "defaultResultTime": 45,
+    "genericResult": {
+      "summary": "CRP resulted",
+      "values": { "CRP_mg_L": 8.2 },
+      "narrative": "CRP 8.2 mg/L (reference <5 mg/L). Mildly elevated — consistent with early or mild inflammatory response. Does not reliably distinguish viral from bacterial infection."
+    }
+  },
+  "lactate": {
+    "id": "lactate",
+    "name": "Serum Lactate",
+    "category": "chemistries",
+    "defaultResultTime": 20,
+    "genericResult": {
+      "summary": "Lactate resulted",
+      "values": { "lactate_mmol_L": 1.6 },
+      "narrative": "Serum lactate 1.6 mmol/L (normal <2 mmol/L). No evidence of tissue hypoperfusion at this time."
+    }
+  },
+  "procalcitonin": {
+    "id": "procalcitonin",
+    "name": "Procalcitonin (PCT)",
+    "category": "chemistries",
+    "defaultResultTime": 60,
+    "genericResult": {
+      "summary": "Procalcitonin resulted",
+      "values": { "PCT_ng_mL": 0.8 },
+      "narrative": "Procalcitonin 0.8 ng/mL. Values ≥0.25 ng/mL suggest bacterial infection; ≥0.5 ng/mL supports antibiotic initiation; values >2 suggest more severe bacterial infection or sepsis. This result supports a bacterial aetiology."
+    }
+  },
+  "respiratory-viral-panel": {
+    "id": "respiratory-viral-panel",
+    "name": "Respiratory Viral Panel (PCR)",
+    "category": "microbiology",
+    "defaultResultTime": 90,
+    "genericResult": {
+      "summary": "Viral panel resulted",
+      "values": {
+        "influenzaA": "negative",
+        "influenzaB": "negative",
+        "RSV": "negative",
+        "SARS-CoV-2": "negative"
+      },
+      "narrative": "Multiplex respiratory viral PCR: Influenza A/B negative, RSV negative, SARS-CoV-2 negative. No common respiratory viruses detected. Result supports a bacterial rather than viral aetiology."
+    }
   }
 }
