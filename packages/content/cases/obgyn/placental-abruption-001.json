@@ -1,0 +1,1075 @@
+{
+  "id": "placental-abruption-001",
+  "version": "1.0.0",
+  "metadata": {
+    "title": "Something's Not Right",
+    "specialty": "obstetrics",
+    "difficulty": "advanced",
+    "estimatedMinutes": 20,
+    "tags": [
+      "antepartum haemorrhage",
+      "placental abruption",
+      "obstetric emergency",
+      "haemorrhagic shock",
+      "disseminated intravascular coagulation",
+      "electronic fetal monitoring",
+      "category 1 caesarean section"
+    ],
+    "author": "emulos-content-team",
+    "expansionPack": "ob-gyn-pack-01",
+    "requiredEngineVersion": ">=1.0.0"
+  },
+  "patient": {
+    "demographics": {
+      "name": "Fatima Al-Rashid",
+      "age": 32,
+      "sex": "female",
+      "weight": 68,
+      "occupation": "secondary school teacher"
+    },
+    "initialVitals": {
+      "heartRate": 118,
+      "bloodPressure": {
+        "systolic": 138,
+        "diastolic": 92
+      },
+      "respiratoryRate": 22,
+      "temperature": 37.0,
+      "oxygenSaturation": 97,
+      "consciousness": "alert",
+      "painScore": 9
+    },
+    "conditions": {
+      "active": [
+        {
+          "conditionId": "hypertension",
+          "severity": "mild"
+        }
+      ],
+      "hidden": [
+        {
+          "conditionId": "placental-abruption",
+          "severity": "severe"
+        }
+      ]
+    },
+    "riskFactors": [
+      "chronic-hypertension",
+      "nulligravida-first-trimester-spotting",
+      "labetalol-antihypertensive"
+    ]
+  },
+  "scoring": {
+    "maxScore": 1000,
+    "passingScore": 550,
+    "gradeThresholds": {
+      "S": 950,
+      "A": 850,
+      "B": 700,
+      "C": 550
+    },
+    "timeBonuses": [
+      {
+        "gameTimeThreshold": 30,
+        "bonus": 150,
+        "label": "Category 1 CS decision within 30 minutes of presentation — Exemplary"
+      },
+      {
+        "gameTimeThreshold": 55,
+        "bonus": 75,
+        "label": "CS decision within 55 minutes of presentation"
+      }
+    ],
+    "criticalActions": [
+      {
+        "actionId": "ob-team-called",
+        "points": 125,
+        "isMandatory": true,
+        "label": "Obstetric emergency team called without delay"
+      },
+      {
+        "actionId": "iv-access-established",
+        "points": 75,
+        "isMandatory": true,
+        "label": "Large-bore IV access ×2 established"
+      },
+      {
+        "actionId": "ctg-applied",
+        "points": 100,
+        "isMandatory": true,
+        "label": "Electronic fetal monitoring (CTG) applied immediately"
+      },
+      {
+        "actionId": "fetal-distress-recognised",
+        "points": 100,
+        "isMandatory": true,
+        "label": "Category III CTG correctly interpreted — immediate delivery indicated"
+      },
+      {
+        "actionId": "emergency-cs-decided",
+        "points": 150,
+        "isMandatory": true,
+        "label": "Emergency Category 1 CS decisively recommended"
+      },
+      {
+        "actionId": "mhp-activated",
+        "points": 100,
+        "isMandatory": true,
+        "label": "Major Haemorrhage Protocol activated and blood products prepared"
+      },
+      {
+        "actionId": "neonatal-team-called",
+        "points": 75,
+        "isMandatory": true,
+        "label": "Neonatal/NICU team called for preterm delivery at 31+5 weeks"
+      },
+      {
+        "actionId": "blood-products-prepared",
+        "points": 75,
+        "isMandatory": false,
+        "label": "Blood products (pRBC + FFP) running before entering theatre"
+      },
+      {
+        "actionId": "coagulation-screen-sent",
+        "points": 50,
+        "isMandatory": false,
+        "label": "Coagulation screen drawn to monitor for DIC"
+      },
+      {
+        "actionId": "group-and-save-sent",
+        "points": 50,
+        "isMandatory": false,
+        "label": "Group and save / crossmatch sent"
+      }
+    ],
+    "modifiers": [
+      {
+        "id": "resuscitation-delay",
+        "description": "Intrauterine resuscitation attempted when Category III CTG mandated immediate delivery — 10 minutes lost, fetal acidosis worsened",
+        "type": "multiplier",
+        "value": 0.8
+      },
+      {
+        "id": "mhp-not-activated",
+        "description": "Major Haemorrhage Protocol not activated before theatre — intraoperative DIC and coagulopathic haemorrhage occurred",
+        "type": "flat-delta",
+        "value": -100
+      },
+      {
+        "id": "dic-developed",
+        "description": "DIC established before CS due to delayed blood product resuscitation — 45-minute delay in obtaining fetal monitoring while awaiting blood results",
+        "type": "flat-delta",
+        "value": -100
+      }
+    ]
+  },
+  "nodes": {
+    "start": {
+      "id": "start",
+      "type": "presentation",
+      "text": "The triage desk calls you to bay 4. Fatima Al-Rashid, 32 years old, 31 weeks and 5 days pregnant, has arrived by ambulance.\n\nShe is gripping the side-rail of the trolley, bent forward, face contorted. 'My stomach — it started really suddenly, about an hour ago. The pain just keeps going, it won't ease off at all.'\n\nHer partner, Mohammed, stands at the entrance: 'She was standing in the kitchen when it hit her. She doubled over. The floor had blood on it when we left.'\n\nThe paramedic hands you the observations:\nHR 118 | BP 138/92 | RR 22 | Temp 37.0°C | SpO₂ 97%\n\n'We tried the Doppler twice,' the paramedic adds, lowering their voice. 'We couldn't get a fetal heartbeat.'\n\nThe community midwife steps beside you: 'I know Fatima — she's G2P1, had a normal delivery at 39 weeks four years ago. Chronic hypertension, well-controlled on labetalol 100mg twice daily. Her last clinic BP was 132/84 two weeks ago. She's been completely uncomplicated this pregnancy.'\n\nFatima's hands feel cold. Her abdomen is visibly gravid. She looks frightened.\n\nWhat is your immediate response?",
+      "effects": [],
+      "choices": [
+        {
+          "id": "start-full-response",
+          "text": "OBSTETRIC EMERGENCY — call the OB team right now. Insert 2 large-bore IVs. Apply CTG immediately. Draw urgent bloods: CBC, coagulation screen, group and save, lactate. Don't move her until monitoring is running.",
+          "nextNodeId": "initial-assessment",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "ob-team-called",
+              "points": 125,
+              "reason": "Obstetric emergency called immediately — appropriate recognition of an acutely unwell third-trimester patient with possible fetal compromise",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "ob-called"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "iv-access-established",
+              "points": 75,
+              "reason": "Large-bore IV access ×2 established — essential for fluid resuscitation and blood product administration",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "iv-access-done"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "ctg-applied",
+              "points": 100,
+              "reason": "CTG applied immediately — electronic fetal monitoring is the critical first step in any third-trimester presentation with potential fetal compromise",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "ctg-ordered"
+            },
+            {
+              "type": "order_test",
+              "testId": "ctg"
+            },
+            {
+              "type": "order_test",
+              "testId": "cbc"
+            },
+            {
+              "type": "order_test",
+              "testId": "coagulation-screen"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "coagulation-screen-sent",
+              "points": 50,
+              "reason": "Coagulation screen ordered — essential to detect developing DIC in the setting of major haemorrhage",
+              "category": "optional-bonus"
+            },
+            {
+              "type": "order_test",
+              "testId": "group-and-save"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "group-and-save-sent",
+              "points": 50,
+              "reason": "Group and save sent — blood group and crossmatch are critical before theatre and blood product administration",
+              "category": "optional-bonus"
+            },
+            {
+              "type": "order_test",
+              "testId": "lactate"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "start-uss-first",
+          "text": "Request an urgent transabdominal ultrasound — I need to see where the placenta is and confirm fetal cardiac activity before escalating",
+          "nextNodeId": "uss-done-first",
+          "timeCost": 3,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "imaging-before-monitoring-penalty",
+              "points": -75,
+              "reason": "Imaging was pursued before fetal monitoring was established. USS has only 24–48% sensitivity for placental abruption and cannot replace CTG for fetal assessment. Precious time has been lost.",
+              "category": "penalty"
+            },
+            {
+              "type": "order_test",
+              "testId": "transabdominal-ultrasound"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "time-lost"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "start-history-first",
+          "text": "Take a detailed history from Fatima and Mohammed first — I need more information before escalating",
+          "nextNodeId": "premature-history",
+          "timeCost": 3,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "history-before-emergency-response-penalty",
+              "points": -50,
+              "reason": "Detailed history-taking before emergency assessment in an acutely unwell third-trimester patient with unaudible fetal heartbeat caused avoidable delay. Key features were already known: severe sudden-onset pain, dark vaginal bleeding, absent fetal Doppler signal.",
+              "category": "penalty"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "time-lost"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "premature-history": {
+      "id": "premature-history",
+      "type": "decision",
+      "text": "You begin to take a structured history. Fatima is struggling to answer between grimaces. Mohammed fills in the details — sudden onset while standing, approximately 75 minutes ago, no trauma, bleeding started about 40 minutes in, dark red, baby has felt 'quiet all afternoon'.\n\nThe midwife interrupts you firmly: 'I'm sorry — I need to stop you. I've tried the Doppler twice. I cannot get a fetal heartbeat. We need monitoring on this baby right now. The history can wait.'\n\nShe's right.",
+      "effects": [
+        {
+          "type": "advance_time",
+          "minutes": 5
+        }
+      ],
+      "choices": [
+        {
+          "id": "premature-history-redirect",
+          "text": "Apply CTG and complete the clinical assessment immediately",
+          "nextNodeId": "initial-assessment",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "uss-done-first": {
+      "id": "uss-done-first",
+      "type": "result",
+      "text": "The portable ultrasound is wheeled in. The on-call sonographer scans Fatima's abdomen.\n\nFindings:\n• Placenta: posterior, appearing thickened and heterogeneous (~5.5cm)\n• Possible hypoechoic collection behind the posterior placental margin — approximately 4×3cm — NOT definitively diagnostic\n• Fetal cardiac activity: present, rate approximately 80–88 bpm ← BRADYCARDIC (reference 110–160 at 31+5)\n• Fetal position: cephalic, liquor volume appears reduced\n\nSonographer: 'I can see something that might be a retroplacental haematoma but I can't be sure. The resolution isn't clear enough. I cannot rule abruption in or out.'\n\n[!] CLINICAL TEACHING: Ultrasound sensitivity for placental abruption is only 24–48%. In one major series, half of confirmed abruptions were missed on USS. A normal or non-diagnostic USS does NOT rule out abruption. Clinical diagnosis is primary — USS is not the right tool for this question.\n\n[!] The fetal bradycardia seen on USS confirms the picture but 25 minutes have passed with no electronic fetal monitoring applied to this baby.\n\nElectronic fetal monitoring is the most urgent outstanding step.",
+      "effects": [
+        {
+          "type": "advance_time",
+          "minutes": 25
+        },
+        {
+          "type": "result_test",
+          "testId": "transabdominal-ultrasound"
+        }
+      ],
+      "choices": [
+        {
+          "id": "uss-to-assessment",
+          "text": "Apply CTG and proceed with full clinical assessment",
+          "nextNodeId": "initial-assessment",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "initial-assessment": {
+      "id": "initial-assessment",
+      "type": "examination",
+      "text": "You perform a rapid structured clinical assessment:\n\nGENERAL: Fatima is pale and diaphoretic. Her hands are cold and clammy. Capillary refill 3 seconds. She cannot complete sentences during pain.\n\nABDOMEN:\n→ Fundal height: 31cm — appropriate for gestation\n→ Uterine consistency: BOARD-LIKE RIGIDITY. The uterus feels hard as wood and does not relax between assessments. This is NOT labour — contractions relax. This uterus does not relax.\n→ Tenderness: Exquisite tenderness to even light palpation over the entire uterus, worst at the fundus\n→ There are no discrete contraction waves\n\nPER VAGINAM ASSESSMENT: Approximately 150–200mL dark, deoxygenated blood noted on the pad. Not bright red. This dark colouration is consistent with blood that has tracked from a retroplacental haematoma rather than fresh active bleeding from the placental edge.\n\nFETAL DOPPLER: 77 bpm. Fetal bradycardia (reference: 110–160 bpm at 31+5 weeks).\n\nCOMPLETED HISTORY:\n• Pain: Constant, severe, sudden onset 75 minutes ago while stationary — not periodic, does not come and go\n• Bleeding: Started 40 minutes ago — dark, not bright red\n• Fetal movements: Baby has been quiet all afternoon\n• Medications: Labetalol 100mg BD for chronic hypertension. No NSAIDs. No anticoagulants.\n• Allergies: NKDA\n• Blood group: Unknown — not in handheld notes\n\nCLINICAL IMPRESSION: Sudden-onset severe constant abdominal pain + dark vaginal bleeding + board-like hypertonic uterus + fetal bradycardia in a 31+5-week pregnancy = PLACENTAL ABRUPTION. This is the diagnosis until proven otherwise, and this baby needs delivering.\n\nHow do you proceed?",
+      "effects": [
+        {
+          "type": "add_examination_finding",
+          "findingId": "woody-uterus"
+        },
+        {
+          "type": "add_examination_finding",
+          "findingId": "dark-vaginal-blood-apv"
+        },
+        {
+          "type": "add_examination_finding",
+          "findingId": "fetal-bradycardia-doppler"
+        },
+        {
+          "type": "reveal_condition",
+          "conditionId": "placental-abruption"
+        }
+      ],
+      "choices": [
+        {
+          "id": "assessment-full-response",
+          "text": "Placental abruption — this is a Category 1 emergency. CTG NOW if not applied. Call OB emergency if not done. IV access ×2. Bloods: CBC, coag screen, group and save, lactate.",
+          "nextNodeId": "ctg-result",
+          "timeCost": 10,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "ob-team-called",
+              "points": 125,
+              "reason": "Obstetric emergency called",
+              "category": "critical-action",
+              "condition": {
+                "op": "not",
+                "condition": {
+                  "op": "has_knowledge",
+                  "knowledgeId": "ob-called"
+                }
+              }
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "ob-called",
+              "condition": {
+                "op": "not",
+                "condition": {
+                  "op": "has_knowledge",
+                  "knowledgeId": "ob-called"
+                }
+              }
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "iv-access-established",
+              "points": 75,
+              "reason": "IV access ×2 established",
+              "category": "critical-action",
+              "condition": {
+                "op": "not",
+                "condition": {
+                  "op": "has_knowledge",
+                  "knowledgeId": "iv-access-done"
+                }
+              }
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "iv-access-done",
+              "condition": {
+                "op": "not",
+                "condition": {
+                  "op": "has_knowledge",
+                  "knowledgeId": "iv-access-done"
+                }
+              }
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "ctg-applied",
+              "points": 100,
+              "reason": "CTG applied to establish electronic fetal monitoring",
+              "category": "critical-action",
+              "condition": {
+                "op": "not",
+                "condition": {
+                  "op": "has_knowledge",
+                  "knowledgeId": "ctg-ordered"
+                }
+              }
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "ctg-ordered",
+              "condition": {
+                "op": "not",
+                "condition": {
+                  "op": "has_knowledge",
+                  "knowledgeId": "ctg-ordered"
+                }
+              }
+            },
+            {
+              "type": "order_test",
+              "testId": "ctg",
+              "condition": {
+                "op": "not",
+                "condition": { "op": "test_ordered", "testId": "ctg" }
+              }
+            },
+            {
+              "type": "order_test",
+              "testId": "cbc",
+              "condition": {
+                "op": "not",
+                "condition": { "op": "test_ordered", "testId": "cbc" }
+              }
+            },
+            {
+              "type": "order_test",
+              "testId": "coagulation-screen",
+              "condition": {
+                "op": "not",
+                "condition": {
+                  "op": "test_ordered",
+                  "testId": "coagulation-screen"
+                }
+              }
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "coagulation-screen-sent",
+              "points": 50,
+              "reason": "Coagulation screen ordered",
+              "category": "optional-bonus",
+              "condition": {
+                "op": "not",
+                "condition": {
+                  "op": "test_ordered",
+                  "testId": "coagulation-screen"
+                }
+              }
+            },
+            {
+              "type": "order_test",
+              "testId": "group-and-save",
+              "condition": {
+                "op": "not",
+                "condition": {
+                  "op": "test_ordered",
+                  "testId": "group-and-save"
+                }
+              }
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "group-and-save-sent",
+              "points": 50,
+              "reason": "Group and save sent",
+              "category": "optional-bonus",
+              "condition": {
+                "op": "not",
+                "condition": {
+                  "op": "test_ordered",
+                  "testId": "group-and-save"
+                }
+              }
+            },
+            {
+              "type": "order_test",
+              "testId": "lactate",
+              "condition": {
+                "op": "not",
+                "condition": { "op": "test_ordered", "testId": "lactate" }
+              }
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "assessment-bloods-first",
+          "text": "Draw urgent bloods to quantify the haemorrhage and assess coagulation before making a delivery decision",
+          "nextNodeId": "bloods-only-result",
+          "timeCost": 10,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "ob-team-called",
+              "points": 125,
+              "reason": "OB team called at assessment",
+              "category": "critical-action",
+              "condition": {
+                "op": "not",
+                "condition": {
+                  "op": "has_knowledge",
+                  "knowledgeId": "ob-called"
+                }
+              }
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "ob-called",
+              "condition": {
+                "op": "not",
+                "condition": {
+                  "op": "has_knowledge",
+                  "knowledgeId": "ob-called"
+                }
+              }
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "iv-access-established",
+              "points": 75,
+              "reason": "IV access established",
+              "category": "critical-action",
+              "condition": {
+                "op": "not",
+                "condition": {
+                  "op": "has_knowledge",
+                  "knowledgeId": "iv-access-done"
+                }
+              }
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "iv-access-done",
+              "condition": {
+                "op": "not",
+                "condition": {
+                  "op": "has_knowledge",
+                  "knowledgeId": "iv-access-done"
+                }
+              }
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "delayed-fetal-monitoring-penalty",
+              "points": -75,
+              "reason": "Blood results were prioritised over electronic fetal monitoring. In a third-trimester emergency with fetal bradycardia on Doppler and clinical abruption, CTG is the most urgent investigation. Blood results cannot guide the delivery decision in the same way a Category III CTG does — and the 45-minute wait allowed DIC to develop.",
+              "category": "penalty"
+            },
+            {
+              "type": "order_test",
+              "testId": "cbc"
+            },
+            {
+              "type": "order_test",
+              "testId": "coagulation-screen"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "coagulation-screen-sent",
+              "points": 50,
+              "reason": "Coagulation screen ordered",
+              "category": "optional-bonus"
+            },
+            {
+              "type": "order_test",
+              "testId": "group-and-save"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "group-and-save-sent",
+              "points": 50,
+              "reason": "Group and save sent",
+              "category": "optional-bonus"
+            },
+            {
+              "type": "order_test",
+              "testId": "lactate"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "time-lost",
+              "condition": {
+                "op": "not",
+                "condition": {
+                  "op": "has_knowledge",
+                  "knowledgeId": "time-lost"
+                }
+              }
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "bloods-only-result": {
+      "id": "bloods-only-result",
+      "type": "result",
+      "text": "The blood results return 45 minutes later. While waiting, you notice Fatima has become increasingly restless. You try the Doppler again — fetal heart rate 72 bpm.\n\nBlood Results:\n\nHaemoglobin: 7.9 g/dL [↓↓] — significantly anaemic. Her booking Hb was 11.4 g/dL. This represents approximately 30% loss of circulating blood volume. Haemodynamic compromise is imminent or already occurring.\n\nPlatelets: 82 ×10⁹/L [↓↓] — thrombocytopenic. Trend is critical.\n\nCoagulation Screen:\n  INR: 2.3 [↑↑] — severely elevated (reference <1.3)\n  APTT: 2.1× upper limit — prolonged\n  Fibrinogen: 0.8 g/L [↓↓] — CRITICALLY LOW (reference >2.0 g/L in pregnancy)\n\n⚠ ESTABLISHED DIC — this patient has disseminated intravascular coagulation. The coagulopathy will worsen with every minute until blood products are given and the source (the abruption) is removed.\n\nLactate: 4.8 mmol/L [↑↑] — severe tissue hypoperfusion.\n\nGroup and Save: Blood group B positive. No antibodies. Crossmatch in progress.\n\nBP is now 104/68 (falling from 138/92). HR 138. She is decompensating.\n\n[!] TEACHING: The 45-minute wait for blood results allowed DIC to develop. Electronic fetal monitoring — not haematology — is the investigation that drives the delivery decision in this scenario. A Category III CTG mandates delivery regardless of blood results. Blood products should run in parallel with the decision to deliver, not before it.\n\nCTG has not yet been applied. This must happen now.",
+      "effects": [
+        {
+          "type": "advance_time",
+          "minutes": 45
+        },
+        {
+          "type": "result_test",
+          "testId": "cbc"
+        },
+        {
+          "type": "result_test",
+          "testId": "coagulation-screen"
+        },
+        {
+          "type": "result_test",
+          "testId": "group-and-save"
+        },
+        {
+          "type": "result_test",
+          "testId": "lactate"
+        },
+        {
+          "type": "adjust_vital",
+          "vital": "bloodPressure.systolic",
+          "delta": -34
+        },
+        {
+          "type": "adjust_vital",
+          "vital": "heartRate",
+          "delta": 20
+        },
+        {
+          "type": "apply_score_modifier",
+          "modifierId": "dic-developed"
+        }
+      ],
+      "choices": [
+        {
+          "id": "bloods-to-ctg",
+          "text": "Apply CTG immediately — fetal assessment cannot wait any longer",
+          "nextNodeId": "ctg-result",
+          "timeCost": 3,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "ctg-applied",
+              "points": 100,
+              "reason": "CTG applied — though late, electronic fetal monitoring is now established",
+              "category": "critical-action",
+              "condition": {
+                "op": "not",
+                "condition": {
+                  "op": "has_knowledge",
+                  "knowledgeId": "ctg-ordered"
+                }
+              }
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "ctg-ordered"
+            },
+            {
+              "type": "order_test",
+              "testId": "ctg",
+              "condition": {
+                "op": "not",
+                "condition": { "op": "test_ordered", "testId": "ctg" }
+              }
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "ctg-result": {
+      "id": "ctg-result",
+      "type": "result",
+      "text": "The CTG trace runs.\n\nFETAL HEART RATE ANALYSIS:\n  Baseline: 72–82 bpm — SEVERE FETAL BRADYCARDIA (reference 110–160)\n  Baseline variability: < 5 bpm — ABSENT (reference: 5–25 bpm)\n  Accelerations: NONE\n  Decelerations: Late decelerations with each mild uterine tightening\n  Uterine activity: Hypertonic — uterus fails to relax\n\nFIGO CLASSIFICATION: CATEGORY III — PATHOLOGICAL\nThis CTG requires immediate delivery. There is no threshold of intrauterine resuscitation that is appropriate to attempt first. Category III with severe bradycardia in the context of clinical abruption means: deliver now.\n\nBlood results (if ordered):\n  Hb: 8.4 g/dL [↓] — significant haemorrhage (booking Hb 11.4)\n  Plt: 96 ×10⁹/L [↓] — falling, watch closely\n  INR: 1.8 [↑] — early coagulopathy, DIC developing\n  APTT: 1.6× normal [↑] — prolonged\n  Fibrinogen: 1.4 g/L [↓] — approaching critical threshold (<1.5 in OB)\n  Lactate: 3.2 mmol/L [↑] — tissue hypoperfusion\n  Blood group: B positive (if group and save sent)\n\nCurrent vitals: HR 134, BP 112/74 — blood pressure is falling. Fatima's chronic hypertension means her 'normal' is higher; 112/74 represents significant relative hypotension in this context.\n\nMohammed is at the door: 'Please — is my baby okay?'\n\nYou need to act.",
+      "effects": [
+        {
+          "type": "result_test",
+          "testId": "ctg"
+        },
+        {
+          "type": "result_test",
+          "testId": "cbc",
+          "condition": {
+            "op": "and",
+            "conditions": [
+              { "op": "test_ordered", "testId": "cbc" },
+              {
+                "op": "not",
+                "condition": { "op": "test_resulted", "testId": "cbc" }
+              }
+            ]
+          }
+        },
+        {
+          "type": "result_test",
+          "testId": "coagulation-screen",
+          "condition": {
+            "op": "and",
+            "conditions": [
+              { "op": "test_ordered", "testId": "coagulation-screen" },
+              {
+                "op": "not",
+                "condition": {
+                  "op": "test_resulted",
+                  "testId": "coagulation-screen"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "result_test",
+          "testId": "group-and-save",
+          "condition": {
+            "op": "and",
+            "conditions": [
+              { "op": "test_ordered", "testId": "group-and-save" },
+              {
+                "op": "not",
+                "condition": {
+                  "op": "test_resulted",
+                  "testId": "group-and-save"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "result_test",
+          "testId": "lactate",
+          "condition": {
+            "op": "and",
+            "conditions": [
+              { "op": "test_ordered", "testId": "lactate" },
+              {
+                "op": "not",
+                "condition": { "op": "test_resulted", "testId": "lactate" }
+              }
+            ]
+          }
+        },
+        {
+          "type": "add_score_event",
+          "actionId": "fetal-distress-recognised",
+          "points": 100,
+          "reason": "Category III CTG correctly recognised — severe fetal bradycardia with absent variability and late decelerations in the context of placental abruption mandates immediate delivery",
+          "category": "critical-action"
+        }
+      ],
+      "choices": [
+        {
+          "id": "ctg-emergency-cs",
+          "text": "Emergency Category 1 caesarean section — IMMEDIATELY. Activate the Major Haemorrhage Protocol, call the neonatal team, alert anaesthetics, and get theatre ready.",
+          "nextNodeId": "management-hub",
+          "timeCost": 2,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "emergency-cs-decided",
+              "points": 150,
+              "reason": "Category 1 CS correctly and decisively called — the right decision at the right time",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "cs-decided"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "ctg-resuscitation-first",
+          "text": "Try intrauterine resuscitation first — left lateral position, high-flow oxygen, rapid IV fluid bolus. Give the fetus 10 minutes to respond before committing to theatre.",
+          "nextNodeId": "resuscitation-attempt",
+          "timeCost": 2,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "resuscitation-not-indicated-penalty",
+              "points": -100,
+              "reason": "Intrauterine resuscitation is not appropriate here. Category III CTG with severe bradycardia, absent variability, and late decelerations in the context of clinical placental abruption is an absolute indication for immediate delivery. There is no fetal reserve remaining to wait for. Every minute of delay worsens fetal acidosis.",
+              "category": "penalty"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "time-lost",
+              "condition": {
+                "op": "not",
+                "condition": {
+                  "op": "has_knowledge",
+                  "knowledgeId": "time-lost"
+                }
+              }
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "resuscitation-attempt": {
+      "id": "resuscitation-attempt",
+      "type": "event",
+      "text": "You position Fatima in the full left lateral position, apply high-flow oxygen via non-rebreather mask, and run in 500mL of Hartmann's solution rapidly through the IV.\n\nThe CTG continues to run. Ten minutes pass.\n\nThe trace does not improve.\n\nBaseline FHR: 68 bpm. Absent variability. The late decelerations have deepened.\n\nBP has dropped further: 96/62. HR 142. Fatima is barely responsive to verbal commands.\n\nThe midwife: 'The uterus is not relaxing at all. This isn't labour. This is abruption. The baby is running out of time.'\n\nThe obstetric registrar, who has just arrived, looks at the CTG for 4 seconds: 'Emergency CS. Right now. How long has this trace been like this?'",
+      "effects": [
+        {
+          "type": "advance_time",
+          "minutes": 10
+        },
+        {
+          "type": "apply_score_modifier",
+          "modifierId": "resuscitation-delay"
+        },
+        {
+          "type": "adjust_vital",
+          "vital": "bloodPressure.systolic",
+          "delta": -16
+        },
+        {
+          "type": "adjust_vital",
+          "vital": "heartRate",
+          "delta": 8
+        }
+      ],
+      "choices": [
+        {
+          "id": "resuscitation-to-management",
+          "text": "Emergency CS — activate MHP, alert neonatal team, tell anaesthetics to prepare for GA",
+          "nextNodeId": "management-hub",
+          "timeCost": 2,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "emergency-cs-decided",
+              "points": 150,
+              "reason": "Emergency CS decision made — delayed but correct",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "cs-decided"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "management-hub": {
+      "id": "management-hub",
+      "type": "decision",
+      "text": "CATEGORY 1 CAESAREAN SECTION — DECISION CONFIRMED.\n\nTheatre is being prepared. The anaesthesia team is assembling. You have approximately 5 minutes to ensure everything is in place before Fatima goes through those doors.\n\nCurrent status:\n  HR: 138 | BP: 108/70 | SpO₂: 95% | Consciousness: alert but deteriorating\n  Blood group: B positive (if obtained)\n  Haemoglobin (if bloods taken): ~8–8.4 g/dL with developing coagulopathy\n  Fetal HR on CTG: 70–78 bpm — persistent bradycardia\n\nGESTATIONAL CONTEXT: 31+5 weeks. A ventilated neonate is expected. The survival rate for babies born at 31+5 weeks is >95% with good neonatal care — but that team must be there.\n\nUK MASSIVE HAEMORRHAGE PROTOCOL (MHP) TRIGGERS: Any of the following:\n✓ Obstetric haemorrhage with haemodynamic compromise\n✓ Estimated blood loss >1500mL\n✓ Placental abruption requiring emergency delivery\n\nAll three are met. What is your complete pre-theatre management?",
+      "effects": [],
+      "choices": [
+        {
+          "id": "management-full-optimal",
+          "text": "ACTIVATE MHP — 4 units O-negative pRBC running now, 4 units FFP concurrently, platelets requested if Plt <75. Call neonatal team to theatre. Anaesthetics: GA for speed. Obtain verbal consent from Fatima. Blood bank on direct line.",
+          "nextNodeId": "outcome-excellent",
+          "timeCost": 8,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "mhp-activated",
+              "points": 100,
+              "reason": "Major Haemorrhage Protocol activated — blood products running before theatre. 1:1:1 ratio of pRBC:FFP:platelets is the correct approach in DIC-risk obstetric haemorrhage.",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "mhp-activated"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "neonatal-team-called",
+              "points": 75,
+              "reason": "Neonatal team called to theatre — essential for a 31+5-week delivery",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "blood-products-prepared",
+              "points": 75,
+              "reason": "Blood products running before CS — reduces intraoperative DIC risk and coagulopathic haemorrhage",
+              "category": "optional-bonus"
+            },
+            {
+              "type": "resolve_condition",
+              "conditionId": "placental-abruption"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": { "op": "has_knowledge", "knowledgeId": "time-lost" }
+          }
+        },
+        {
+          "id": "management-full-optimal-delayed",
+          "text": "ACTIVATE MHP — 4 units O-negative pRBC running now, 4 units FFP concurrently, platelets requested if Plt <75. Call neonatal team to theatre. Anaesthetics: GA for speed. Obtain verbal consent from Fatima. Blood bank on direct line.",
+          "nextNodeId": "outcome-survived-morbidity",
+          "timeCost": 8,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "mhp-activated",
+              "points": 100,
+              "reason": "MHP activated — correct, but prior delay has already worsened fetal and maternal status",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "mhp-activated"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "neonatal-team-called",
+              "points": 75,
+              "reason": "Neonatal team called to theatre",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "blood-products-prepared",
+              "points": 75,
+              "reason": "Blood products running before CS",
+              "category": "optional-bonus"
+            },
+            {
+              "type": "resolve_condition",
+              "conditionId": "placental-abruption"
+            }
+          ],
+          "condition": {
+            "op": "has_knowledge",
+            "knowledgeId": "time-lost"
+          }
+        },
+        {
+          "id": "management-theatre-only",
+          "text": "To theatre immediately — the blood bank will catch up. Neonatal team called. No time to activate the full MHP.",
+          "nextNodeId": "outcome-survived-morbidity",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "neonatal-team-called",
+              "points": 75,
+              "reason": "Neonatal team called to theatre",
+              "category": "critical-action"
+            },
+            {
+              "type": "apply_score_modifier",
+              "modifierId": "mhp-not-activated"
+            },
+            {
+              "type": "resolve_condition",
+              "conditionId": "placental-abruption"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "management-wait-for-results",
+          "text": "Wait for the full blood result panel to come back before committing to theatre — I need to know what we're dealing with haematologically",
+          "nextNodeId": "observation-delay",
+          "timeCost": 3,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "waiting-for-results-fatal-penalty",
+              "points": -200,
+              "reason": "Waiting for blood results before a Category 1 CS when the CTG shows Category III — severe fetal bradycardia with absent variability — is a fatal error in prioritisation. Blood results do not change the delivery decision when a Category III CTG is already established. Every minute of delay causes irreversible fetal hypoxic injury.",
+              "category": "penalty"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "observation-delay": {
+      "id": "observation-delay",
+      "type": "event",
+      "text": "You decide to wait for the blood results.\n\nFifteen minutes pass.\n\nThe CTG alarm sounds — the trace has flatlined. The midwife cannot detect any fetal cardiac activity. Fatima's BP: 72/44. HR: 158. She is pale, cold, and barely responsive.\n\nBlood results finally return: Hb 6.2 g/dL. INR >4. Fibrinogen 0.4 g/L. Lactate 7.8. Complete DIC.\n\nThe haematologist calls: 'She needs blood products NOW. How long has she been like this?'\n\nThe obstetric consultant arrives and looks at the CTG for two seconds. 'There is no fetal heartbeat. This baby needed delivering 25 minutes ago.'",
+      "effects": [
+        {
+          "type": "advance_time",
+          "minutes": 15
+        },
+        {
+          "type": "set_game_phase",
+          "phase": "terminal"
+        },
+        {
+          "type": "adjust_vital",
+          "vital": "bloodPressure.systolic",
+          "delta": -40
+        },
+        {
+          "type": "adjust_vital",
+          "vital": "heartRate",
+          "delta": 20
+        }
+      ],
+      "choices": [
+        {
+          "id": "delay-to-fatal",
+          "text": "Emergency crash CS and maternal resuscitation",
+          "nextNodeId": "outcome-fatal",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "outcome-excellent": {
+      "id": "outcome-excellent",
+      "type": "outcome",
+      "text": "Category 1 CS under general anaesthesia.\n\nIncision to delivery: 8 minutes.\n\nA live male infant is delivered, 1.58kg. He is pale and floppy at delivery — Apgar 3 at 1 minute, 7 at 5 minutes. The neonatal team intubates briefly at 1 minute, extubates to CPAP by 3 minutes. Cord pH: 7.14 — acidotic but within the survivable range.\n\nUterus at delivery: A 6×8cm retroplacental haematoma is found adherent to the posterior uterine wall. Estimated total blood loss: 2100mL. Uterus contracts well after oxytocin bolus. No hysterectomy required.\n\nMHP: 3 units pRBC transfused intraoperatively. Coagulation maintained — fibrinogen did not fall below 1.5 g/L. No further blood products required.\n\n--- Final Results ---\nMaternal: Transferred to HDU postoperatively Hb nadir 7.2 g/dL, transfused to 9.5 g/dL. Coags normalised by 24h. Discharged Day 6.\nNeonatal: NICU Day 1–47. Graduated to nursery. Discharged home Day 52, breast-feeding established.\nCord pH at birth: 7.14 — within the survivable range. Neurology clear at 6-week follow-up.\n\nMohammed: 'The doctors at NICU say he might have some breathing problems for a few weeks but they think he'll be fine. Thank you.'\n\n[!] Teaching Points:\n• Placental abruption is a CLINICAL diagnosis — board-like uterus + dark haemorrhage + constant pain = abruption. USS confirms nothing when it's negative.\n• Category III CTG = immediate delivery. There is no role for intrauterine resuscitation when the CTG pattern is already terminal.\n• Major Haemorrhage Protocol (MHP) activation is life-saving — blood products run in parallel with the decision to deliver, not after\n• At 31+5 weeks, baby survival with good NICU care is >95% — gestational age should not delay the decision to deliver when fetal compromise is present\n• The 30-minute rule for Category 1 CS exists for a reason — it is achievable with a prepared team",
+      "outcomeId": "excellent",
+      "effects": [],
+      "choices": []
+    },
+    "outcome-survived-morbidity": {
+      "id": "outcome-survived-morbidity",
+      "type": "outcome",
+      "text": "Category 1 CS under general anaesthesia.\n\nIncision to delivery: 11 minutes.\n\nA live male infant is delivered, 1.55kg. Apgar 1 at 1 minute, 5 at 5 minutes. He requires sustained positive-pressure ventilation and is intubated by the neonatal team. Cord pH: 7.01 — significant acidosis.\n\nUterus at delivery: A 7×9cm retroplacental haematoma. Uterus poorly contracted despite oxytocin — disseminated coagulopathy at this stage. Estimated blood loss: 3,400mL.\n\nMHP ultimately activated intraoperatively: 8 units pRBC, 6 units FFP, 2 pools platelets, cryoprecipitate. Haematologist on the phone throughout. Uterine compression sutures placed. Balloon tamponade considered. Hysterectomy narrowly avoided.\n\n--- Final Results ---\nMaternal: ICU admission (72h). Hb nadir 5.8 g/dL. Acute kidney injury — creatinine peaked at 218 µmol/L, resolved by Day 8. DIC resolved with aggressive replacement. Discharged Day 11.\nNeonatal: NICU Day 1–68. Cord pH 7.01 — neonatal encephalopathy protocol initiated, therapeutic hypothermia for 72 hours. Neurodevelopmental follow-up arranged. Feeding difficulties; nasogastric tube on discharge.\nPatient discharged Day 11 without being able to hold her son — he remained in NICU.\n\n[!] Teaching Points:\n• Every minute of delay in a Category III CTG setting worsens fetal acidosis and the margin for intact survival narrows rapidly\n• Cord pH is a direct marker of fetal hypoxic burden at delivery — the difference between 7.14 and 7.01 is the difference between normal neurodevelopment and uncertain outcome\n• Major Haemorrhage Protocol must be activated BEFORE theatre, not when things go wrong on the table\n• Intrauterine resuscitation is not treatment — it is a reason to delay the only treatment that actually works: delivery",
+      "outcomeId": "survived-with-morbidity",
+      "effects": [],
+      "choices": []
+    },
+    "outcome-fatal": {
+      "id": "outcome-fatal",
+      "type": "outcome",
+      "text": "Crash Category 1 CS is performed.\n\nIncision at 68 minutes after presentation.\n\nA stillborn male infant is delivered. Weight 1.56kg. There is no cardiac activity at delivery. The cord pH cannot be obtained. Neonatal resuscitation is attempted for 20 minutes before the team stops.\n\nThe retroplacental clot weighs 820 grams. The majority of the placenta has separated.\n\nFatima develops catastrophic DIC intraoperatively: uncontrollable haemorrhage from all surfaces. Despite activation of the MHP, 22 units of blood products are administered. Peripartum hysterectomy is performed. She is transferred to ICU on vasopressors.\n\nShe survives, but requires renal replacement therapy for 11 days before her kidneys recover. She will not be able to carry a further pregnancy.\n\nShe is told about her son while still in ICU, 36 hours after the operation.\n\nThe case is reviewed at the Serious Incident panel. The primary finding: the delivery decision was delayed by a clinical escalation error. A Category III CTG was present from the moment monitoring was first applied. The 30-minute decision-to-delivery standard was missed by 38 minutes.\n\n[!] Teaching Points:\n• The Category 1 CS standard — 30 minutes from decision to delivery — is not a guideline. It is the physiological window within which intact fetal survival is achievable above a baseline rate.\n• Category III CTG = NO DELAY. No blood results, no intrauterine resuscitation, no consent paperwork delays that cannot happen simultaneously.\n• The blood results that prompted the wait were already predictable from the clinical picture. They changed nothing. They cost everything.\n• DIC in major abruption is not a condition to wait for — it is a condition to pre-empt with MHP activation before it happens.\n• Placental abruption is survivable for both mother and baby with fast, decisive, protocol-driven management. The tools exist. The barrier is recognition and speed.",
+      "outcomeId": "fatal",
+      "effects": [],
+      "choices": []
+    }
+  }
+}

@@ -21,6 +21,7 @@ import confusion001 from "../cases/general/confusion-001.json";
 import ectopicPregnancy001 from "../cases/obgyn/ectopic-pregnancy-001.json";
 import firstTrimesterBleeding001 from "../cases/obgyn/first-trimester-bleeding-001.json";
 import preeclampsia001 from "../cases/obgyn/preeclampsia-001.json";
+import placentalAbruption001 from "../cases/obgyn/placental-abruption-001.json";
 import conditionsRegistryJson from "../conditions/conditions-registry.json";
 import testsRegistryJson from "../tests-catalog/tests-registry.json";
 
@@ -42,6 +43,7 @@ const CASE_REGISTRY: Record<string, unknown> = {
   "ectopic-pregnancy-001": ectopicPregnancy001,
   "first-trimester-bleeding-001": firstTrimesterBleeding001,
   "preeclampsia-001": preeclampsia001,
+  "placental-abruption-001": placentalAbruption001,
 };
 
 /**

@@ -268,5 +268,46 @@
       },
       "narrative": "Multiplex respiratory viral PCR: Influenza A/B negative, RSV negative, SARS-CoV-2 negative. No common respiratory viruses detected. Result supports a bacterial rather than viral aetiology."
     }
+  },
+  "ctg": {
+    "id": "ctg",
+    "name": "Cardiotocograph (Electronic Fetal Monitoring)",
+    "category": "obstetric",
+    "defaultResultTime": 5,
+    "genericResult": {
+      "summary": "CTG running",
+      "values": {},
+      "narrative": "Cardiotocograph applied. Continuous fetal heart rate and uterine activity monitoring in progress."
+    }
+  },
+  "coagulation-screen": {
+    "id": "coagulation-screen",
+    "name": "Coagulation Screen (PT / INR / APTT / Fibrinogen)",
+    "category": "hematology",
+    "defaultResultTime": 45,
+    "genericResult": {
+      "summary": "Coagulation screen resulted",
+      "values": {
+        "INR": 1.1,
+        "APTT_seconds": 32,
+        "fibrinogen_g_L": 3.2
+      },
+      "narrative": "Coagulation screen within normal limits. PT/INR 1.1, APTT 32 seconds, fibrinogen 3.2 g/L."
+    }
+  },
+  "group-and-save": {
+    "id": "group-and-save",
+    "name": "Group and Save / Crossmatch",
+    "category": "hematology",
+    "defaultResultTime": 30,
+    "genericResult": {
+      "summary": "Group and save resulted",
+      "values": {
+        "bloodGroup": "A",
+        "Rh": "positive",
+        "antibodyScreen": "negative"
+      },
+      "narrative": "Blood group A positive. No atypical red cell antibodies detected. Sample held for crossmatch — 2 units compatible packed red cells available within 20 minutes."
+    }
   }
 }

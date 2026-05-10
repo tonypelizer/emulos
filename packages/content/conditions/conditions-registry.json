@@ -171,6 +171,34 @@
       ]
     }
   },
+  "placental-abruption": {
+    "id": "placental-abruption",
+    "name": "Major Placental Abruption",
+    "category": "obstetric",
+    "isFatal": true,
+    "vitalProgression": {
+      "heartRate": [
+        { "atMinute": 0, "value": 10 },
+        { "atMinute": 30, "value": 22 },
+        { "atMinute": 60, "value": 35 }
+      ],
+      "bloodPressure.systolic": [
+        { "atMinute": 0, "value": -5 },
+        { "atMinute": 30, "value": -22 },
+        { "atMinute": 60, "value": -42 }
+      ],
+      "oxygenSaturation": [
+        { "atMinute": 0, "value": 0 },
+        { "atMinute": 30, "value": -2 },
+        { "atMinute": 60, "value": -6 }
+      ],
+      "painScore": [
+        { "atMinute": 0, "value": 0 },
+        { "atMinute": 30, "value": 1 },
+        { "atMinute": 60, "value": 2 }
+      ]
+    }
+  },
   "preeclampsia-severe": {
     "id": "preeclampsia-severe",
     "name": "Preeclampsia with Severe Features",

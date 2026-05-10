@@ -75,6 +75,21 @@ const CASES: CaseListing[] = [
       "28F — 34 weeks pregnant, severe headache, visual disturbances, BP 162/108",
     tags: ["Headache", "Visual Disturbance", "Third Trimester", "OB/GYN"],
   },
+  {
+    id: "placental-abruption-001",
+    title: "Something\u2019s Not Right",
+    specialty: "OB/GYN",
+    difficulty: "advanced",
+    estimatedMinutes: 20,
+    chiefComplaint:
+      "32F \u2014 32 weeks pregnant, sudden severe abdominal pain, dark vaginal bleeding, no fetal heartbeat on Doppler",
+    tags: [
+      "Abdominal Pain",
+      "Antepartum Haemorrhage",
+      "Third Trimester",
+      "OB/GYN",
+    ],
+  },
 ];
 
 const DIFFICULTY_LABEL: Record<CaseListing["difficulty"], string> = {
