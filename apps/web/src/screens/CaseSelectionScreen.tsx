@@ -18,7 +18,7 @@ const CASES: CaseListing[] = [
     difficulty: "intermediate",
     estimatedMinutes: 20,
     chiefComplaint: "54M — crushing chest pain, diaphoresis, radiation to jaw",
-    tags: ["STEMI", "ACS", "ECG", "Reperfusion"],
+    tags: ["Chest Pain", "Emergency", "Cardiology", "ECG"],
   },
   {
     id: "fever-001",
@@ -28,7 +28,7 @@ const CASES: CaseListing[] = [
     estimatedMinutes: 20,
     chiefComplaint:
       "34M — 3-day fever, productive cough, pleuritic chest pain, SpO₂ 94%",
-    tags: ["Pneumonia", "CAP", "Fever", "Antibiotics", "Sepsis"],
+    tags: ["Fever", "Cough", "Respiratory", "Acute Presentation"],
   },
   {
     id: "ectopic-pregnancy-001",
@@ -38,7 +38,7 @@ const CASES: CaseListing[] = [
     estimatedMinutes: 25,
     chiefComplaint:
       "28F — 7 weeks amenorrhoea, right pelvic pain, vaginal spotting",
-    tags: ["Ectopic Pregnancy", "First Trimester", "TVUS", "β-hCG"],
+    tags: ["Pelvic Pain", "First Trimester", "OB/GYN", "Early Pregnancy"],
   },
   {
     id: "confusion-001",
@@ -48,7 +48,12 @@ const CASES: CaseListing[] = [
     estimatedMinutes: 20,
     chiefComplaint:
       "78F — acute confusion, fever, not herself since yesterday, brought in by daughter",
-    tags: ["Delirium", "UTI", "Urosepsis", "Elderly", "Altered Mental Status"],
+    tags: [
+      "Altered Mental Status",
+      "Elderly",
+      "Emergency",
+      "Acute Presentation",
+    ],
   },
   {
     id: "first-trimester-bleeding-001",
@@ -58,7 +63,7 @@ const CASES: CaseListing[] = [
     estimatedMinutes: 20,
     chiefComplaint:
       "26F — 6 weeks pregnant, vaginal bleeding, right-sided pelvic pain, prior ectopic",
-    tags: ["Ectopic Pregnancy", "First Trimester", "Bleeding", "TVUS", "β-hCG"],
+    tags: ["Vaginal Bleeding", "Pelvic Pain", "First Trimester", "OB/GYN"],
   },
   {
     id: "preeclampsia-001",
@@ -68,13 +73,7 @@ const CASES: CaseListing[] = [
     estimatedMinutes: 20,
     chiefComplaint:
       "28F — 34 weeks pregnant, severe headache, visual disturbances, BP 162/108",
-    tags: [
-      "Preeclampsia",
-      "Eclampsia",
-      "Third Trimester",
-      "Magnesium Sulphate",
-      "Hypertension",
-    ],
+    tags: ["Headache", "Visual Disturbance", "Third Trimester", "OB/GYN"],
   },
 ];
 
