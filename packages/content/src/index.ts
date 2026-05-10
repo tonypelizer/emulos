@@ -19,6 +19,7 @@ import chestPain001 from "../cases/general/chest-pain-001.json";
 import fever001 from "../cases/general/fever-001.json";
 import confusion001 from "../cases/general/confusion-001.json";
 import ectopicPregnancy001 from "../cases/obgyn/ectopic-pregnancy-001.json";
+import firstTrimesterBleeding001 from "../cases/obgyn/first-trimester-bleeding-001.json";
 import conditionsRegistryJson from "../conditions/conditions-registry.json";
 import testsRegistryJson from "../tests-catalog/tests-registry.json";
 
@@ -38,6 +39,7 @@ const CASE_REGISTRY: Record<string, unknown> = {
   "fever-001": fever001,
   "confusion-001": confusion001,
   "ectopic-pregnancy-001": ectopicPregnancy001,
+  "first-trimester-bleeding-001": firstTrimesterBleeding001,
 };
 
 /**

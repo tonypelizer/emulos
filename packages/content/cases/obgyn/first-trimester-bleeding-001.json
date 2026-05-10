@@ -1,0 +1,1019 @@
+{
+  "id": "first-trimester-bleeding-001",
+  "version": "1.0.0",
+  "metadata": {
+    "title": "Six Weeks and Bleeding",
+    "specialty": "obstetrics",
+    "difficulty": "beginner",
+    "estimatedMinutes": 20,
+    "tags": [
+      "first trimester",
+      "vaginal bleeding",
+      "threatened miscarriage",
+      "ectopic pregnancy",
+      "β-hCG",
+      "TVUS",
+      "early pregnancy"
+    ],
+    "author": "emulos-content-team",
+    "expansionPack": "ob-gyn-pack-01",
+    "requiredEngineVersion": ">=1.0.0"
+  },
+  "patient": {
+    "demographics": {
+      "name": "Chloe Watkins",
+      "age": 26,
+      "sex": "female",
+      "weight": 64,
+      "occupation": "Graphic designer"
+    },
+    "initialVitals": {
+      "heartRate": 88,
+      "bloodPressure": {
+        "systolic": 116,
+        "diastolic": 72
+      },
+      "respiratoryRate": 16,
+      "temperature": 36.9,
+      "oxygenSaturation": 99,
+      "consciousness": "alert",
+      "painScore": 4
+    },
+    "conditions": {
+      "active": [],
+      "hidden": [
+        {
+          "conditionId": "ectopic-pregnancy",
+          "severity": "moderate"
+        }
+      ]
+    },
+    "riskFactors": [
+      "prior-chlamydia-infection",
+      "prior-ectopic-pregnancy",
+      "active-smoker"
+    ]
+  },
+  "scoring": {
+    "maxScore": 1000,
+    "passingScore": 600,
+    "gradeThresholds": {
+      "S": 950,
+      "A": 850,
+      "B": 700,
+      "C": 600
+    },
+    "timeBonuses": [
+      {
+        "gameTimeThreshold": 40,
+        "bonus": 150,
+        "label": "Ectopic excluded and management confirmed within 40 minutes — Exceptional"
+      },
+      {
+        "gameTimeThreshold": 70,
+        "bonus": 75,
+        "label": "Safe management confirmed within 70 minutes"
+      }
+    ],
+    "criticalActions": [
+      {
+        "actionId": "pregnancy-confirmed",
+        "points": 75,
+        "isMandatory": true,
+        "label": "Pregnancy confirmed with urine or serum hCG"
+      },
+      {
+        "actionId": "ob-history-obtained",
+        "points": 75,
+        "isMandatory": true,
+        "label": "Obstetric history and ectopic risk factors assessed"
+      },
+      {
+        "actionId": "vitals-stability-assessed",
+        "points": 50,
+        "isMandatory": true,
+        "label": "Haemodynamic stability formally assessed"
+      },
+      {
+        "actionId": "serum-hcg-ordered",
+        "points": 75,
+        "isMandatory": true,
+        "label": "Quantitative serum β-hCG ordered"
+      },
+      {
+        "actionId": "tvus-ordered",
+        "points": 200,
+        "isMandatory": true,
+        "label": "Transvaginal ultrasound performed to localise pregnancy"
+      },
+      {
+        "actionId": "rh-status-checked",
+        "points": 50,
+        "isMandatory": true,
+        "label": "Rh blood type checked for anti-D prophylaxis decision"
+      },
+      {
+        "actionId": "ectopic-recognised",
+        "points": 200,
+        "isMandatory": true,
+        "label": "Ectopic pregnancy correctly identified"
+      },
+      {
+        "actionId": "ob-consult-activated",
+        "points": 150,
+        "isMandatory": true,
+        "label": "Obstetrics/gynaecology urgently consulted for ectopic"
+      },
+      {
+        "actionId": "iv-access-established",
+        "points": 50,
+        "isMandatory": false,
+        "label": "IV access established and bloods drawn"
+      },
+      {
+        "actionId": "anti-d-given",
+        "points": 50,
+        "isMandatory": false,
+        "label": "Anti-D immunoglobulin administered (Rh negative)"
+      }
+    ],
+    "modifiers": [
+      {
+        "id": "discharged-without-ectopic-exclusion",
+        "description": "Patient discharged or reassured without excluding ectopic pregnancy",
+        "type": "multiplier",
+        "value": 0.2
+      },
+      {
+        "id": "ruptured-before-recognition",
+        "description": "Ectopic ruptured before the diagnosis was considered",
+        "type": "flat-delta",
+        "value": -200
+      },
+      {
+        "id": "taus-only-no-tvus",
+        "description": "Transabdominal ultrasound used without TVUS — inadequate imaging for first trimester",
+        "type": "flat-delta",
+        "value": -75
+      }
+    ]
+  },
+  "nodes": {
+    "start": {
+      "id": "start",
+      "type": "presentation",
+      "text": "You are the gynaecology registrar covering the Early Pregnancy Assessment Unit.\n\nChloe Watkins, 26, a graphic designer, walks in holding her lower abdomen. She looks anxious but not acutely unwell.\n\n'I'm about 6 weeks pregnant. I started bleeding last night — not a lot, just spotting — but now it's a bit heavier and I have cramps on my right side. I'm really scared I'm losing the baby.'\n\nShe has had no prenatal care yet. She took a home pregnancy test 10 days ago which was positive. This is a planned pregnancy.\n\nVitals: HR 88 | BP 116/72 | RR 16 | Temp 36.9°C | SpO₂ 99% | Pain 4/10\n\nWhat is your first priority?",
+      "effects": [],
+      "choices": [
+        {
+          "id": "start-confirm-pregnancy-and-history",
+          "text": "Confirm pregnancy with a urine test and take a detailed obstetric history simultaneously",
+          "nextNodeId": "pregnancy-and-history",
+          "timeCost": 8,
+          "effects": [
+            {
+              "type": "order_test",
+              "testId": "urine-pregnancy-test"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "pregnancy-confirmed",
+              "points": 75,
+              "reason": "Pregnancy confirmation and history taken concurrently — efficient and correct first step",
+              "category": "critical-action"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "start-reassure-threatened-mc",
+          "text": "Reassure her this is almost certainly a threatened miscarriage — very common at 6 weeks",
+          "nextNodeId": "premature-reassurance",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "premature-reassurance-penalty",
+              "points": -100,
+              "reason": "Reassuring a patient with unilateral pelvic pain and early pregnancy bleeding before ectopic pregnancy has been excluded is dangerous and clinically inappropriate",
+              "category": "penalty"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "start-examine-abdomen",
+          "text": "Perform an abdominal examination immediately",
+          "nextNodeId": "early-abdominal-exam",
+          "timeCost": 5,
+          "effects": [],
+          "condition": null
+        },
+        {
+          "id": "start-vitals-assessment",
+          "text": "Formally assess haemodynamic stability before anything else",
+          "nextNodeId": "vitals-assessment",
+          "timeCost": 3,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "vitals-stability-assessed",
+              "points": 50,
+              "reason": "Haemodynamic stability formally assessed — correct approach in any bleeding obstetric patient",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "vitals-stable-confirmed"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "vitals-assessment": {
+      "id": "vitals-assessment",
+      "type": "examination",
+      "text": "Haemodynamic Stability Assessment:\n\nHR: 88 bpm — mildly elevated but not tachycardic\nBP: 116/72 — stable\nRR: 16 — normal\nSpO₂: 99%\nCap refill: <2 seconds\nPostural symptoms: she denies dizziness on standing\n\nYou ask her to stand and recheck: HR 94, BP 112/70 — minimal postural change. No orthostatic hypotension.\n\nCONCLUSION: Haemodynamically STABLE at this time. This does not exclude ectopic pregnancy — a patient can be stable right up until tubal rupture, which can then be catastrophic.\n\nStability is reassuring but does NOT change the urgency of excluding ectopic pregnancy.\n\nWhat is your next action?",
+      "effects": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "vitals-stable-confirmed"
+        }
+      ],
+      "choices": [
+        {
+          "id": "vitals-to-history",
+          "text": "Obtain a detailed obstetric history and confirm pregnancy status",
+          "nextNodeId": "pregnancy-and-history",
+          "timeCost": 8,
+          "effects": [
+            {
+              "type": "order_test",
+              "testId": "urine-pregnancy-test"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "pregnancy-confirmed",
+              "points": 75,
+              "reason": "Pregnancy confirmation and OB history obtained",
+              "category": "critical-action"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "test_ordered",
+              "testId": "urine-pregnancy-test"
+            }
+          }
+        },
+        {
+          "id": "vitals-to-workup",
+          "text": "Proceed directly to investigations — order TVUS and serum β-hCG",
+          "nextNodeId": "investigation-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "premature-reassurance": {
+      "id": "premature-reassurance",
+      "type": "decision",
+      "text": "You begin to reassure Chloe that this is likely a threatened miscarriage.\n\nChloe nods, relieved — but then adds: 'The pain is mostly on my right side, not in the middle. And last year I had a pregnancy that... it wasn't in the right place. They had to give me a shot. Is that relevant?'\n\nShe has just disclosed a prior ectopic pregnancy treated with methotrexate.\n\nThis is a high-risk red flag you nearly missed. A prior ectopic is the single strongest risk factor for a repeat ectopic.\n\nYou need to immediately reassess.",
+      "effects": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "prior-ectopic-disclosed"
+        }
+      ],
+      "choices": [
+        {
+          "id": "reassurance-reverse-course",
+          "text": "Immediately reassess — take a full OB history and order urgent investigations",
+          "nextNodeId": "pregnancy-and-history",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "order_test",
+              "testId": "urine-pregnancy-test"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "pregnancy-confirmed",
+              "points": 75,
+              "reason": "Pregnancy confirmed and OB history taken after recognising prior ectopic risk",
+              "category": "critical-action"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "early-abdominal-exam": {
+      "id": "early-abdominal-exam",
+      "type": "examination",
+      "text": "Abdominal Examination:\n\n• Abdomen soft, non-distended\n• Right iliac fossa tenderness — moderate, without guarding\n• Mild suprapubic tenderness\n• No peritoneal signs on percussion\n• Bowel sounds present and normal\n• No rebound tenderness\n\nYou note that the right-sided tenderness is more pronounced than central, and you defer pelvic examination until you know the pregnancy status.\n\nThis finding is consistent with a right adnexal process — which raises concern for a right-sided ectopic pregnancy.\n\nYou should now confirm pregnancy and obtain obstetric history urgently.",
+      "effects": [
+        {
+          "type": "add_examination_finding",
+          "findingId": "right-iliac-fossa-tenderness"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "exam-rif-tenderness"
+        }
+      ],
+      "choices": [
+        {
+          "id": "exam-to-history",
+          "text": "Confirm pregnancy status and take a full OB history",
+          "nextNodeId": "pregnancy-and-history",
+          "timeCost": 8,
+          "effects": [
+            {
+              "type": "order_test",
+              "testId": "urine-pregnancy-test"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "pregnancy-confirmed",
+              "points": 75,
+              "reason": "Pregnancy confirmed after examination — correct sequencing",
+              "category": "critical-action"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "test_ordered",
+              "testId": "urine-pregnancy-test"
+            }
+          }
+        },
+        {
+          "id": "exam-to-workup-direct",
+          "text": "Skip further history and order TVUS immediately",
+          "nextNodeId": "investigation-hub",
+          "timeCost": 0,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "ob-history-skipped-penalty",
+              "points": -50,
+              "reason": "OB history — specifically prior ectopic, STI history, and LMP — is critical to risk-stratify this patient before imaging",
+              "category": "penalty"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "pregnancy-and-history": {
+      "id": "pregnancy-and-history",
+      "type": "history",
+      "text": "While the urine pregnancy test processes, you take a detailed obstetric history.\n\nChloe tells you:\n\n• LMP: approximately 6 weeks and 2 days ago — consistent with her home test\n• G2P0 — one prior pregnancy last year: confirmed ectopic (right tube), treated with methotrexate. She did NOT have surgery.\n• Chlamydia infection 2 years ago — treated. No PID that she knows of.\n• Regular 28-day cycles. Not currently using contraception — this pregnancy was planned.\n• No IUD. Currently taking folic acid.\n• Active smoker — 5–6 cigarettes per day.\n• She is Rh-negative — she remembers being told last time.\n\nRISK STRATIFICATION:\n[!] Prior ectopic pregnancy — HIGHEST single risk factor (recurrence rate ~10–15%)\n[!] Prior chlamydia — tubal mucosal damage risk\n[!] Active smoker — increased ectopic risk (relative risk ×2–4)\n[!] Unilateral right-sided pain\n\nUrine pregnancy test result: POSITIVE.\n\nThis is a high-risk presentation. Ectopic must be excluded urgently.",
+      "effects": [
+        {
+          "type": "result_test",
+          "testId": "urine-pregnancy-test"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "pregnancy-confirmed"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "ob-history-complete"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "prior-ectopic-disclosed"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "rh-negative-known"
+        },
+        {
+          "type": "add_history_item",
+          "itemId": "ob-risk-factors-gathered"
+        },
+        {
+          "type": "add_score_event",
+          "actionId": "ob-history-obtained",
+          "points": 75,
+          "reason": "Obstetric history and ectopic risk factors comprehensively assessed",
+          "category": "critical-action"
+        }
+      ],
+      "choices": [
+        {
+          "id": "history-to-investigation",
+          "text": "Proceed to urgent investigations — TVUS, serum β-hCG, bloods",
+          "nextNodeId": "investigation-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        },
+        {
+          "id": "history-to-exam-first",
+          "text": "Perform an abdominal examination before ordering imaging",
+          "nextNodeId": "early-abdominal-exam",
+          "timeCost": 5,
+          "effects": [],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "exam-rif-tenderness"
+            }
+          }
+        }
+      ]
+    },
+    "investigation-hub": {
+      "id": "investigation-hub",
+      "type": "decision",
+      "text": "Chloe is haemodynamically stable. Pregnancy confirmed. OB history reveals a prior ectopic and multiple other risk factors.\n\nWhat investigations do you want to order?\n\nCurrent concern: Ectopic pregnancy must be excluded before any reassurance can be given. Light bleeding in early pregnancy has a broad differential — threatened miscarriage, inevitable miscarriage, ectopic pregnancy, or subchorionic haemorrhage — but the risk factor profile here demands urgent imaging.",
+      "effects": [],
+      "choices": [
+        {
+          "id": "order-tvus-urgent",
+          "text": "Order urgent transvaginal ultrasound (TVUS) — the definitive first-trimester imaging test",
+          "nextNodeId": "tvus-result",
+          "timeCost": 30,
+          "effects": [
+            {
+              "type": "order_test",
+              "testId": "transvaginal-ultrasound"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "tvus-ordered",
+              "points": 200,
+              "reason": "TVUS ordered urgently — the gold-standard imaging modality for first-trimester pregnancy localisation",
+              "category": "critical-action"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "test_ordered",
+              "testId": "transvaginal-ultrasound"
+            }
+          }
+        },
+        {
+          "id": "order-serum-hcg",
+          "text": "Order quantitative serum β-hCG and blood type while waiting for TVUS",
+          "nextNodeId": "serum-hcg-result",
+          "timeCost": 15,
+          "effects": [
+            {
+              "type": "order_test",
+              "testId": "serum-beta-hcg"
+            },
+            {
+              "type": "order_test",
+              "testId": "rh-blood-type"
+            },
+            {
+              "type": "order_test",
+              "testId": "cbc"
+            },
+            {
+              "type": "order_test",
+              "testId": "progesterone-level"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "serum-hcg-ordered",
+              "points": 75,
+              "reason": "Serum β-hCG and blood type ordered — essential for discriminatory zone interpretation and anti-D decision",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "rh-status-checked",
+              "points": 50,
+              "reason": "Rh blood type checked — anti-D prophylaxis may be indicated",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "iv-access-established",
+              "points": 50,
+              "reason": "IV access and bloods drawn — appropriate preparation for potential surgical emergency",
+              "category": "critical-action"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "test_ordered",
+              "testId": "serum-beta-hcg"
+            }
+          }
+        },
+        {
+          "id": "order-taus-instead",
+          "text": "Order transabdominal ultrasound (TAUS) — it is available sooner",
+          "nextNodeId": "taus-suboptimal",
+          "timeCost": 20,
+          "effects": [
+            {
+              "type": "order_test",
+              "testId": "transabdominal-ultrasound"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "taus-instead-of-tvus-penalty",
+              "points": -75,
+              "reason": "TAUS alone is insufficient for first-trimester evaluation — sensitivity for early IUP and ectopic pregnancy is substantially lower than TVUS. TVUS must be performed.",
+              "category": "penalty"
+            },
+            {
+              "type": "apply_score_modifier",
+              "modifierId": "taus-only-no-tvus"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "test_ordered",
+              "testId": "transvaginal-ultrasound"
+            }
+          }
+        },
+        {
+          "id": "workup-to-tvus-result",
+          "text": "Review the TVUS result (scan complete)",
+          "nextNodeId": "tvus-result",
+          "timeCost": 0,
+          "effects": [],
+          "condition": {
+            "op": "test_ordered",
+            "testId": "transvaginal-ultrasound"
+          }
+        },
+        {
+          "id": "discharge-observe-home",
+          "text": "She is stable — discharge her with a repeat hCG in 48 hours and GP review",
+          "nextNodeId": "dangerous-discharge",
+          "timeCost": 10,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "unsafe-discharge-penalty",
+              "points": -200,
+              "reason": "Discharging a haemodynamically stable patient does NOT exclude ectopic pregnancy — ectopic can rupture within hours of a stable presentation. A prior ectopic plus unilateral pain mandates TVUS before any discharge.",
+              "category": "penalty"
+            },
+            {
+              "type": "apply_score_modifier",
+              "modifierId": "discharged-without-ectopic-exclusion"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "serum-hcg-result": {
+      "id": "serum-hcg-result",
+      "type": "result",
+      "text": "Laboratory Results — RESULTED:\n\nSerum β-hCG: 2,200 mIU/mL\n  • Discriminatory zone for TVUS: typically 1,500–3,500 mIU/mL (varies by institution)\n  • At 2,200 mIU/mL, a viable intrauterine pregnancy SHOULD be visible on TVUS if present\n  • Absence of IUP on TVUS at this level is highly suspicious for ectopic\n\nProgesterone: 11 ng/mL\n  • Values <5 ng/mL suggest non-viable pregnancy\n  • Values >25 ng/mL suggest viable IUP\n  • 11 ng/mL is INDETERMINATE — does not confirm viability\n\nCBC: Hb 12.1 g/dL — no acute haemorrhage evident\nBlood type: O negative — Rh NEGATIVE\n  [!] Anti-D immunoglobulin is required if any bleeding event is confirmed\n\nKEY TEACHING: The serum β-hCG alone cannot localise a pregnancy. It contextualises the TVUS result. A TVUS is still essential.",
+      "effects": [
+        {
+          "type": "result_test",
+          "testId": "serum-beta-hcg"
+        },
+        {
+          "type": "result_test",
+          "testId": "rh-blood-type"
+        },
+        {
+          "type": "result_test",
+          "testId": "cbc"
+        },
+        {
+          "type": "result_test",
+          "testId": "progesterone-level"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "hcg-level-known"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "rh-negative-confirmed"
+        }
+      ],
+      "choices": [
+        {
+          "id": "hcg-to-tvus",
+          "text": "Proceed to TVUS urgently — β-hCG 2,200 is above discriminatory zone, IUP should be visible",
+          "nextNodeId": "tvus-result",
+          "timeCost": 30,
+          "effects": [
+            {
+              "type": "order_test",
+              "testId": "transvaginal-ultrasound"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "tvus-ordered",
+              "points": 200,
+              "reason": "TVUS ordered — correct next step after serum β-hCG result confirms discriminatory zone has been crossed",
+              "category": "critical-action"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "test_ordered",
+              "testId": "transvaginal-ultrasound"
+            }
+          }
+        },
+        {
+          "id": "hcg-discharge-48h",
+          "text": "Repeat β-hCG in 48 hours — the progesterone is indeterminate, observe at home",
+          "nextNodeId": "dangerous-discharge",
+          "timeCost": 10,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "discharge-after-hcg-above-zone-penalty",
+              "points": -200,
+              "reason": "The β-hCG is 2,200 mIU/mL — above the discriminatory zone. A 48-hour repeat strategy is appropriate when β-hCG is BELOW the discriminatory zone. At this level, TVUS must be performed before discharge.",
+              "category": "penalty"
+            },
+            {
+              "type": "apply_score_modifier",
+              "modifierId": "discharged-without-ectopic-exclusion"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "taus-suboptimal": {
+      "id": "taus-suboptimal",
+      "type": "result",
+      "text": "Transabdominal Ultrasound Result:\n\nThe sonographer reports: 'I can see the uterus. It appears empty — no obvious intrauterine gestational sac visible. There is a possible vague adnexal structure on the right, but image quality at this gestational age is limited transabdominally. I strongly recommend a transvaginal scan for further evaluation.'\n\nThe TAUS is NON-DIAGNOSTIC.\n\nAt 6 weeks, an intrauterine sac may not be visible transabdominally — the embryo is too small. TVUS provides far superior resolution.\n\nAn empty uterus on TAUS at this β-hCG level does NOT exclude ectopic — it demands further evaluation with TVUS.\n\nWhat do you do now?",
+      "effects": [
+        {
+          "type": "result_test",
+          "testId": "transabdominal-ultrasound"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "taus-non-diagnostic"
+        }
+      ],
+      "choices": [
+        {
+          "id": "taus-now-order-tvus",
+          "text": "Order TVUS immediately — the TAUS is non-diagnostic and TVUS is essential",
+          "nextNodeId": "tvus-result",
+          "timeCost": 30,
+          "effects": [
+            {
+              "type": "order_test",
+              "testId": "transvaginal-ultrasound"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "tvus-ordered",
+              "points": 200,
+              "reason": "TVUS correctly ordered after recognising TAUS limitations",
+              "category": "critical-action"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "taus-discharge-with-repeat",
+          "text": "The uterus looks empty — discharge with a repeat scan in one week",
+          "nextNodeId": "dangerous-discharge",
+          "timeCost": 10,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "discharge-empty-uterus-penalty",
+              "points": -200,
+              "reason": "An empty uterus on TAUS with a positive hCG does NOT exclude ectopic — the scan is non-diagnostic at this gestational age. Discharge at this point is unsafe.",
+              "category": "penalty"
+            },
+            {
+              "type": "apply_score_modifier",
+              "modifierId": "discharged-without-ectopic-exclusion"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "tvus-result": {
+      "id": "tvus-result",
+      "type": "result",
+      "text": "Transvaginal Ultrasound Report:\n\nSonographer findings:\n• Uterus: Normal size and shape. Endometrium thickened (12mm) — no intrauterine gestational sac identified.\n• Left adnexa: Normal ovary visualised. No abnormality.\n• Right adnexa: [!] Heterogeneous ring-like structure measuring 18 × 14mm adjacent to the right ovary. No fetal cardiac activity identified within this structure. Ovary is separate.\n• Free fluid: Small amount of free fluid in the Pouch of Douglas.\n\nSONOGRAPHER COMMENT: 'No intrauterine pregnancy identified. Right adnexal mass with tubal ring appearance. Findings are highly suspicious for right-sided ectopic pregnancy. Urgent clinical review recommended.'\n\nβ-hCG 2,200 mIU/mL with no IUP visible: strongly supports ectopic pregnancy.\n\nThis is an ectopic pregnancy until proven otherwise.",
+      "effects": [
+        {
+          "type": "result_test",
+          "testId": "transvaginal-ultrasound"
+        },
+        {
+          "type": "reveal_condition",
+          "conditionId": "ectopic-pregnancy"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "ectopic-suspected-tvus"
+        }
+      ],
+      "choices": [
+        {
+          "id": "tvus-diagnose-ectopic",
+          "text": "This is an ectopic pregnancy — activate obstetrics/gynaecology urgently",
+          "nextNodeId": "ectopic-management",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "ectopic-recognised",
+              "points": 200,
+              "reason": "Ectopic pregnancy correctly identified from TVUS findings and clinical context",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "ectopic-diagnosed"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "tvus-observe-repeat-scan",
+          "text": "The sac could be outside the uterus but I'm not sure — repeat scan in 48 hours",
+          "nextNodeId": "indecision-delay",
+          "timeCost": 0,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "tvus-indecision-penalty",
+              "points": -100,
+              "reason": "A tubal ring with no IUP and β-hCG above the discriminatory zone is ectopic pregnancy until proven otherwise. Delay for repeat scanning without senior review is unsafe.",
+              "category": "penalty"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "indecision-delay": {
+      "id": "indecision-delay",
+      "type": "event",
+      "text": "[DETERIORATION] Three hours pass. Chloe was sent to the waiting area.\n\nThe nurse calls urgently: 'She's collapsed in the toilet. HR 138, BP 78/42. She is pale and barely rousable. There is blood on the floor.'\n\nThe ectopic has ruptured.\n\nYou run to her. Intraperitoneal haemorrhage — haemorrhagic shock.",
+      "effects": [
+        {
+          "type": "advance_time",
+          "minutes": 180
+        },
+        {
+          "type": "adjust_vital",
+          "vital": "heartRate",
+          "delta": 50
+        },
+        {
+          "type": "adjust_vital",
+          "vital": "bloodPressure.systolic",
+          "delta": -38
+        },
+        {
+          "type": "add_condition",
+          "conditionId": "intraperitoneal-haemorrhage",
+          "severity": "critical"
+        },
+        {
+          "type": "apply_score_modifier",
+          "modifierId": "ruptured-before-recognition"
+        },
+        {
+          "type": "set_game_phase",
+          "phase": "terminal"
+        }
+      ],
+      "choices": [
+        {
+          "id": "ruptured-emergency-response",
+          "text": "Call a crash team — large-bore IV access, fluid resuscitation, emergency theatre, urgent OB consult",
+          "nextNodeId": "outcome-ruptured-rescue",
+          "timeCost": 10,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "ob-consult-activated",
+              "points": 150,
+              "reason": "OB consulted for emergency surgery — necessary but delayed",
+              "category": "critical-action"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "dangerous-discharge": {
+      "id": "dangerous-discharge",
+      "type": "event",
+      "text": "[CRITICAL ERROR] Chloe is discharged without ectopic pregnancy being excluded.\n\nShe calls 999 from a car park four hours later. She is found collapsed, pale, and pulseless on arrival. Massive intraperitoneal haemorrhage from a ruptured right ectopic pregnancy.\n\nDespite emergency laparotomy, she suffers cardiac arrest on the table.\n\nShe does not survive.\n\nA prior ectopic pregnancy, unilateral pain, positive hCG, and first-trimester bleeding is an ectopic pregnancy until proven otherwise. She should never have left without TVUS-confirmed pregnancy localisation.",
+      "effects": [
+        {
+          "type": "advance_time",
+          "minutes": 240
+        },
+        {
+          "type": "set_game_phase",
+          "phase": "terminal"
+        }
+      ],
+      "choices": [
+        {
+          "id": "discharge-outcome",
+          "text": "Review case outcome",
+          "nextNodeId": "outcome-fatal",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "ectopic-management": {
+      "id": "ectopic-management",
+      "type": "decision",
+      "text": "ECTOPIC PREGNANCY CONFIRMED — RIGHT ADNEXAL MASS, NO IUP.\n\nChloe is currently haemodynamically STABLE:\nHR 88 | BP 116/72 | No signs of rupture\n\nβ-hCG: 2,200 mIU/mL\nRight adnexal mass: 18mm — moderate size\nNo fetal cardiac activity on TVUS\nSmall free fluid — not large volume haemoperitoneum\n\nThe gynaecology attending must be called to lead from here. However, you must also initiate immediate management steps.\n\nWhat do you do now?",
+      "effects": [],
+      "choices": [
+        {
+          "id": "management-ob-consult-plus-prep",
+          "text": "Urgently call gynaecology on-call AND simultaneously: establish IV access, cross-match blood, prepare for potential theatre, give anti-D (Rh negative)",
+          "nextNodeId": "optimal-management",
+          "timeCost": 15,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "ob-consult-activated",
+              "points": 150,
+              "reason": "OB/Gyn urgently consulted and patient prepared appropriately for surgical management",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "anti-d-given",
+              "points": 50,
+              "reason": "Anti-D immunoglobulin given for Rh-negative patient with confirmed pregnancy and bleeding",
+              "category": "critical-action"
+            },
+            {
+              "type": "order_test",
+              "testId": "blood-cultures"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "management-ob-consult-only",
+          "text": "Call gynaecology and hand over — they will manage from here",
+          "nextNodeId": "optimal-management",
+          "timeCost": 10,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "ob-consult-activated",
+              "points": 150,
+              "reason": "OB/Gyn consulted",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "anti-d-not-given-penalty",
+              "points": -50,
+              "reason": "Anti-D immunoglobulin not administered — Chloe is Rh-negative and has active bleeding from a confirmed ectopic. Anti-D should have been given before handover.",
+              "category": "penalty"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "management-observe-stable",
+          "text": "She is stable — observe her closely for 4 hours before calling gynaecology",
+          "nextNodeId": "observation-delay",
+          "timeCost": 0,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "observation-delay-penalty",
+              "points": -150,
+              "reason": "Confirmed ectopic pregnancy requires immediate senior gynaecological review regardless of haemodynamic stability. Stability can deteriorate rapidly and unpredictably with tubal ectopics.",
+              "category": "penalty"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "observation-delay": {
+      "id": "observation-delay",
+      "type": "event",
+      "text": "[DETERIORATION] Two hours into your observation period.\n\nChloe presses her call bell: 'The pain is getting so much worse. My shoulder hurts. I feel sick.'\n\nVitals: HR 118, BP 88/56. She is pale and diaphoretic. Repeat FH ultrasound on the portable machine shows a large volume of free fluid in the abdomen.\n\nThe tube has ruptured. She is in haemorrhagic shock.\n\nYou call gynaecology — immediate emergency laparotomy is organised.",
+      "effects": [
+        {
+          "type": "advance_time",
+          "minutes": 120
+        },
+        {
+          "type": "adjust_vital",
+          "vital": "heartRate",
+          "delta": 30
+        },
+        {
+          "type": "adjust_vital",
+          "vital": "bloodPressure.systolic",
+          "delta": -28
+        },
+        {
+          "type": "add_condition",
+          "conditionId": "intraperitoneal-haemorrhage",
+          "severity": "severe"
+        },
+        {
+          "type": "apply_score_modifier",
+          "modifierId": "ruptured-before-recognition"
+        },
+        {
+          "type": "set_game_phase",
+          "phase": "terminal"
+        }
+      ],
+      "choices": [
+        {
+          "id": "delay-obs-now-emergency",
+          "text": "Immediate IV access, blood transfusion, call anaesthetics — emergency theatre",
+          "nextNodeId": "outcome-ruptured-rescue",
+          "timeCost": 10,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "ob-consult-activated",
+              "points": 150,
+              "reason": "Emergency gynaecology activated — but rupture occurred due to delayed escalation",
+              "category": "critical-action"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "optimal-management": {
+      "id": "optimal-management",
+      "type": "decision",
+      "text": "The gynaecology attending, Dr. Yemi Adeyemi, reviews Chloe immediately.\n\n'Good catch. She is stable and the mass is 18mm with no fetal cardiac activity. β-hCG 2,200. This is consistent with an early, unruptured right-sided ectopic. She has a prior ectopic managed medically — she knows what this means.'\n\nDr. Adeyemi sits with Chloe and explains the diagnosis gently. Chloe is upset but not surprised — she knew the risk.\n\nManagement options are discussed:\n1. Methotrexate (medical) — suitable if β-hCG <5,000, no fetal cardiac activity, mass <35mm, stable\n2. Laparoscopic salpingostomy or salpingectomy (surgical)\n3. Expectant management (very selected cases only)\n\nCriteria for methotrexate are met. The team proceeds to counsel Chloe.\n\nYour role is complete. The case is appropriately escalated.",
+      "effects": [],
+      "choices": [
+        {
+          "id": "optimal-to-outcome",
+          "text": "Confirm handover and document management plan",
+          "nextNodeId": "outcome-excellent",
+          "timeCost": 5,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "outcome-excellent": {
+      "id": "outcome-excellent",
+      "type": "outcome",
+      "text": "Chloe Watkins receives methotrexate 50mg/m² IM in the day unit under gynaecology supervision.\n\nShe is counselled extensively:\n• No pregnancy for 3 months post-methotrexate\n• Weekly β-hCG until <5 mIU/mL\n• Return immediately with any shoulder-tip pain, heavy bleeding, or collapse\n• Anti-D 625 IU given (Rh negative, bleeding event confirmed)\n\n--- Follow-up ---\nbeta-hCG Day 7: 1,800 mIU/mL (only 18% fall — borderline → second dose given)\nbeta-hCG Day 14: 390 mIU/mL — satisfactory decline\nbeta-hCG Day 28: 12 mIU/mL — approaching resolution\nbeta-hCG Day 35: <5 mIU/mL — treatment successful. No surgery required.\n\nChloe is seen in clinic at 6 weeks. She is well. She asks about future fertility — a careful, hopeful conversation follows.\n\n[!] Teaching Points:\n• Always exclude ectopic before labelling first-trimester bleeding as a threatened miscarriage\n• A prior ectopic is the single strongest risk factor for a repeat ectopic\n• TVUS is the gold standard for first-trimester pregnancy localisation\n• β-hCG above the discriminatory zone with no IUP on TVUS = ectopic until proven otherwise\n• Rh-negative patients require anti-D after any pregnancy bleeding event",
+      "outcomeId": "excellent",
+      "effects": [],
+      "choices": []
+    },
+    "outcome-ruptured-rescue": {
+      "id": "outcome-ruptured-rescue",
+      "type": "outcome",
+      "text": "Emergency laparoscopy performed. Right fallopian tube has ruptured — approximately 400mL of haemoperitoneum.\n\nRight salpingectomy performed. Haemostasis achieved. Transfused 2 units packed red cells intraoperatively.\n\n--- Post-operative course ---\nICU: 12 hours monitoring\nDischarge: Day 3\nFertility: One remaining fallopian tube — natural conception possible but risk of repeat ectopic is elevated\n\nChloe recovers fully. She was lucky.\n\n[!] Teaching Points:\n• A haemodynamically stable ectopic can rupture within hours without warning\n• Any delay in senior gynaecological review after ectopic is identified risks tubal rupture\n• The window between 'stable ectopic' and 'ruptured ectopic with haemorrhagic shock' is narrow and unpredictable\n• Salpingectomy may be unavoidable once rupture occurs — early diagnosis preserves surgical options (salpingostomy, medical management)",
+      "outcomeId": "ruptured-rescue",
+      "effects": [],
+      "choices": []
+    },
+    "outcome-fatal": {
+      "id": "outcome-fatal",
+      "type": "outcome",
+      "text": "Chloe Watkins, 26, died from haemorrhagic shock secondary to a ruptured right ectopic pregnancy.\n\nThe coroner's report identifies delayed recognition and premature discharge without exclusion of ectopic pregnancy as the contributory factors.\n\nShe had presented with all the classical features:\n• Positive pregnancy test\n• Unilateral pelvic pain\n• Prior ectopic pregnancy\n• First-trimester vaginal bleeding\n\nAny one of these features in isolation warrants consideration of ectopic. All four together make it a diagnosis until proven otherwise.\n\n[!] Teaching Points:\n• First-trimester bleeding + positive hCG = ectopic excluded before discharge — no exceptions\n• 'Haemodynamically stable' does not mean 'safe to discharge without imaging'\n• Threatened miscarriage is a diagnosis of exclusion once ectopic has been ruled out by TVUS\n• A prior ectopic is the single most important risk factor — recurrence rate 10–15%\n• This was a preventable death",
+      "outcomeId": "fatal",
+      "effects": [],
+      "choices": []
+    }
+  }
+}

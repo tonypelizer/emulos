@@ -50,6 +50,16 @@ const CASES: CaseListing[] = [
       "78F — acute confusion, fever, not herself since yesterday, brought in by daughter",
     tags: ["Delirium", "UTI", "Urosepsis", "Elderly", "Altered Mental Status"],
   },
+  {
+    id: "first-trimester-bleeding-001",
+    title: "Six Weeks and Bleeding",
+    specialty: "OB/GYN",
+    difficulty: "beginner",
+    estimatedMinutes: 20,
+    chiefComplaint:
+      "26F — 6 weeks pregnant, vaginal bleeding, right-sided pelvic pain, prior ectopic",
+    tags: ["Ectopic Pregnancy", "First Trimester", "Bleeding", "TVUS", "β-hCG"],
+  },
 ];
 
 const DIFFICULTY_LABEL: Record<CaseListing["difficulty"], string> = {
