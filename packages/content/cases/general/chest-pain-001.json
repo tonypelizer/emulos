@@ -1,0 +1,2153 @@
+{
+  "id": "chest-pain-001",
+  "version": "2.0.0",
+  "metadata": {
+    "title": "The Chest That Wouldn't Stop",
+    "specialty": "emergency",
+    "difficulty": "intermediate",
+    "estimatedMinutes": 20,
+    "tags": [
+      "STEMI",
+      "ACS",
+      "ECG",
+      "reperfusion",
+      "cardiology",
+      "ACLS"
+    ],
+    "author": "emulos-content-team",
+    "expansionPack": null,
+    "requiredEngineVersion": ">=1.0.0"
+  },
+  "patient": {
+    "demographics": {
+      "name": "Malcolm Torres",
+      "age": 54,
+      "sex": "male",
+      "weight": 88,
+      "occupation": "Construction foreman"
+    },
+    "initialVitals": {
+      "heartRate": 98,
+      "bloodPressure": {
+        "systolic": 142,
+        "diastolic": 88
+      },
+      "respiratoryRate": 20,
+      "temperature": 37.0,
+      "oxygenSaturation": 95,
+      "consciousness": "alert",
+      "painScore": 9
+    },
+    "conditions": {
+      "active": [
+        {
+          "conditionId": "hypertension",
+          "severity": "moderate"
+        },
+        {
+          "conditionId": "type2-diabetes",
+          "severity": "mild"
+        }
+      ],
+      "hidden": [
+        {
+          "conditionId": "anterior-stemi",
+          "severity": "critical"
+        },
+        {
+          "conditionId": "triple-vessel-disease",
+          "severity": "severe"
+        }
+      ]
+    },
+    "riskFactors": [
+      "active-smoker",
+      "family-hx-cad",
+      "hyperlipidemia",
+      "obesity"
+    ]
+  },
+  "scoring": {
+    "maxScore": 1000,
+    "passingScore": 600,
+    "gradeThresholds": {
+      "S": 950,
+      "A": 850,
+      "B": 700,
+      "C": 600
+    },
+    "timeBonuses": [
+      {
+        "gameTimeThreshold": 35,
+        "bonus": 150,
+        "label": "Door-to-balloon < 35 min \u2014 Exceptional speed"
+      },
+      {
+        "gameTimeThreshold": 60,
+        "bonus": 75,
+        "label": "Within the Golden Hour"
+      }
+    ],
+    "criticalActions": [
+      {
+        "actionId": "order-ecg",
+        "points": 100,
+        "isMandatory": true,
+        "label": "12-lead ECG obtained promptly"
+      },
+      {
+        "actionId": "ecg-interpretation-correct",
+        "points": 75,
+        "isMandatory": true,
+        "label": "ECG correctly identified as anterior STEMI"
+      },
+      {
+        "actionId": "oxygen-therapy",
+        "points": 50,
+        "isMandatory": false,
+        "label": "Supplemental oxygen given for SpO2 < 94%"
+      },
+      {
+        "actionId": "administer-aspirin",
+        "points": 100,
+        "isMandatory": true,
+        "label": "Aspirin 300mg given"
+      },
+      {
+        "actionId": "iv-access-bloods",
+        "points": 50,
+        "isMandatory": false,
+        "label": "IV access established and bloods drawn"
+      },
+      {
+        "actionId": "pain-management",
+        "points": 50,
+        "isMandatory": false,
+        "label": "Analgesia administered"
+      },
+      {
+        "actionId": "activate-cath-lab",
+        "points": 250,
+        "isMandatory": true,
+        "label": "Cath lab activated \u2014 primary PCI initiated"
+      },
+      {
+        "actionId": "anticoagulation",
+        "points": 75,
+        "isMandatory": false,
+        "label": "Heparin anticoagulation given pre-PCI"
+      },
+      {
+        "actionId": "p2y12-loading",
+        "points": 50,
+        "isMandatory": false,
+        "label": "P2Y12 inhibitor loading dose given"
+      }
+    ],
+    "modifiers": [
+      {
+        "id": "patient-arrested",
+        "description": "Patient suffered a preventable cardiac arrest due to delayed management",
+        "type": "multiplier",
+        "value": 0.5
+      },
+      {
+        "id": "shock-developed",
+        "description": "Cardiogenic shock developed due to delayed reperfusion",
+        "type": "flat-delta",
+        "value": -100
+      }
+    ]
+  },
+  "nodes": {
+    "start": {
+      "id": "start",
+      "type": "presentation",
+      "text": "EMS radio crackles: 'Inbound \u2014 54-year-old male, construction foreman. Found by coworkers sitting on the ground. Severe central chest pain, diaphoretic, nauseous. Pain started 40 minutes ago while carrying materials. Pale and looks sick. BP 142/88, HR 98, SpO2 95%. ETA 3 minutes.'\n\nMr. Malcolm Torres rolls in on the stretcher, jaw clenched, hand pressed to his sternum. 'Doc, something is really wrong. I feel like there's a truck on my chest.'\n\nVitals confirmed: HR 98 | BP 142/88 | RR 20 | SpO2 95% | Temp 37.0\u00b0C | Pain 9/10\n\nWhat is your first action?",
+      "effects": [],
+      "choices": [
+        {
+          "id": "immediate-ecg",
+          "text": "Order an immediate 12-lead ECG while attaching the monitor",
+          "nextNodeId": "ecg-ordered",
+          "timeCost": 8,
+          "effects": [
+            {
+              "type": "order_test",
+              "testId": "12-lead-ecg"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "order-ecg",
+              "points": 100,
+              "reason": "12-lead ECG ordered immediately \u2014 the single most important first step in undifferentiated chest pain",
+              "category": "critical-action"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "history-first",
+          "text": "Take a targeted chest pain history before any tests",
+          "nextNodeId": "history-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        },
+        {
+          "id": "exam-first",
+          "text": "Perform a rapid primary survey and physical examination",
+          "nextNodeId": "rapid-exam",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        },
+        {
+          "id": "start-iv-bloods-first",
+          "text": "Establish IV access and draw bloods while attaching monitoring",
+          "nextNodeId": "iv-access-node",
+          "timeCost": 10,
+          "effects": [
+            {
+              "type": "order_test",
+              "testId": "troponin-i"
+            },
+            {
+              "type": "order_test",
+              "testId": "cbc"
+            },
+            {
+              "type": "order_test",
+              "testId": "bmp"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "iv-access-bloods",
+              "points": 50,
+              "reason": "IV access established and bloods drawn \u2014 appropriate supportive action",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "bloods-before-ecg",
+              "points": -30,
+              "reason": "Bloods drawn before ECG delays the most critical diagnostic test in acute chest pain",
+              "category": "penalty"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "history-hub": {
+      "id": "history-hub",
+      "type": "history",
+      "text": "Mr. Torres is in obvious discomfort but cooperative. You need to be efficient.\n\nWhat history do you want?",
+      "effects": [],
+      "choices": [
+        {
+          "id": "ask-hpi",
+          "text": "Character and onset of the chest pain",
+          "nextNodeId": "history-hpi",
+          "timeCost": 3,
+          "effects": [],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "hpi-gathered"
+            }
+          }
+        },
+        {
+          "id": "ask-cardiac-risk",
+          "text": "Cardiac risk factors and past medical history",
+          "nextNodeId": "history-risk-factors",
+          "timeCost": 3,
+          "effects": [],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "risk-factors-gathered"
+            }
+          }
+        },
+        {
+          "id": "ask-medications",
+          "text": "Current medications and allergies",
+          "nextNodeId": "history-medications",
+          "timeCost": 2,
+          "effects": [],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "medications-gathered"
+            }
+          }
+        },
+        {
+          "id": "ask-contraindications",
+          "text": "Screen for thrombolytic and antiplatelet contraindications",
+          "nextNodeId": "history-contraindications",
+          "timeCost": 2,
+          "effects": [],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "contraindications-screened"
+            }
+          }
+        },
+        {
+          "id": "history-to-ecg",
+          "text": "Order ECG \u2014 enough clinical context to act",
+          "nextNodeId": "ecg-ordered",
+          "timeCost": 8,
+          "effects": [
+            {
+              "type": "order_test",
+              "testId": "12-lead-ecg"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "order-ecg",
+              "points": 100,
+              "reason": "ECG ordered after focused history \u2014 appropriate prioritisation",
+              "category": "critical-action"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "test_ordered",
+              "testId": "12-lead-ecg"
+            }
+          }
+        },
+        {
+          "id": "history-review-ecg",
+          "text": "Review the ECG (already ordered)",
+          "nextNodeId": "ecg-ordered",
+          "timeCost": 2,
+          "effects": [],
+          "condition": {
+            "op": "test_ordered",
+            "testId": "12-lead-ecg"
+          }
+        }
+      ]
+    },
+    "history-hpi": {
+      "id": "history-hpi",
+      "type": "history",
+      "text": "9/10 crushing, pressure-like pain. Radiates to jaw and left arm. Onset 40 minutes ago, abrupt, while lifting heavy materials. Constant since. Nausea and profuse diaphoresis. Similar milder episode 2 days ago resolved at rest \u2014 he thought it was indigestion.\n\nNo pleuritic component. No positional change. No cough or dyspnoea preceding the pain.",
+      "effects": [
+        {
+          "type": "add_history_item",
+          "itemId": "hpi"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "hpi-gathered"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "high-risk-chest-pain-features"
+        }
+      ],
+      "choices": [
+        {
+          "id": "hpi-back-to-hub",
+          "text": "Continue taking history",
+          "nextNodeId": "history-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "history-risk-factors": {
+      "id": "history-risk-factors",
+      "type": "history",
+      "text": "PMHx: Hypertension (8 years), Type 2 Diabetes (5 years). No prior MI, PCI, CABG, or known CAD.\n\nRisk factors: Active smoker (30 pack-years). Father had fatal MI at 58. BMI 31. Elevated cholesterol known but untreated until 3 weeks ago.\n\nExtremely high-risk cardiac profile.",
+      "effects": [
+        {
+          "type": "add_history_item",
+          "itemId": "pmhx"
+        },
+        {
+          "type": "add_history_item",
+          "itemId": "family-hx"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "risk-factors-gathered"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "high-cardiac-risk-profile"
+        }
+      ],
+      "choices": [
+        {
+          "id": "risk-back-to-hub",
+          "text": "Continue taking history",
+          "nextNodeId": "history-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "history-medications": {
+      "id": "history-medications",
+      "type": "history",
+      "text": "Medications: Metformin 1g BD, Lisinopril 5mg OD, Atorvastatin 40mg OD (started 3 weeks ago).\n\nAllergies: Penicillin (childhood rash \u2014 likely non-anaphylactic). No NSAID allergy. No warfarin, DOAC, or antiplatelet agents. No GTN prescription.",
+      "effects": [
+        {
+          "type": "add_history_item",
+          "itemId": "medications"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "medications-gathered"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "no-anticoagulation-on-board"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "no-aspirin-allergy"
+        }
+      ],
+      "choices": [
+        {
+          "id": "meds-back-to-hub",
+          "text": "Continue taking history",
+          "nextNodeId": "history-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "history-contraindications": {
+      "id": "history-contraindications",
+      "type": "history",
+      "text": "Contraindication screen:\n- No recent surgery (dental extraction 2 years ago)\n- No prior stroke, TIA, or intracranial pathology\n- No active bleeding or coagulopathy\n- BP 142/88 \u2014 below the thrombolytic threshold of 185/110\n\nNo contraindications to aspirin, anticoagulation, or thrombolysis if indicated.",
+      "effects": [
+        {
+          "type": "add_history_item",
+          "itemId": "contraindication-screen"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "contraindications-screened"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "no-thrombolytic-contraindications"
+        }
+      ],
+      "choices": [
+        {
+          "id": "ci-back-to-hub",
+          "text": "Continue taking history",
+          "nextNodeId": "history-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "rapid-exam": {
+      "id": "rapid-exam",
+      "type": "examination",
+      "text": "Primary survey (90 seconds):\n\nA: Patent, self-maintaining.\nB: RR 20. Bilateral air entry. Fine bibasal crackles \u2014 early pulmonary oedema.\nC: HR 98, regular. BP 142/88. Pallor, diaphoresis. Peripheral pulses present. Cap refill 2-3s.\nD: GCS 15. Oriented. Pain 9/10.\n\nCardiovascular: S1 + S2 present. S4 gallop at apex (reduced LV compliance). No murmurs. JVP not elevated. Mild peripheral oedema (likely chronic).\n\nThe S4 gallop and bibasal crackles are highly significant in the context of acute chest pain.",
+      "effects": [
+        {
+          "type": "add_examination_finding",
+          "findingId": "cardiovascular-exam"
+        },
+        {
+          "type": "add_examination_finding",
+          "findingId": "s4-gallop"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "exam-completed"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "bibasal-crackles-present"
+        }
+      ],
+      "choices": [
+        {
+          "id": "exam-order-ecg",
+          "text": "Order 12-lead ECG immediately \u2014 ACS presentation",
+          "nextNodeId": "ecg-ordered",
+          "timeCost": 8,
+          "effects": [
+            {
+              "type": "order_test",
+              "testId": "12-lead-ecg"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "order-ecg",
+              "points": 100,
+              "reason": "ECG ordered after focused exam \u2014 appropriate next step",
+              "category": "critical-action"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "test_ordered",
+              "testId": "12-lead-ecg"
+            }
+          }
+        },
+        {
+          "id": "exam-review-ecg",
+          "text": "Review the ECG (already ordered)",
+          "nextNodeId": "ecg-ordered",
+          "timeCost": 2,
+          "effects": [],
+          "condition": {
+            "op": "test_ordered",
+            "testId": "12-lead-ecg"
+          }
+        },
+        {
+          "id": "exam-to-history",
+          "text": "Take focused history first",
+          "nextNodeId": "history-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "iv-access-node": {
+      "id": "iv-access-node",
+      "type": "decision",
+      "text": "Large-bore IV established. Bloods drawn (troponin, FBC, U&E, glucose, coag). The most important diagnostic question is on the ECG.",
+      "effects": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "iv-access-established"
+        }
+      ],
+      "choices": [
+        {
+          "id": "iv-order-ecg",
+          "text": "Order the 12-lead ECG now",
+          "nextNodeId": "ecg-ordered",
+          "timeCost": 8,
+          "effects": [
+            {
+              "type": "order_test",
+              "testId": "12-lead-ecg"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "order-ecg",
+              "points": 100,
+              "reason": "ECG ordered \u2014 required diagnostic first step",
+              "category": "critical-action"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "test_ordered",
+              "testId": "12-lead-ecg"
+            }
+          }
+        },
+        {
+          "id": "iv-review-ecg",
+          "text": "Review the ECG (already ordered)",
+          "nextNodeId": "ecg-ordered",
+          "timeCost": 2,
+          "effects": [],
+          "condition": {
+            "op": "test_ordered",
+            "testId": "12-lead-ecg"
+          }
+        }
+      ]
+    },
+    "ecg-ordered": {
+      "id": "ecg-ordered",
+      "type": "result",
+      "text": "The 12-lead ECG is printed. Good quality, no artefact.\n\nSystematic review:\nRate: 98 bpm | Rhythm: Regular sinus | Axis: Normal | PR: 160ms | QRS: 80ms (narrow)\n\nST segments:\n[!] 4mm ST elevation in V1, V2, V3, V4 \u2014 anterior distribution\n[!] Reciprocal ST depression in leads II, III, aVF\n[!] Hyperacute broad-based T-waves in V2, V3\n\nNo Q-waves. No bundle branch block. No prior ECG for comparison.\n\nHow do you interpret this ECG?",
+      "effects": [
+        {
+          "type": "result_test",
+          "testId": "12-lead-ecg"
+        }
+      ],
+      "choices": [
+        {
+          "id": "interpret-stemi-correct",
+          "text": "Anterior STEMI \u2014 4mm STE in V1-V4 with reciprocal inferior changes. Activate STEMI pathway.",
+          "nextNodeId": "stemi-confirmed",
+          "timeCost": 2,
+          "effects": [
+            {
+              "type": "reveal_condition",
+              "conditionId": "anterior-stemi"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "stemi-confirmed-ecg"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "ecg-interpretation-correct",
+              "points": 75,
+              "reason": "ECG correctly interpreted as anterior STEMI \u2014 confident, accurate identification",
+              "category": "critical-action"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "interpret-nstemi",
+          "text": "Possible NSTEMI or unstable angina \u2014 order troponin and admit for observation",
+          "nextNodeId": "misinterpretation-nstemi",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "order_test",
+              "testId": "troponin-i"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "ecg-misread-nstemi",
+              "points": -150,
+              "reason": "ECG misidentified as NSTEMI \u2014 4mm STE in V1-V4 with reciprocal changes is diagnostic STEMI. Troponin is not required to activate the STEMI pathway.",
+              "category": "penalty"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "interpret-benign",
+          "text": "ST changes could be early repolarisation \u2014 repeat ECG in 30 minutes",
+          "nextNodeId": "catastrophic-delay",
+          "timeCost": 30,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "ecg-misread-benign",
+              "points": -250,
+              "reason": "CRITICAL ERROR \u2014 4mm STE in V1-V4 with reciprocal ST depression cannot be early repolarisation. Early repolarisation is a diagnosis of exclusion in young patients with benign-appearing minimal changes. This is a life-threatening misdiagnosis.",
+              "category": "penalty"
+            },
+            {
+              "type": "trigger_event",
+              "eventId": "vf-arrest-event",
+              "delayMinutes": 0
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "interpret-pericarditis",
+          "text": "Widespread ST changes suggest pericarditis \u2014 order ESR, CRP, echocardiogram",
+          "nextNodeId": "misinterpretation-pericarditis",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "order_test",
+              "testId": "echo"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "ecg-misread-pericarditis",
+              "points": -175,
+              "reason": "Pericarditis causes diffuse saddle-shaped STE across many leads. Focal 4mm STE in V1-V4 with inferior reciprocal changes is the hallmark of transmural ischaemia, not inflammation.",
+              "category": "penalty"
+            },
+            {
+              "type": "trigger_event",
+              "eventId": "deterioration-event",
+              "delayMinutes": 0
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "misinterpretation-nstemi": {
+      "id": "misinterpretation-nstemi",
+      "type": "decision",
+      "text": "While waiting for the troponin, the ED nurse shows you the ECG again. 'Doctor \u2014 I've seen STEMIs before. The ST elevation is 4 millimetres in V2 with reciprocal inferior changes. Are you sure this isn't a STEMI?'\n\nShe's correct.",
+      "effects": [],
+      "choices": [
+        {
+          "id": "nurse-correct-reassess",
+          "text": "She's right \u2014 re-interpret as anterior STEMI and activate the pathway immediately",
+          "nextNodeId": "stemi-confirmed",
+          "timeCost": 3,
+          "effects": [
+            {
+              "type": "reveal_condition",
+              "conditionId": "anterior-stemi"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "stemi-confirmed-ecg"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "ecg-interpretation-correct",
+              "points": 40,
+              "reason": "STEMI correctly identified after reassessment \u2014 delayed but recovered",
+              "category": "critical-action"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "nurse-override-wait",
+          "text": "Wait for the troponin \u2014 clinical decisions should not be based on nursing input",
+          "nextNodeId": "troponin-wait-disaster",
+          "timeCost": 60,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "ignored-clinical-feedback",
+              "points": -100,
+              "reason": "Dismissing valid nursing concern and waiting for troponin when ECG is diagnostic \u2014 a dangerous attitude that causes avoidable harm",
+              "category": "penalty"
+            },
+            {
+              "type": "trigger_event",
+              "eventId": "cardiogenic-shock-event",
+              "delayMinutes": 0
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "misinterpretation-pericarditis": {
+      "id": "misinterpretation-pericarditis",
+      "type": "decision",
+      "text": "You are completing the echo request when the cardiology registrar walks past and stops cold. 'Wait \u2014 that's not pericarditis. V1 to V4 with inferior reciprocal changes. That's an anterior STEMI. What is your door time?'\n\nYou have already lost 5 minutes. Mr. Torres' pain is 10/10.",
+      "effects": [],
+      "choices": [
+        {
+          "id": "accept-cardiologist-correction",
+          "text": "The cardiologist is correct \u2014 activate the STEMI pathway immediately",
+          "nextNodeId": "stemi-confirmed",
+          "timeCost": 3,
+          "effects": [
+            {
+              "type": "reveal_condition",
+              "conditionId": "anterior-stemi"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "stemi-confirmed-ecg"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "ecg-interpretation-correct",
+              "points": 40,
+              "reason": "STEMI identified after specialist correction",
+              "category": "critical-action"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "stemi-confirmed": {
+      "id": "stemi-confirmed",
+      "type": "decision",
+      "text": "ANTERIOR STEMI CONFIRMED.\n\nEvery passing minute costs ~1.7 years of life expectancy and ~1 billion cardiomyocytes.\n\nYour team is assembled. The following can be delegated simultaneously:\n\u2022 SpO2 95% \u2014 supplemental oxygen?\n\u2022 Aspirin given?\n\u2022 IV access and bloods done?\n\u2022 Pain relief needed?\n\u2022 Reperfusion strategy?\n\nYour next action:",
+      "effects": [],
+      "choices": [
+        {
+          "id": "give-oxygen",
+          "text": "Give supplemental oxygen \u2014 SpO2 95%",
+          "nextNodeId": "stemi-oxygen-given",
+          "timeCost": 3,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "oxygen-therapy",
+              "points": 50,
+              "reason": "Oxygen given for SpO2 < 94% \u2014 guideline target 94-98%",
+              "category": "critical-action"
+            },
+            {
+              "type": "adjust_vital",
+              "vital": "oxygenSaturation",
+              "delta": 2
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "oxygen-given"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "oxygen-given"
+            }
+          }
+        },
+        {
+          "id": "give-aspirin",
+          "text": "Administer aspirin 300mg chewable \u2014 no known allergy",
+          "nextNodeId": "stemi-aspirin-given",
+          "timeCost": 3,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "administer-aspirin",
+              "points": 100,
+              "reason": "Aspirin 300mg given \u2014 cornerstone antiplatelet therapy, reduces STEMI mortality ~25%",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "aspirin-given"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "aspirin-given"
+            }
+          }
+        },
+        {
+          "id": "establish-iv-now",
+          "text": "Establish large-bore IV access and draw STEMI bloods",
+          "nextNodeId": "stemi-iv-established",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "order_test",
+              "testId": "troponin-i"
+            },
+            {
+              "type": "order_test",
+              "testId": "cbc"
+            },
+            {
+              "type": "order_test",
+              "testId": "bmp"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "iv-access-bloods",
+              "points": 50,
+              "reason": "IV access established and STEMI bloods drawn \u2014 required for PCI preparation",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "iv-access-established"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "iv-access-established"
+            }
+          }
+        },
+        {
+          "id": "pain-control",
+          "text": "Give morphine 2.5mg IV for pain management",
+          "nextNodeId": "stemi-analgesia-given",
+          "timeCost": 3,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "pain-management",
+              "points": 50,
+              "reason": "Analgesia given \u2014 reduces sympathetic activation. Use cautiously if haemodynamically unstable.",
+              "category": "critical-action"
+            },
+            {
+              "type": "adjust_vital",
+              "vital": "painScore",
+              "delta": -3
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "analgesia-given"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "analgesia-given"
+            }
+          }
+        },
+        {
+          "id": "go-to-treatment-decision",
+          "text": "Proceed to reperfusion decision \u2014 enough preparation",
+          "nextNodeId": "treatment-decision",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "stemi-oxygen-given": {
+      "id": "stemi-oxygen-given",
+      "type": "decision",
+      "text": "Oxygen via nasal cannula. SpO2 climbing toward 97%.\n\nWhat next?",
+      "effects": [],
+      "choices": [
+        {
+          "id": "o2-give-aspirin",
+          "text": "Give aspirin 300mg chewable",
+          "nextNodeId": "stemi-aspirin-given",
+          "timeCost": 3,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "administer-aspirin",
+              "points": 100,
+              "reason": "Aspirin 300mg given",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "aspirin-given"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "aspirin-given"
+            }
+          }
+        },
+        {
+          "id": "o2-iv-access",
+          "text": "Establish IV access and draw STEMI bloods",
+          "nextNodeId": "stemi-iv-established",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "order_test",
+              "testId": "troponin-i"
+            },
+            {
+              "type": "order_test",
+              "testId": "cbc"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "iv-access-bloods",
+              "points": 50,
+              "reason": "IV access established and bloods drawn",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "iv-access-established"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "iv-access-established"
+            }
+          }
+        },
+        {
+          "id": "o2-proceed-treatment",
+          "text": "Proceed to reperfusion decision",
+          "nextNodeId": "treatment-decision",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "stemi-aspirin-given": {
+      "id": "stemi-aspirin-given",
+      "type": "decision",
+      "text": "Mr. Torres chews the aspirin. 'That tasted awful.' Good \u2014 he can protect his airway.\n\nWhat next?",
+      "effects": [],
+      "choices": [
+        {
+          "id": "asp-give-oxygen",
+          "text": "Give supplemental oxygen (SpO2 95%)",
+          "nextNodeId": "stemi-oxygen-given",
+          "timeCost": 3,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "oxygen-therapy",
+              "points": 50,
+              "reason": "Oxygen given for SpO2 < 94%",
+              "category": "critical-action"
+            },
+            {
+              "type": "adjust_vital",
+              "vital": "oxygenSaturation",
+              "delta": 2
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "oxygen-given"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "oxygen-given"
+            }
+          }
+        },
+        {
+          "id": "asp-iv-access",
+          "text": "Establish IV access and draw bloods",
+          "nextNodeId": "stemi-iv-established",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "order_test",
+              "testId": "troponin-i"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "iv-access-bloods",
+              "points": 50,
+              "reason": "IV access established and bloods drawn",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "iv-access-established"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "iv-access-established"
+            }
+          }
+        },
+        {
+          "id": "asp-pain-management",
+          "text": "Give morphine 2.5mg IV",
+          "nextNodeId": "stemi-analgesia-given",
+          "timeCost": 3,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "pain-management",
+              "points": 50,
+              "reason": "Analgesia given",
+              "category": "critical-action"
+            },
+            {
+              "type": "adjust_vital",
+              "vital": "painScore",
+              "delta": -3
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "analgesia-given"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "analgesia-given"
+            }
+          }
+        },
+        {
+          "id": "asp-proceed-treatment",
+          "text": "Proceed to reperfusion decision",
+          "nextNodeId": "treatment-decision",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "stemi-iv-established": {
+      "id": "stemi-iv-established",
+      "type": "decision",
+      "text": "Large-bore IV in situ. Bloods sent. Troponin result in ~60 minutes.\n\nWhat next?",
+      "effects": [],
+      "choices": [
+        {
+          "id": "iv-give-aspirin",
+          "text": "Give aspirin 300mg chewable",
+          "nextNodeId": "stemi-aspirin-given",
+          "timeCost": 3,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "administer-aspirin",
+              "points": 100,
+              "reason": "Aspirin 300mg given",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "aspirin-given"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "aspirin-given"
+            }
+          }
+        },
+        {
+          "id": "iv-give-oxygen",
+          "text": "Give supplemental oxygen",
+          "nextNodeId": "stemi-oxygen-given",
+          "timeCost": 3,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "oxygen-therapy",
+              "points": 50,
+              "reason": "Oxygen given for SpO2 < 94%",
+              "category": "critical-action"
+            },
+            {
+              "type": "adjust_vital",
+              "vital": "oxygenSaturation",
+              "delta": 2
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "oxygen-given"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "oxygen-given"
+            }
+          }
+        },
+        {
+          "id": "iv-proceed-treatment",
+          "text": "Proceed to reperfusion decision",
+          "nextNodeId": "treatment-decision",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "stemi-analgesia-given": {
+      "id": "stemi-analgesia-given",
+      "type": "decision",
+      "text": "Morphine 2.5mg IV given slowly. Pain falls from 9/10 to 7/10. He exhales shakily. 'Thank you.' Vitals stable.\n\nWhat next?",
+      "effects": [],
+      "choices": [
+        {
+          "id": "analg-give-aspirin",
+          "text": "Give aspirin 300mg chewable",
+          "nextNodeId": "stemi-aspirin-given",
+          "timeCost": 3,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "administer-aspirin",
+              "points": 100,
+              "reason": "Aspirin 300mg given",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "aspirin-given"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "aspirin-given"
+            }
+          }
+        },
+        {
+          "id": "analg-give-oxygen",
+          "text": "Give supplemental oxygen",
+          "nextNodeId": "stemi-oxygen-given",
+          "timeCost": 3,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "oxygen-therapy",
+              "points": 50,
+              "reason": "Oxygen given for SpO2 < 94%",
+              "category": "critical-action"
+            },
+            {
+              "type": "adjust_vital",
+              "vital": "oxygenSaturation",
+              "delta": 2
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "oxygen-given"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "oxygen-given"
+            }
+          }
+        },
+        {
+          "id": "analg-proceed-treatment",
+          "text": "Proceed to reperfusion decision",
+          "nextNodeId": "treatment-decision",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "treatment-decision": {
+      "id": "treatment-decision",
+      "type": "decision",
+      "text": "ANTERIOR STEMI. 24/7 interventional cardiology available on-site. No transfer required.\n\nACC/AHA / ESC Guidelines: Primary PCI preferred when achievable within 120 minutes of first medical contact. Door-to-balloon target: 90 min (ideally 60). Thrombolytics are second-line when PCI unavailable within 120 minutes.\n\nReperfusion strategy?",
+      "effects": [],
+      "choices": [
+        {
+          "id": "primary-pci",
+          "text": "Activate primary PCI \u2014 call the Cath Lab now",
+          "nextNodeId": "cath-lab-activated",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "activate-cath-lab",
+              "points": 250,
+              "reason": "Primary PCI activated \u2014 gold standard with on-site catheterisation. Maximises myocardial salvage.",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "cath-lab-activated"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "thrombolytics",
+          "text": "Administer IV thrombolytics (alteplase/tPA) \u2014 start immediately",
+          "nextNodeId": "thrombolytics-pathway",
+          "timeCost": 15,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "thrombolytics-chosen",
+              "points": -175,
+              "reason": "Thrombolytics chosen when primary PCI is available on-site \u2014 guideline-discordant. PCI produces superior outcomes when door-to-balloon is feasible within 120 minutes.",
+              "category": "penalty"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "conservative-management",
+          "text": "Medical management only \u2014 he is haemodynamically stable for now",
+          "nextNodeId": "conservative-disaster",
+          "timeCost": 60,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "no-reperfusion",
+              "points": -400,
+              "reason": "CRITICAL ERROR \u2014 medical management alone in acute STEMI carries 20-35% in-hospital mortality. Reperfusion therapy is mandatory unless absolutely contraindicated.",
+              "category": "penalty"
+            },
+            {
+              "type": "trigger_event",
+              "eventId": "cardiogenic-shock-event",
+              "delayMinutes": 0
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "wait-for-troponin",
+          "text": "Wait for the troponin result before committing to reperfusion",
+          "nextNodeId": "troponin-wait-disaster",
+          "timeCost": 60,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "troponin-delay",
+              "points": -200,
+              "reason": "Waiting for troponin when ECG is diagnostic for STEMI is a critical error. The ECG alone dictates treatment \u2014 troponin confirms injury but does not gate reperfusion.",
+              "category": "penalty"
+            },
+            {
+              "type": "trigger_event",
+              "eventId": "cardiogenic-shock-event",
+              "delayMinutes": 0
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "cath-lab-activated": {
+      "id": "cath-lab-activated",
+      "type": "decision",
+      "text": "Cath Lab coordinator answers on the first ring. Interventional cardiologist already in the building \u2014 team assembles in 15 minutes. Door-to-balloon tracking: 35-45 minutes.\n\nNurse asks: 'Before we transfer \u2014 anticoagulation? P2Y12?'",
+      "effects": [],
+      "choices": [
+        {
+          "id": "full-pre-pci-regimen",
+          "text": "Full regimen: heparin 5000 units IV bolus + ticagrelor 180mg loading dose",
+          "nextNodeId": "pre-pci-complete",
+          "timeCost": 8,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "anticoagulation",
+              "points": 75,
+              "reason": "Unfractionated heparin given pre-PCI \u2014 reduces thrombus propagation and periprocedural complications",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "p2y12-loading",
+              "points": 50,
+              "reason": "Ticagrelor 180mg loading dose given \u2014 dual antiplatelet therapy is guideline class I for primary PCI",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "full-antiplatelet-given"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "heparin-only",
+          "text": "Heparin 5000 units IV only \u2014 Cath Lab to decide on P2Y12",
+          "nextNodeId": "pre-pci-partial",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "anticoagulation",
+              "points": 75,
+              "reason": "Heparin given \u2014 correct. P2Y12 loading ideally should be given pre-PCI.",
+              "category": "critical-action"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "transfer-now-no-anticoag",
+          "text": "Transfer immediately \u2014 anticoagulation can be given in the Cath Lab",
+          "nextNodeId": "pre-pci-no-anticoag",
+          "timeCost": 2,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "no-pre-pci-anticoag",
+              "points": -50,
+              "reason": "Pre-PCI anticoagulation reduces thrombus burden and improves procedural outcomes \u2014 should be given in the ED when feasible",
+              "category": "penalty"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "check-aspirin-status",
+          "text": "First \u2014 confirm aspirin has been given",
+          "nextNodeId": "aspirin-check",
+          "timeCost": 2,
+          "effects": [],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "aspirin-given"
+            }
+          }
+        }
+      ]
+    },
+    "aspirin-check": {
+      "id": "aspirin-check",
+      "type": "decision",
+      "text": "The nurse confirms aspirin has not been given yet. 'Should I give it now?'\n\nAspirin reduces STEMI mortality by ~25%. No documented allergy.",
+      "effects": [],
+      "choices": [
+        {
+          "id": "aspirin-check-yes",
+          "text": "Yes \u2014 give aspirin 300mg immediately before transfer",
+          "nextNodeId": "cath-lab-activated",
+          "timeCost": 3,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "administer-aspirin",
+              "points": 75,
+              "reason": "Aspirin given before PCI \u2014 delayed but correct",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "aspirin-given"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "aspirin-check-no",
+          "text": "No \u2014 transfer now, Cath Lab can give it",
+          "nextNodeId": "pre-pci-no-anticoag",
+          "timeCost": 2,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "no-aspirin-at-all",
+              "points": -100,
+              "reason": "Aspirin not given \u2014 mandatory critical action in STEMI. Mortality benefit too significant to omit.",
+              "category": "penalty"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "pre-pci-complete": {
+      "id": "pre-pci-complete",
+      "type": "decision",
+      "text": "Complete pre-PCI preparation: oxygen on, aspirin given, heparin infusing, ticagrelor loaded. IV running. Mr. Torres is ready. Porters at the door.\n\nDoor-to-balloon tracking: 38 minutes.",
+      "effects": [],
+      "choices": [
+        {
+          "id": "transfer-to-cath-lab",
+          "text": "Transfer to Cath Lab \u2014 go",
+          "nextNodeId": "outcome-excellent",
+          "timeCost": 8,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "pre-pci-partial": {
+      "id": "pre-pci-partial",
+      "type": "decision",
+      "text": "Heparin running. Mr. Torres ready for transfer. Door-to-balloon tracking: 42 minutes.",
+      "effects": [],
+      "choices": [
+        {
+          "id": "transfer-partial",
+          "text": "Transfer to Cath Lab",
+          "nextNodeId": "outcome-good",
+          "timeCost": 8,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "pre-pci-no-anticoag": {
+      "id": "pre-pci-no-anticoag",
+      "type": "decision",
+      "text": "Mr. Torres being transferred without pre-PCI anticoagulation. Door-to-balloon within the 90-minute window.",
+      "effects": [],
+      "choices": [
+        {
+          "id": "transfer-no-anticoag",
+          "text": "Transfer to Cath Lab",
+          "nextNodeId": "outcome-suboptimal",
+          "timeCost": 8,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "thrombolytics-pathway": {
+      "id": "thrombolytics-pathway",
+      "type": "decision",
+      "text": "Alteplase running. At 20 minutes post-infusion: repeat ECG shows persistent 4mm ST elevation in V1-V4. No reduction. No reperfusion arrhythmia. No pain relief.\n\nFailed thrombolysis.\n\nThe interventional cardiologist calls: 'We're scrubbed. Are you sending him up?'",
+      "effects": [
+        {
+          "type": "order_test",
+          "testId": "troponin-i"
+        },
+        {
+          "type": "advance_time",
+          "minutes": 20
+        }
+      ],
+      "choices": [
+        {
+          "id": "rescue-pci-after-lytic",
+          "text": "Transfer for rescue PCI \u2014 thrombolysis has failed",
+          "nextNodeId": "outcome-rescue-pci",
+          "timeCost": 15,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "rescue-pci-initiated",
+              "points": 100,
+              "reason": "Rescue PCI appropriately initiated after failed thrombolysis \u2014 guideline-concordant",
+              "category": "optional-bonus"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "activate-cath-lab",
+              "points": 100,
+              "reason": "Cath Lab activated via rescue PCI pathway \u2014 delayed but correct",
+              "category": "critical-action"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "repeat-lytic",
+          "text": "Give a second dose of tPA \u2014 reinforce the first dose",
+          "nextNodeId": "outcome-fatal",
+          "timeCost": 0,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "repeat-lytic-contraindicated",
+              "points": -300,
+              "reason": "CRITICAL ERROR \u2014 repeat thrombolysis after failed first dose is absolutely contraindicated. Dramatically increases bleeding risk with no benefit. Rescue PCI is the only correct response.",
+              "category": "penalty"
+            },
+            {
+              "type": "trigger_event",
+              "eventId": "vf-arrest-event",
+              "delayMinutes": 0
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "medical-only-post-lytic",
+          "text": "Continue observation \u2014 give the drug more time",
+          "nextNodeId": "cardiogenic-shock-delay",
+          "timeCost": 30,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "delayed-rescue-pci",
+              "points": -150,
+              "reason": "Failed thrombolysis not recognised \u2014 persistent STE at 20 minutes with no reperfusion signs mandates immediate rescue PCI",
+              "category": "penalty"
+            },
+            {
+              "type": "trigger_event",
+              "eventId": "cardiogenic-shock-event",
+              "delayMinutes": 0
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "conservative-disaster": {
+      "id": "conservative-disaster",
+      "type": "decision",
+      "text": "One hour passes. Mr. Torres is deteriorating: HR 118, BP 102/64, SpO2 91%. Dyspnoeic. Increasingly confused.\n\n'Doctor,' the nurse says quietly, 'he looks like he's in shock.'\n\nCardiogenic shock is developing.",
+      "effects": [
+        {
+          "type": "set_vital",
+          "vital": "heartRate",
+          "value": 118
+        },
+        {
+          "type": "set_vital",
+          "vital": "oxygenSaturation",
+          "value": 91
+        },
+        {
+          "type": "apply_score_modifier",
+          "modifierId": "shock-developed"
+        },
+        {
+          "type": "add_condition",
+          "conditionId": "cardiogenic-shock",
+          "severity": "severe"
+        }
+      ],
+      "choices": [
+        {
+          "id": "conservative-to-cath",
+          "text": "Activate Cath Lab \u2014 emergent PCI for STEMI with cardiogenic shock",
+          "nextNodeId": "outcome-shock-pci",
+          "timeCost": 10,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "activate-cath-lab",
+              "points": 75,
+              "reason": "Cath Lab activated \u2014 correct, though significantly delayed with shock already established",
+              "category": "critical-action"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "conservative-continue",
+          "text": "Start IV fluids and vasopressors \u2014 stabilise before deciding",
+          "nextNodeId": "outcome-fatal",
+          "timeCost": 0,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "fluids-vasopressors-instead-pci",
+              "points": -200,
+              "reason": "Vasopressors are a bridge to PCI \u2014 not a substitute. Emergent revascularisation is the definitive treatment. Further delay is fatal.",
+              "category": "penalty"
+            },
+            {
+              "type": "trigger_event",
+              "eventId": "vf-arrest-event",
+              "delayMinutes": 0
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "troponin-wait-disaster": {
+      "id": "troponin-wait-disaster",
+      "type": "decision",
+      "text": "Sixty minutes pass. Troponin I: 48,220 ng/L (reference < 52 ng/L). Massively elevated.\n\nMr. Torres is drowsy. HR 126, BP 88/54, SpO2 88% on high-flow oxygen. Runs of non-sustained VT on the monitor.\n\nCardiogenic shock. This is now critical.",
+      "effects": [
+        {
+          "type": "result_test",
+          "testId": "troponin-i"
+        },
+        {
+          "type": "set_vital",
+          "vital": "heartRate",
+          "value": 126
+        },
+        {
+          "type": "set_vital",
+          "vital": "oxygenSaturation",
+          "value": 88
+        },
+        {
+          "type": "set_vital",
+          "vital": "consciousness",
+          "value": "drowsy"
+        },
+        {
+          "type": "apply_score_modifier",
+          "modifierId": "shock-developed"
+        },
+        {
+          "type": "add_condition",
+          "conditionId": "cardiogenic-shock",
+          "severity": "critical"
+        }
+      ],
+      "choices": [
+        {
+          "id": "troponin-late-pci",
+          "text": "Activate Cath Lab emergently \u2014 STEMI with cardiogenic shock",
+          "nextNodeId": "outcome-shock-pci",
+          "timeCost": 10,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "activate-cath-lab",
+              "points": 50,
+              "reason": "Cath Lab activated \u2014 60 minutes too late. Shock established. Significant myocardium already lost.",
+              "category": "critical-action"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "cardiogenic-shock-delay": {
+      "id": "cardiogenic-shock-delay",
+      "type": "decision",
+      "text": "Mr. Torres deteriorates rapidly. BP 82/50. Barely conscious. The nurse is at the crash trolley. Cardiogenic shock fully established.",
+      "effects": [
+        {
+          "type": "set_vital",
+          "vital": "heartRate",
+          "value": 124
+        },
+        {
+          "type": "set_vital",
+          "vital": "oxygenSaturation",
+          "value": 86
+        },
+        {
+          "type": "set_vital",
+          "vital": "consciousness",
+          "value": "drowsy"
+        },
+        {
+          "type": "apply_score_modifier",
+          "modifierId": "shock-developed"
+        },
+        {
+          "type": "add_condition",
+          "conditionId": "cardiogenic-shock",
+          "severity": "critical"
+        }
+      ],
+      "choices": [
+        {
+          "id": "shock-delay-pci",
+          "text": "Activate Cath Lab \u2014 emergent PCI for STEMI with cardiogenic shock",
+          "nextNodeId": "outcome-shock-pci",
+          "timeCost": 10,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "activate-cath-lab",
+              "points": 50,
+              "reason": "Cath Lab activated after significant delay \u2014 shock already established",
+              "category": "critical-action"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "catastrophic-delay": {
+      "id": "catastrophic-delay",
+      "type": "event",
+      "text": "[ALERT] 30 minutes have elapsed waiting for a 'repeat ECG'. Mr. Torres is slumped in the trolley. Barely conscious. SpO2 89%. Senior nursing staff have called for help.",
+      "effects": [
+        {
+          "type": "set_vital",
+          "vital": "consciousness",
+          "value": "drowsy"
+        },
+        {
+          "type": "set_vital",
+          "vital": "oxygenSaturation",
+          "value": 89
+        }
+      ],
+      "choices": [
+        {
+          "id": "catastrophic-activate-cath",
+          "text": "Activate Cath Lab \u2014 this is a STEMI, the initial ECG interpretation was wrong",
+          "nextNodeId": "outcome-shock-pci",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "activate-cath-lab",
+              "points": 25,
+              "reason": "Cath Lab finally activated after a critical 30-minute delay \u2014 most viable myocardium already lost",
+              "category": "critical-action"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "vf-arrest-event": {
+      "id": "vf-arrest-event",
+      "type": "event",
+      "text": "[CODE BLUE] Mr. Torres loses consciousness. The cardiac monitor alarms: coarse ventricular fibrillation. He is pulseless and unresponsive. The crash cart is 2 metres away.",
+      "effects": [
+        {
+          "type": "set_vital",
+          "vital": "heartRate",
+          "value": 0
+        },
+        {
+          "type": "set_vital",
+          "vital": "oxygenSaturation",
+          "value": 0
+        },
+        {
+          "type": "set_vital",
+          "vital": "consciousness",
+          "value": "unresponsive"
+        },
+        {
+          "type": "apply_score_modifier",
+          "modifierId": "patient-arrested"
+        }
+      ],
+      "choices": [
+        {
+          "id": "cpr-and-defib",
+          "text": "Call Code Blue \u2014 CPR immediately, charge defibrillator to 200J biphasic",
+          "nextNodeId": "resuscitation",
+          "timeCost": 2,
+          "effects": [],
+          "condition": null
+        },
+        {
+          "id": "defib-without-cpr-first",
+          "text": "Defibrillate immediately without starting CPR",
+          "nextNodeId": "resuscitation",
+          "timeCost": 1,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "defib-without-cpr",
+              "points": -25,
+              "reason": "CPR should be commenced while charging the defibrillator \u2014 minimise hands-off time",
+              "category": "penalty"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "cardiogenic-shock-event": {
+      "id": "cardiogenic-shock-event",
+      "type": "event",
+      "text": "[DETERIORATION] Mr. Torres is in cardiogenic shock. BP 84/52. HR 122. Confused, diaphoretic. SpO2 dropping. Cardiomyocytes are dying en masse.",
+      "effects": [
+        {
+          "type": "set_vital",
+          "vital": "heartRate",
+          "value": 122
+        },
+        {
+          "type": "set_vital",
+          "vital": "oxygenSaturation",
+          "value": 88
+        },
+        {
+          "type": "set_vital",
+          "vital": "consciousness",
+          "value": "confused"
+        },
+        {
+          "type": "apply_score_modifier",
+          "modifierId": "shock-developed"
+        },
+        {
+          "type": "add_condition",
+          "conditionId": "cardiogenic-shock",
+          "severity": "critical"
+        }
+      ],
+      "choices": [
+        {
+          "id": "shock-event-pci",
+          "text": "Activate Cath Lab \u2014 emergent PCI mandatory in STEMI with cardiogenic shock",
+          "nextNodeId": "outcome-shock-pci",
+          "timeCost": 10,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "activate-cath-lab",
+              "points": 50,
+              "reason": "Cath Lab activated \u2014 significantly delayed but only chance for survival",
+              "category": "critical-action"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "shock-event-vasopressors",
+          "text": "Start norepinephrine infusion to stabilise BP before Cath Lab",
+          "nextNodeId": "outcome-fatal",
+          "timeCost": 0,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "vasopressors-instead-pci",
+              "points": -200,
+              "reason": "CRITICAL ERROR \u2014 vasopressors delay the only treatment that can save this patient. Vasopressors are a bridge to PCI, not a substitute.",
+              "category": "penalty"
+            },
+            {
+              "type": "trigger_event",
+              "eventId": "vf-arrest-event",
+              "delayMinutes": 0
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "deterioration-event": {
+      "id": "deterioration-event",
+      "type": "event",
+      "text": "[DETERIORATION] Mr. Torres is increasingly distressed. HR 116, SpO2 dropping to 91%. He grabs the rail. 'Something's happening \u2014 doctor, please.' ECG shows worsening ischaemic changes extending to lateral leads.",
+      "effects": [
+        {
+          "type": "set_vital",
+          "vital": "heartRate",
+          "value": 116
+        },
+        {
+          "type": "set_vital",
+          "vital": "oxygenSaturation",
+          "value": 91
+        },
+        {
+          "type": "set_vital",
+          "vital": "painScore",
+          "value": 10
+        }
+      ],
+      "choices": [
+        {
+          "id": "deterioration-activate-pci",
+          "text": "Activate Cath Lab \u2014 this STEMI requires urgent reperfusion",
+          "nextNodeId": "treatment-decision",
+          "timeCost": 3,
+          "effects": [],
+          "condition": null
+        },
+        {
+          "id": "deterioration-stabilise",
+          "text": "Attempt medical stabilisation before committing to an invasive strategy",
+          "nextNodeId": "outcome-fatal",
+          "timeCost": 0,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "ongoing-delay-deterioration",
+              "points": -200,
+              "reason": "Continued delay in the face of clinical deterioration \u2014 reperfusion cannot be further deferred",
+              "category": "penalty"
+            },
+            {
+              "type": "trigger_event",
+              "eventId": "vf-arrest-event",
+              "delayMinutes": 0
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "resuscitation": {
+      "id": "resuscitation",
+      "type": "decision",
+      "text": "CPR in progress. Defibrillator shows coarse VF. Two minutes of CPR completed. Rhythm check: still VF. The team looks to you.",
+      "effects": [],
+      "choices": [
+        {
+          "id": "shock-200j",
+          "text": "200J biphasic \u2014 CLEAR \u2014 shock delivered",
+          "nextNodeId": "rosc-achieved",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "defibrillation-vf",
+              "points": 75,
+              "reason": "Prompt defibrillation for VF \u2014 correct and timely",
+              "category": "optional-bonus"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "amiodarone-before-1st-shock",
+          "text": "Give amiodarone 300mg IV before shocking",
+          "nextNodeId": "rosc-achieved",
+          "timeCost": 8,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "amiodarone-before-first-shock",
+              "points": -30,
+              "reason": "Amiodarone before the first shock in VF is not recommended \u2014 defibrillation takes priority in cycles 1 and 2. Amiodarone is indicated after the third failed shock.",
+              "category": "penalty"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "rosc-achieved": {
+      "id": "rosc-achieved",
+      "type": "decision",
+      "text": "ROSC \u2014 return of spontaneous circulation after 1 shock. Sinus rhythm. HR 86, BP 92/58. Mr. Torres responds to commands \u2014 confused but alive.\n\nInterventional cardiologist on the phone: 'We're scrubbed. Bring him up \u2014 we'll open the artery now.'",
+      "effects": [
+        {
+          "type": "set_vital",
+          "vital": "heartRate",
+          "value": 86
+        },
+        {
+          "type": "set_vital",
+          "vital": "oxygenSaturation",
+          "value": 92
+        },
+        {
+          "type": "set_vital",
+          "vital": "consciousness",
+          "value": "confused"
+        }
+      ],
+      "choices": [
+        {
+          "id": "rosc-to-cath",
+          "text": "Transfer to Cath Lab \u2014 post-arrest STEMI mandates emergent PCI",
+          "nextNodeId": "outcome-complicated",
+          "timeCost": 10,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "activate-cath-lab",
+              "points": 100,
+              "reason": "Primary PCI after ROSC in STEMI \u2014 guideline class I recommendation. Correct, though a preventable arrest precedes it.",
+              "category": "critical-action"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "rosc-icu-only",
+          "text": "Stabilise in ICU first \u2014 catheterise when he is more stable",
+          "nextNodeId": "outcome-fatal",
+          "timeCost": 0,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "icu-instead-of-pci-post-arrest",
+              "points": -200,
+              "reason": "Post-arrest STEMI patients should proceed directly to the Cath Lab if haemodynamically stable \u2014 the ischaemic window is closing.",
+              "category": "penalty"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "outcome-excellent": {
+      "id": "outcome-excellent",
+      "type": "outcome",
+      "text": "Mr. Torres is wheeled into Cath Lab 1 with quiet efficiency. The interventional cardiologist threads a catheter through the radial artery. The coronary angiogram reveals a 95% occlusion of the proximal left anterior descending artery \u2014 the widow-maker.\n\nA drug-eluting stent is deployed. TIMI-3 flow restored. ST segments resolve within minutes. Pain: 0/10.\n\n--- Results ---\nDoor-to-balloon time: 38 minutes\nPeak troponin I: 6,400 ng/L (small infarct for the LAD territory)\nEcho Day 2: EF 58%. No significant wall motion abnormality. Anterior wall preserved.\nDischarge: Day 3.\n\nMr. Torres shakes your hand at the door. 'My daughter's wedding is in June. I'll be there because of you.'",
+      "outcomeId": "excellent",
+      "effects": [
+        {
+          "type": "set_game_phase",
+          "phase": "terminal"
+        }
+      ],
+      "choices": []
+    },
+    "outcome-good": {
+      "id": "outcome-good",
+      "type": "outcome",
+      "text": "Primary PCI performed successfully. Door-to-balloon: 46 minutes \u2014 within guidelines.\n\nLAD stented. TIMI-3 flow. ST segments resolve.\n\n--- Results ---\nPeak troponin I: 12,800 ng/L\nEcho Day 2: EF 52%, mild anterior hypokinesis\nDischarge: Day 4\n\nFull recovery expected with cardiac rehabilitation. Pre-procedural P2Y12 loading would have reduced thrombus burden \u2014 a measurable missed opportunity.",
+      "outcomeId": "good",
+      "effects": [
+        {
+          "type": "set_game_phase",
+          "phase": "terminal"
+        }
+      ],
+      "choices": []
+    },
+    "outcome-suboptimal": {
+      "id": "outcome-suboptimal",
+      "type": "outcome",
+      "text": "Primary PCI completed. Door-to-balloon: 55 minutes.\n\nGood outcome \u2014 not optimal. Absence of pre-procedural anticoagulation led to higher thrombus burden requiring aspiration thrombectomy before stenting.\n\n--- Results ---\nPeak troponin I: 18,400 ng/L\nEcho Day 2: EF 49%, anterior hypokinesis\nDischarge: Day 5\n\nHis ejection fraction reflects the consequence of every omitted step.",
+      "outcomeId": "suboptimal",
+      "effects": [
+        {
+          "type": "set_game_phase",
+          "phase": "terminal"
+        }
+      ],
+      "choices": []
+    },
+    "outcome-rescue-pci": {
+      "id": "outcome-rescue-pci",
+      "type": "outcome",
+      "text": "Rescue PCI successful. Proximal LAD stented \u2014 TIMI-3 flow achieved after aspiration thrombectomy.\n\nThrombolytics partially disrupted the clot but failed reperfusion (~30% of cases). Delay in recognising lytic failure extended the ischaemic window significantly.\n\n--- Results ---\nPeak troponin I: 52,000 ng/L\nEcho Day 2: EF 44%, moderate anterior wall motion abnormality\nDischarge: Day 7 on heart failure therapy\n\nHe survives, but his heart will work harder for the rest of his life.",
+      "outcomeId": "rescue",
+      "effects": [
+        {
+          "type": "set_game_phase",
+          "phase": "terminal"
+        }
+      ],
+      "choices": []
+    },
+    "outcome-shock-pci": {
+      "id": "outcome-shock-pci",
+      "type": "outcome",
+      "text": "Emergency PCI performed in cardiogenic shock. LAD opened, but downstream myocardium has suffered prolonged ischaemia.\n\n--- Results ---\nPost-procedure EF: 32%\nICU: 4 days \u2014 inotropic support and mechanical ventilation\nDischarge: Day 14 \u2014 severe systolic dysfunction\n\nLifelong heart failure therapy required. ICD implantation. Significant functional limitations.\n\nReperfusion delay is the cause. Time is muscle. Muscle is life.",
+      "outcomeId": "shock-pci",
+      "effects": [
+        {
+          "type": "set_game_phase",
+          "phase": "terminal"
+        }
+      ],
+      "choices": []
+    },
+    "outcome-complicated": {
+      "id": "outcome-complicated",
+      "type": "outcome",
+      "text": "PCI performed post-resuscitation. LAD stented. TIMI-3 flow \u2014 but the ischaemic window was extended by a preventable cardiac arrest.\n\n--- Results ---\nPost-procedure EF: 36%\nICU: 8 days \u2014 intubated, vasoactive support\nDischarge: Severe cardiomyopathy requiring ICD and GDMT\n\nHe survives. But the arrest caused hypoxic injury beyond the myocardium. A preventable deterioration produced a survivable but life-altering complication.",
+      "outcomeId": "complicated",
+      "effects": [
+        {
+          "type": "set_game_phase",
+          "phase": "terminal"
+        }
+      ],
+      "choices": []
+    },
+    "outcome-fatal": {
+      "id": "outcome-fatal",
+      "type": "outcome",
+      "text": "Mr. Malcolm Torres does not survive.\n\nRefractory cardiogenic shock \u2014 despite late resuscitation attempts \u2014 results in multi-organ failure. The myocardium, deprived of reperfusion for too long, cannot recover.\n\nTime of death is called.\n\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n\nEvery minute of delay in STEMI costs approximately 1.7 years of life expectancy. The 90-minute door-to-balloon target exists because of cases like this one.\n\nThe decisions that led here were reversible. Review this case and identify the branch point where the outcome changed.",
+      "outcomeId": "fatal",
+      "effects": [
+        {
+          "type": "set_game_phase",
+          "phase": "terminal"
+        }
+      ],
+      "choices": []
+    }
+  }
+}

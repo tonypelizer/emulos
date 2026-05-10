@@ -1,0 +1,109 @@
+{
+  "12-lead-ecg": {
+    "id": "12-lead-ecg",
+    "name": "12-Lead Electrocardiogram",
+    "category": "cardiology",
+    "defaultResultTime": 10,
+    "genericResult": {
+      "summary": "ECG resulted",
+      "values": {},
+      "narrative": "The 12-lead ECG has been obtained and reviewed."
+    }
+  },
+  "troponin-i": {
+    "id": "troponin-i",
+    "name": "Troponin I (high-sensitivity)",
+    "category": "cardiology",
+    "defaultResultTime": 60,
+    "genericResult": {
+      "summary": "Troponin I resulted",
+      "values": { "troponinI_ngL": 14 },
+      "narrative": "High-sensitivity troponin I is within normal limits (<52 ng/L)."
+    }
+  },
+  "chest-xray": {
+    "id": "chest-xray",
+    "name": "Chest X-Ray (PA and Lateral)",
+    "category": "radiology",
+    "defaultResultTime": 30,
+    "genericResult": {
+      "summary": "CXR resulted",
+      "values": {},
+      "narrative": "The chest X-ray has been completed and reviewed."
+    }
+  },
+  "abg": {
+    "id": "abg",
+    "name": "Arterial Blood Gas",
+    "category": "pulmonology",
+    "defaultResultTime": 15,
+    "genericResult": {
+      "summary": "ABG resulted",
+      "values": {
+        "pH": 7.4,
+        "pCO2_mmHg": 40,
+        "pO2_mmHg": 90,
+        "HCO3_mEqL": 24
+      },
+      "narrative": "ABG shows no significant acid-base disturbance."
+    }
+  },
+  "cbc": {
+    "id": "cbc",
+    "name": "Complete Blood Count",
+    "category": "hematology",
+    "defaultResultTime": 45,
+    "genericResult": {
+      "summary": "CBC resulted",
+      "values": {
+        "WBC_k_uL": 8.5,
+        "Hgb_g_dL": 13.8,
+        "Plt_k_uL": 220
+      },
+      "narrative": "CBC is within normal limits."
+    }
+  },
+  "bmp": {
+    "id": "bmp",
+    "name": "Basic Metabolic Panel",
+    "category": "chemistries",
+    "defaultResultTime": 45,
+    "genericResult": {
+      "summary": "BMP resulted",
+      "values": {
+        "Na_mEqL": 138,
+        "K_mEqL": 4.1,
+        "Cr_mg_dL": 1.0,
+        "glucose_mg_dL": 112
+      },
+      "narrative": "Basic chemistries are within normal limits."
+    }
+  },
+  "lipid-panel": {
+    "id": "lipid-panel",
+    "name": "Fasting Lipid Panel",
+    "category": "chemistries",
+    "defaultResultTime": 60,
+    "genericResult": {
+      "summary": "Lipid panel resulted",
+      "values": {
+        "totalCholesterol_mg_dL": 210,
+        "LDL_mg_dL": 145,
+        "HDL_mg_dL": 38,
+        "triglycerides_mg_dL": 190
+      },
+      "narrative": "LDL is elevated at 145 mg/dL. HDL is below the optimal threshold. Triglycerides are borderline high."
+    }
+  },
+  "echo": {
+    "id": "echo",
+    "name": "Transthoracic Echocardiogram",
+    "category": "cardiology",
+    "defaultResultTime": 90,
+    "genericResult": {
+      "summary": "Echo resulted",
+      "values": { "EF_percent": 60 },
+      "narrative": "Normal left ventricular function. Ejection fraction 60%. No significant valvular abnormality."
+    }
+  }
+}
