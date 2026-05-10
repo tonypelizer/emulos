@@ -21,7 +21,6 @@ import type {
   PatientVitals,
   IndexedCaseDocument,
 } from "@emulos/types";
-import type { ConditionDefinition } from "@emulos/types";
 
 // ─── Vital recalculation ──────────────────────────────────────────────────────
 

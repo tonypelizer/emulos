@@ -1,0 +1,19 @@
+.root {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--c-bg);
+  /* Clamp the width on wider viewports — keeps reading comfortable */
+  max-width: 680px;
+  margin: 0 auto;
+  width: 100%;
+  box-shadow: var(--shadow-lg);
+}
+
+/* On larger screens, show the full viewport */
+@media (min-width: 700px) {
+  .root {
+    max-width: 640px;
+  }
+}

@@ -1,0 +1,108 @@
+.root {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  background: var(--c-bg);
+  overscroll-behavior: contain;
+}
+
+.entry {
+  position: relative;
+  padding: var(--sp-4);
+  border-radius: var(--r-md);
+}
+
+.isNew {
+  animation: fadeSlideIn 0.3s ease both;
+}
+
+/* Narrative: plain, serif */
+.typeNarrative {
+  background: var(--c-surface);
+  border-left: 3px solid var(--c-border-strong);
+}
+
+.typeNarrative .text {
+  font-family: var(--font-serif);
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--c-text);
+}
+
+/* Test result: blue accent */
+.typeResult {
+  background: var(--c-accent-soft);
+  border-left: 3px solid var(--c-accent);
+}
+
+.typeResult .text {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--c-accent);
+  white-space: pre-wrap;
+}
+
+/* Event: urgent red/purple */
+.typeEvent {
+  background: var(--c-event-bg);
+  border-left: 3px solid var(--c-event);
+  border-radius: var(--r-md);
+}
+
+.typeEvent .text {
+  font-family: var(--font-serif);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1.55;
+  color: var(--c-event);
+}
+
+/* System: subtle muted */
+.typeSystem {
+  background: transparent;
+}
+
+.typeSystem .text {
+  font-size: 0.8125rem;
+  color: var(--c-text-dim);
+  font-style: italic;
+}
+
+.text {
+  margin: 0;
+}
+
+.typeLabel {
+  display: block;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: var(--sp-2);
+  opacity: 0.7;
+}
+
+.typeResult .typeLabel {
+  color: var(--c-accent);
+}
+
+.typeEvent .typeLabel {
+  color: var(--c-event);
+}
+
+.typeSystem .typeLabel {
+  color: var(--c-text-dim);
+}
+
+.timestamp {
+  display: block;
+  font-size: 0.625rem;
+  font-family: var(--font-mono);
+  color: var(--c-text-dim);
+  margin-top: var(--sp-2);
+  text-align: right;
+}

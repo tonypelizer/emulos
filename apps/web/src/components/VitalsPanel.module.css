@@ -1,0 +1,81 @@
+.root {
+  display: flex;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-4);
+  background: var(--c-surface);
+  border-bottom: 1px solid var(--c-border);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  flex-shrink: 0;
+}
+
+.root::-webkit-scrollbar {
+  display: none;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 56px;
+  padding: var(--sp-2) var(--sp-2);
+  border-radius: var(--r-md);
+  flex-shrink: 0;
+}
+
+.label {
+  font-size: 0.625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-family: var(--font-mono);
+  color: var(--c-text-muted);
+}
+
+.value {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.unit {
+  font-size: 0.625rem;
+  font-weight: 400;
+  opacity: 0.75;
+}
+
+/* Status variants */
+.status_ok {
+  background: transparent;
+}
+
+.status_ok .value {
+  color: var(--c-text);
+}
+
+.status_warning {
+  background: var(--c-warning-bg);
+}
+
+.status_warning .value {
+  color: var(--c-warning);
+}
+
+.status_warning .label {
+  color: var(--c-warning);
+}
+
+.status_critical {
+  background: var(--c-critical-bg);
+}
+
+.status_critical .value {
+  color: var(--c-critical);
+}
+
+.status_critical .label {
+  color: var(--c-critical);
+}

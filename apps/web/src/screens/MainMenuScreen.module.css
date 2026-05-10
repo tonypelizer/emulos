@@ -1,0 +1,112 @@
+.root {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-8) var(--sp-4);
+  background: var(--c-bg);
+  gap: var(--sp-8);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-2);
+  text-align: center;
+}
+
+.logo {
+  font-size: 1.75rem;
+  color: var(--c-critical);
+}
+
+.title {
+  font-size: clamp(1.75rem, 6vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--c-accent);
+}
+
+.subtitle {
+  font-family: var(--font-serif);
+  font-size: 0.9375rem;
+  color: var(--c-text-muted);
+  font-style: italic;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  width: 100%;
+  max-width: 380px;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  width: 100%;
+  padding: var(--sp-4) var(--sp-5);
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-lg);
+  color: var(--c-text);
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: left;
+  box-shadow: var(--shadow-sm);
+  transition:
+    box-shadow var(--transition-base),
+    border-color var(--transition-base),
+    background var(--transition-base);
+}
+
+.menuItem:hover:not(:disabled) {
+  border-color: var(--c-accent);
+  box-shadow: var(--shadow-md);
+  background: var(--c-accent-soft);
+}
+
+.menuItem:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 2px;
+}
+
+.menuItem:disabled {
+  opacity: 0.55;
+}
+
+.menuIcon {
+  font-size: 1.125rem;
+  flex-shrink: 0;
+}
+
+.menuLabel {
+  flex: 1;
+}
+
+.menuArrow {
+  font-size: 1.25rem;
+  color: var(--c-text-muted);
+}
+
+.menuBadge {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--c-text-dim);
+  background: var(--c-border);
+  padding: 2px 8px;
+  border-radius: var(--r-full);
+}
+
+.footer {
+  font-size: 0.75rem;
+  color: var(--c-text-dim);
+  font-family: var(--font-mono);
+  text-align: center;
+}
