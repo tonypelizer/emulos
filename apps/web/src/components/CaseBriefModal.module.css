@@ -112,9 +112,7 @@
   font-size: 0.8125rem;
   line-height: 1.7;
   color: var(--c-text);
-  white-space: pre-wrap;
   word-break: break-word;
-  margin: 0;
 }
 
 /* ── Tips section ─────────────────────────────────────────────── */

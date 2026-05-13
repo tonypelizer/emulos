@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { RichText } from "./RichText";
 import styles from "./CaseBriefModal.module.css";
 
 interface Props {
@@ -47,7 +48,7 @@ export function CaseBriefModal({
           role="region"
           aria-label="Case information"
         >
-          <pre className={styles.briefText}>{text}</pre>
+          <RichText text={text} className={styles.briefText} />
         </div>
 
         {/* ── Tips accordion ─────────────────────────────────────── */}

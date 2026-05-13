@@ -47,13 +47,13 @@ export const proceduresRegistry: unknown = proceduresRegistryJson;
 
 /** Map of caseId → raw case JSON. Add new cases here as they are authored. */
 const CASE_REGISTRY: Record<string, unknown> = {
-  "chest-pain-001": chestPain001,
   "fever-001": fever001,
-  "confusion-001": confusion001,
-  "ectopic-pregnancy-001": ectopicPregnancy001,
-  "first-trimester-bleeding-001": firstTrimesterBleeding001,
-  "preeclampsia-001": preeclampsia001,
-  "placental-abruption-001": placentalAbruption001,
+  // "chest-pain-001": chestPain001,
+  // "confusion-001": confusion001,
+  // "ectopic-pregnancy-001": ectopicPregnancy001,
+  // "first-trimester-bleeding-001": firstTrimesterBleeding001,
+  // "preeclampsia-001": preeclampsia001,
+  // "placental-abruption-001": placentalAbruption001,
 };
 
 /**

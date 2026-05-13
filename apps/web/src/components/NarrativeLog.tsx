@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import type { NarrativeEntry } from "@emulos/types";
+import { RichText } from "./RichText";
 import styles from "./NarrativeLog.module.css";
 
 const TYPE_CLASS: Record<NarrativeEntry["type"], string> = {
@@ -65,7 +66,11 @@ export function NarrativeLog({ entries, onNewEntries }: Props) {
           {entry.type !== "narrative" && (
             <span className={styles.typeLabel}>{TYPE_LABEL[entry.type]}</span>
           )}
-          <p className={styles.text}>{entry.text}</p>
+          {entry.type === "narrative" || entry.type === "event" ? (
+            <RichText text={entry.text} className={styles.text} />
+          ) : (
+            <p className={styles.text}>{entry.text}</p>
+          )}
           <span className={styles.timestamp}>T+{entry.gameTime}m</span>
         </article>
       ))}

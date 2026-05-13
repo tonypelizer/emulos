@@ -12,15 +12,6 @@ interface CaseListing {
 
 const CASES: CaseListing[] = [
   {
-    id: "chest-pain-001",
-    title: "The Chest That Wouldn't Stop",
-    specialty: "Emergency Medicine",
-    difficulty: "intermediate",
-    estimatedMinutes: 20,
-    chiefComplaint: "54M — crushing chest pain, diaphoresis, radiation to jaw",
-    tags: ["Chest Pain", "Emergency", "Cardiology", "ECG"],
-  },
-  {
     id: "fever-001",
     title: "Not Just a Cold",
     specialty: "General Medicine",
@@ -30,66 +21,75 @@ const CASES: CaseListing[] = [
       "34M — 3-day fever, productive cough, pleuritic chest pain, SpO₂ 94%",
     tags: ["Fever", "Cough", "Respiratory", "Acute Presentation"],
   },
-  {
-    id: "ectopic-pregnancy-001",
-    title: "Pain at 7 Weeks",
-    specialty: "OB/GYN",
-    difficulty: "intermediate",
-    estimatedMinutes: 25,
-    chiefComplaint:
-      "28F — 7 weeks amenorrhoea, right pelvic pain, vaginal spotting",
-    tags: ["Pelvic Pain", "First Trimester", "OB/GYN", "Early Pregnancy"],
-  },
-  {
-    id: "confusion-001",
-    title: "Not Herself Today",
-    specialty: "Emergency Medicine",
-    difficulty: "beginner",
-    estimatedMinutes: 20,
-    chiefComplaint:
-      "78F — acute confusion, fever, not herself since yesterday, brought in by daughter",
-    tags: [
-      "Altered Mental Status",
-      "Elderly",
-      "Emergency",
-      "Acute Presentation",
-    ],
-  },
-  {
-    id: "first-trimester-bleeding-001",
-    title: "Six Weeks and Bleeding",
-    specialty: "OB/GYN",
-    difficulty: "beginner",
-    estimatedMinutes: 20,
-    chiefComplaint:
-      "26F — 6 weeks pregnant, vaginal bleeding, right-sided pelvic pain, prior ectopic",
-    tags: ["Vaginal Bleeding", "Pelvic Pain", "First Trimester", "OB/GYN"],
-  },
-  {
-    id: "preeclampsia-001",
-    title: "Headache at 34 Weeks",
-    specialty: "OB/GYN",
-    difficulty: "intermediate",
-    estimatedMinutes: 20,
-    chiefComplaint:
-      "28F — 34 weeks pregnant, severe headache, visual disturbances, BP 162/108",
-    tags: ["Headache", "Visual Disturbance", "Third Trimester", "OB/GYN"],
-  },
-  {
-    id: "placental-abruption-001",
-    title: "Something\u2019s Not Right",
-    specialty: "OB/GYN",
-    difficulty: "advanced",
-    estimatedMinutes: 20,
-    chiefComplaint:
-      "32F \u2014 32 weeks pregnant, sudden severe abdominal pain, dark vaginal bleeding, no fetal heartbeat on Doppler",
-    tags: [
-      "Abdominal Pain",
-      "Antepartum Haemorrhage",
-      "Third Trimester",
-      "OB/GYN",
-    ],
-  },
+  // {
+  //   id: "chest-pain-001",
+  //   title: "The Chest That Wouldn't Stop",
+  //   specialty: "Emergency Medicine",
+  //   difficulty: "intermediate",
+  //   estimatedMinutes: 20,
+  //   chiefComplaint: "54M — crushing chest pain, diaphoresis, radiation to jaw",
+  //   tags: ["Chest Pain", "Emergency", "Cardiology", "ECG"],
+  // },
+  // {
+  //   id: "ectopic-pregnancy-001",
+  //   title: "Pain at 7 Weeks",
+  //   specialty: "OB/GYN",
+  //   difficulty: "intermediate",
+  //   estimatedMinutes: 25,
+  //   chiefComplaint:
+  //     "28F — 7 weeks amenorrhoea, right pelvic pain, vaginal spotting",
+  //   tags: ["Pelvic Pain", "First Trimester", "OB/GYN", "Early Pregnancy"],
+  // },
+  // {
+  //   id: "confusion-001",
+  //   title: "Not Herself Today",
+  //   specialty: "Emergency Medicine",
+  //   difficulty: "beginner",
+  //   estimatedMinutes: 20,
+  //   chiefComplaint:
+  //     "78F — acute confusion, fever, not herself since yesterday, brought in by daughter",
+  //   tags: [
+  //     "Altered Mental Status",
+  //     "Elderly",
+  //     "Emergency",
+  //     "Acute Presentation",
+  //   ],
+  // },
+  // {
+  //   id: "first-trimester-bleeding-001",
+  //   title: "Six Weeks and Bleeding",
+  //   specialty: "OB/GYN",
+  //   difficulty: "beginner",
+  //   estimatedMinutes: 20,
+  //   chiefComplaint:
+  //     "26F — 6 weeks pregnant, vaginal bleeding, right-sided pelvic pain, prior ectopic",
+  //   tags: ["Vaginal Bleeding", "Pelvic Pain", "First Trimester", "OB/GYN"],
+  // },
+  // {
+  //   id: "preeclampsia-001",
+  //   title: "Headache at 34 Weeks",
+  //   specialty: "OB/GYN",
+  //   difficulty: "intermediate",
+  //   estimatedMinutes: 20,
+  //   chiefComplaint:
+  //     "28F — 34 weeks pregnant, severe headache, visual disturbances, BP 162/108",
+  //   tags: ["Headache", "Visual Disturbance", "Third Trimester", "OB/GYN"],
+  // },
+  // {
+  //   id: "placental-abruption-001",
+  //   title: "Something\u2019s Not Right",
+  //   specialty: "OB/GYN",
+  //   difficulty: "advanced",
+  //   estimatedMinutes: 20,
+  //   chiefComplaint:
+  //     "32F \u2014 32 weeks pregnant, sudden severe abdominal pain, dark vaginal bleeding, no fetal heartbeat on Doppler",
+  //   tags: [
+  //     "Abdominal Pain",
+  //     "Antepartum Haemorrhage",
+  //     "Third Trimester",
+  //     "OB/GYN",
+  //   ],
+  // },
 ];
 
 const DIFFICULTY_LABEL: Record<CaseListing["difficulty"], string> = {

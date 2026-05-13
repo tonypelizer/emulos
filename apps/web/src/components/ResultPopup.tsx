@@ -1,4 +1,5 @@
 import type { NarrativeEntry } from "@emulos/types";
+import { RichText } from "./RichText";
 import styles from "./ResultPopup.module.css";
 
 const TYPE_LABEL: Partial<Record<NarrativeEntry["type"], string>> = {
@@ -75,7 +76,7 @@ export function ResultPopup({ entries, onDismiss, scoreDelta }: Props) {
                   {TYPE_LABEL[entry.type]}
                 </span>
               )}
-              <p className={styles.text}>{entry.text}</p>
+              <RichText text={entry.text} className={styles.text} />
             </div>
           ))}
         </div>
