@@ -38,8 +38,13 @@ export function PatientHeader({ patient, session, score }: Props) {
           className={`${styles.scoreChip} ${totalPoints < 0 ? styles.scoreNeg : ""}`}
           aria-label={`Score: ${totalPoints} points`}
         >
-          <span className={styles.scoreIcon} aria-hidden="true">★</span>
-          <span className={styles.scoreValue}>{totalPoints >= 0 ? "+" : ""}{totalPoints}</span>
+          <span className={styles.scoreIcon} aria-hidden="true">
+            ★
+          </span>
+          <span className={styles.scoreValue}>
+            {totalPoints >= 0 ? "+" : ""}
+            {totalPoints}
+          </span>
         </div>
         <div
           className={styles.timer}

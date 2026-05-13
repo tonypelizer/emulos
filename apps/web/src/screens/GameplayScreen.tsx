@@ -112,7 +112,11 @@ export function GameplayScreen({
         />
       )}
 
-      <PatientHeader patient={state.patient} session={state.session} score={state.score} />
+      <PatientHeader
+        patient={state.patient}
+        session={state.session}
+        score={state.score}
+      />
       <VitalsPanel vitals={state.patient.vitals} />
       <NarrativeLog
         entries={state.progress.narrativeLog}

@@ -100,7 +100,11 @@ export function enterNode(
     const [onlyChoice] = active;
     const currentNode = caseDoc.nodesById.get(next.progress.currentNodeId);
     const rawChoice = currentNode?.choices.find((c) => c.id === onlyChoice!.id);
-    if (rawChoice && rawChoice.timeCost === 0 && rawChoice.effects.length === 0) {
+    if (
+      rawChoice &&
+      rawChoice.timeCost === 0 &&
+      rawChoice.effects.length === 0
+    ) {
       return enterNode(next, rawChoice.nextNodeId, caseDoc);
     }
   }

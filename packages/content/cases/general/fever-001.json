@@ -155,8 +155,11 @@
       "conditionalHints": [
         {
           "condition": {
-            "op": "has_knowledge",
-            "knowledgeId": "oxygen-applied"
+            "op": "or",
+            "conditions": [
+              { "op": "has_knowledge", "knowledgeId": "oxygen-applied" },
+              { "op": "has_knowledge", "knowledgeId": "med-oxygen-given" }
+            ]
           },
           "hint": "Good — oxygen is on. The next step is already on screen: choose 'Oxygen is running — now take a focused history' from the options below. Work through the respiratory symptoms, systemic history, and PMHx sections, then proceed to investigations. A chest X-ray and blood cultures before antibiotics are your two most critical next steps."
         }
@@ -175,11 +178,21 @@
               "knowledgeId": "oxygen-applied"
             },
             {
+              "type": "add_knowledge",
+              "knowledgeId": "med-oxygen-given"
+            },
+            {
               "type": "dispense_medication",
               "medicationId": "oxygen"
             }
           ],
-          "condition": null
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "med-oxygen-given"
+            }
+          }
         },
         {
           "id": "start-oxygen-applied-proceed",
@@ -188,8 +201,11 @@
           "timeCost": 0,
           "effects": [],
           "condition": {
-            "op": "has_knowledge",
-            "knowledgeId": "oxygen-applied"
+            "op": "or",
+            "conditions": [
+              { "op": "has_knowledge", "knowledgeId": "oxygen-applied" },
+              { "op": "has_knowledge", "knowledgeId": "med-oxygen-given" }
+            ]
           }
         },
         {
@@ -209,8 +225,11 @@
           "condition": {
             "op": "not",
             "condition": {
-              "op": "has_knowledge",
-              "knowledgeId": "oxygen-applied"
+              "op": "or",
+              "conditions": [
+                { "op": "has_knowledge", "knowledgeId": "oxygen-applied" },
+                { "op": "has_knowledge", "knowledgeId": "med-oxygen-given" }
+              ]
             }
           }
         },
@@ -232,7 +251,13 @@
               "category": "critical-action"
             }
           ],
-          "condition": null
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "test_ordered",
+              "testId": "chest-xray"
+            }
+          }
         },
         {
           "id": "start-bloods-only",
@@ -979,6 +1004,64 @@
         }
       ]
     },
+    "ward-deterioration": {
+      "id": "ward-deterioration",
+      "type": "event",
+      "text": "30 minutes later — Ward Nurse Alert\n\nThe ward nurse pages you. Daniel's observations:\n\nHR 118 | BP 98/60 | RR 26 | SpO₂ 89% on 2L O₂ | Temp 39.6°C\n\nHe is increasingly confused and cannot tell you today's date. He meets Sepsis-3 criteria.\n\nHe was admitted to the ward with no antibiotics started, no clear diagnosis, and no management plan. This is a patient safety failure — untreated moderate-severe CAP deteriorates to sepsis within hours.",
+      "effects": [
+        { "type": "add_knowledge", "knowledgeId": "sepsis-developed" },
+        { "type": "add_knowledge", "knowledgeId": "ward-no-treatment-end" },
+        {
+          "type": "add_score_event",
+          "actionId": "admitted-without-treatment",
+          "points": -200,
+          "reason": "Patient admitted to ward without antibiotics, diagnosis, or management plan — deteriorated to sepsis",
+          "category": "penalty"
+        },
+        { "type": "adjust_vital", "vital": "heartRate", "delta": 14 },
+        {
+          "type": "adjust_vital",
+          "vital": "bloodPressure.systolic",
+          "delta": -18
+        },
+        { "type": "adjust_vital", "vital": "oxygenSaturation", "delta": -5 },
+        { "type": "adjust_vital", "vital": "temperature", "delta": 0.7 }
+      ],
+      "choices": [
+        {
+          "id": "ward-treated-already",
+          "text": "Continue — antibiotics are already running",
+          "nextNodeId": "treatment-given",
+          "timeCost": 0,
+          "effects": [],
+          "condition": {
+            "op": "has_knowledge",
+            "knowledgeId": "antibiotics-given"
+          }
+        },
+        {
+          "id": "ward-deterioration-end",
+          "text": "Acknowledge the deterioration",
+          "nextNodeId": "ward-admitted-no-treatment",
+          "timeCost": 0,
+          "effects": [],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "antibiotics-given"
+            }
+          }
+        }
+      ]
+    },
+    "ward-admitted-no-treatment": {
+      "id": "ward-admitted-no-treatment",
+      "type": "outcome",
+      "outcomeId": "outcome-ward-no-treatment",
+      "text": "Daniel deteriorates to sepsis on the ward.\n\nWith no antibiotics, no clear diagnosis documented, and no management plan, the ward team escalates to the medical registrar. He is transferred to the High Dependency Unit.\n\nHDU course: IV antibiotics commenced on HDU admission, vasopressors required overnight, non-invasive ventilation for 18 hours. He is stepped down on day 4 and discharged day 9.\n\n─────────────────────────────────────────────\nDEBRIEF\n\nAdmitting a patient to a ward is a disposition decision, not a management plan.\n\nA patient with:\n• Confirmed CAP (clinical + radiological features)\n• SpO\u2082 94% requiring supplemental oxygen\n• Fever, tachycardia, elevated inflammatory markers\n\n...requires antibiotics within the hour of diagnosis — not after admission paperwork.\n\nThe sequence should always be: Diagnose → Treat → Admit. Not: Admit → (nothing).",
+      "effects": []
+    },
     "delayed-treatment-path": {
       "id": "delayed-treatment-path",
       "type": "event",
@@ -1454,6 +1537,11 @@
           "points": 75,
           "reason": "Patient admitted to ward — correct disposition for moderate CAP with hypoxaemia",
           "category": "critical-action"
+        },
+        {
+          "type": "trigger_event",
+          "eventId": "ward-deterioration",
+          "delayMinutes": 30
         }
       ],
       "iv-access-peripheral": [
@@ -1474,10 +1562,16 @@
     }
   },
   "endCondition": {
-    "op": "and",
+    "op": "or",
     "conditions": [
-      { "op": "has_knowledge", "knowledgeId": "antibiotics-given" },
-      { "op": "has_knowledge", "knowledgeId": "admitted-to-ward" }
+      {
+        "op": "and",
+        "conditions": [
+          { "op": "has_knowledge", "knowledgeId": "antibiotics-given" },
+          { "op": "has_knowledge", "knowledgeId": "admitted-to-ward" }
+        ]
+      },
+      { "op": "has_knowledge", "knowledgeId": "ward-no-treatment-end" }
     ]
   },
   "relevantTests": [

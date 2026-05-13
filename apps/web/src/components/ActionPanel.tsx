@@ -253,21 +253,21 @@ export function ActionPanel({
       {/* ── Tab bar (always visible at the bottom) ─────────────────── */}
       <div className={styles.tabBar} role="tablist" aria-label="Action tabs">
         {visibleTabs.map((tab) => (
-            <button
-              key={tab.id}
-              role="tab"
-              aria-selected={openTab === tab.id}
-              aria-expanded={openTab === tab.id}
-              id={`tab-${tab.id}`}
-              className={`${styles.tabBtn} ${openTab === tab.id ? styles.active : ""}`}
-              onClick={() => toggleTab(tab.id)}
-            >
-              <span className={styles.tabIcon} aria-hidden="true">
-                {tab.icon}
-              </span>
-              <span className={styles.tabLabel}>{tab.label}</span>
-            </button>
-          ))}
+          <button
+            key={tab.id}
+            role="tab"
+            aria-selected={openTab === tab.id}
+            aria-expanded={openTab === tab.id}
+            id={`tab-${tab.id}`}
+            className={`${styles.tabBtn} ${openTab === tab.id ? styles.active : ""}`}
+            onClick={() => toggleTab(tab.id)}
+          >
+            <span className={styles.tabIcon} aria-hidden="true">
+              {tab.icon}
+            </span>
+            <span className={styles.tabLabel}>{tab.label}</span>
+          </button>
+        ))}
       </div>
     </div>
   );

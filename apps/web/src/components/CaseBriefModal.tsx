@@ -75,12 +75,9 @@ export function CaseBriefModal({
                 urgent things are. Low SpO₂ (oxygen) means act fast.
               </li>
               <li>
-                Use the <strong>tab bar</strong> at the bottom to order tests,
-                give medications, or perform procedures at any time.
-              </li>
-              <li>
-                The <strong>Story tab</strong> (📋) shows the choices that move
-                the narrative forward.
+                Use the <strong>tab bar</strong> at the bottom to take actions,
+                order tests, give medications, or perform procedures at any
+                time.
               </li>
               <li>
                 Stuck? Tap <strong>💡 Hint</strong> in the tab bar to ask the
