@@ -112,9 +112,7 @@ function calculateScore(
 
   // 5. Derive percentage and grade.
   const percentage =
-    scoring.maxScore > 0
-      ? ((final / scoring.maxScore) * 100).toFixed(2)
-      : "0.00";
+    scoring.maxScore > 0 ? Math.round((final / scoring.maxScore) * 100) : 0;
   const grade = deriveGrade(final, scoring.gradeThresholds);
   const passed = final >= scoring.passingScore;
 
