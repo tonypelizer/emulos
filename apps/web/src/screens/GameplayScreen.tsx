@@ -100,7 +100,7 @@ export function GameplayScreen({
       <VitalsPanel vitals={state.patient.vitals} />
       <NarrativeLog
         entries={state.progress.narrativeLog}
-        onNewEntries={hasDismissedBrief ? handleNewEntries : undefined}
+        {...(hasDismissedBrief && { onNewEntries: handleNewEntries })}
       />
       <TestResultsPanel
         orderedTests={state.player.orderedTests}
