@@ -110,6 +110,7 @@
     "id": "urine-pregnancy-test",
     "name": "Urine Pregnancy Test (hCG)",
     "category": "obstetric",
+    "specialties": ["obstetrics"],
     "defaultResultTime": 5,
     "genericResult": {
       "summary": "Urine hCG: Positive",
@@ -121,6 +122,7 @@
     "id": "serum-beta-hcg",
     "name": "Serum β-hCG (Quantitative)",
     "category": "obstetric",
+    "specialties": ["obstetrics"],
     "defaultResultTime": 45,
     "genericResult": {
       "summary": "Serum β-hCG resulted",
@@ -132,6 +134,7 @@
     "id": "transvaginal-ultrasound",
     "name": "Transvaginal Ultrasound (TVUS)",
     "category": "obstetric",
+    "specialties": ["obstetrics"],
     "defaultResultTime": 30,
     "genericResult": {
       "summary": "TVUS resulted",
@@ -143,6 +146,7 @@
     "id": "transabdominal-ultrasound",
     "name": "Transabdominal Ultrasound (TAUS)",
     "category": "obstetric",
+    "specialties": ["obstetrics"],
     "defaultResultTime": 20,
     "genericResult": {
       "summary": "TAUS resulted",
@@ -165,6 +169,7 @@
     "id": "progesterone-level",
     "name": "Serum Progesterone",
     "category": "obstetric",
+    "specialties": ["obstetrics"],
     "defaultResultTime": 60,
     "genericResult": {
       "summary": "Progesterone resulted",

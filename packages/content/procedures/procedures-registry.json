@@ -1,0 +1,253 @@
+{
+  "iv-access-peripheral": {
+    "id": "iv-access-peripheral",
+    "name": "Peripheral IV Access",
+    "category": "vascular-access",
+    "timeCost": 5,
+    "defaultEffects": [
+      {
+        "type": "add_knowledge",
+        "knowledgeId": "procedure-iv-access-peripheral-done"
+      }
+    ]
+  },
+  "iv-access-central": {
+    "id": "iv-access-central",
+    "name": "Central Venous Catheter (CVC)",
+    "category": "vascular-access",
+    "timeCost": 20,
+    "defaultEffects": [
+      {
+        "type": "add_knowledge",
+        "knowledgeId": "procedure-iv-access-central-done"
+      }
+    ]
+  },
+  "arterial-line": {
+    "id": "arterial-line",
+    "name": "Arterial Line Placement",
+    "category": "vascular-access",
+    "timeCost": 15,
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "procedure-arterial-line-done" }
+    ]
+  },
+  "cpr": {
+    "id": "cpr",
+    "name": "Cardiopulmonary Resuscitation (CPR)",
+    "category": "resuscitation",
+    "timeCost": 2,
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "procedure-cpr-done" }
+    ]
+  },
+  "defibrillation": {
+    "id": "defibrillation",
+    "name": "Electrical Defibrillation / Cardioversion",
+    "category": "resuscitation",
+    "timeCost": 5,
+    "defaultEffects": [
+      {
+        "type": "add_knowledge",
+        "knowledgeId": "procedure-defibrillation-done"
+      }
+    ]
+  },
+  "intubation-rsi": {
+    "id": "intubation-rsi",
+    "name": "Rapid Sequence Intubation (RSI)",
+    "category": "airway",
+    "timeCost": 10,
+    "defaultEffects": [
+      {
+        "type": "add_knowledge",
+        "knowledgeId": "procedure-intubation-rsi-done"
+      },
+      { "type": "adjust_vital", "vital": "oxygenSaturation", "delta": 5 }
+    ]
+  },
+  "bag-mask-ventilation": {
+    "id": "bag-mask-ventilation",
+    "name": "Bag-Valve-Mask (BVM) Ventilation",
+    "category": "airway",
+    "timeCost": 3,
+    "defaultEffects": [
+      {
+        "type": "add_knowledge",
+        "knowledgeId": "procedure-bag-mask-ventilation-done"
+      },
+      { "type": "adjust_vital", "vital": "oxygenSaturation", "delta": 3 }
+    ]
+  },
+  "foley-catheter": {
+    "id": "foley-catheter",
+    "name": "Urinary Catheterization (Foley)",
+    "category": "monitoring",
+    "timeCost": 5,
+    "defaultEffects": [
+      {
+        "type": "add_knowledge",
+        "knowledgeId": "procedure-foley-catheter-done"
+      }
+    ]
+  },
+  "nasogastric-tube": {
+    "id": "nasogastric-tube",
+    "name": "Nasogastric Tube (NGT) Placement",
+    "category": "gastrointestinal",
+    "timeCost": 5,
+    "defaultEffects": [
+      {
+        "type": "add_knowledge",
+        "knowledgeId": "procedure-nasogastric-tube-done"
+      }
+    ]
+  },
+  "chest-tube": {
+    "id": "chest-tube",
+    "name": "Chest Tube Thoracostomy",
+    "category": "thoracic",
+    "timeCost": 15,
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "procedure-chest-tube-done" }
+    ]
+  },
+  "pericardiocentesis": {
+    "id": "pericardiocentesis",
+    "name": "Pericardiocentesis",
+    "category": "cardiac",
+    "timeCost": 20,
+    "defaultEffects": [
+      {
+        "type": "add_knowledge",
+        "knowledgeId": "procedure-pericardiocentesis-done"
+      }
+    ]
+  },
+  "activate-cath-lab": {
+    "id": "activate-cath-lab",
+    "name": "Activate Cath Lab (Primary PCI)",
+    "category": "cardiac-intervention",
+    "timeCost": 3,
+    "specialties": ["emergency", "general"],
+    "defaultEffects": [
+      {
+        "type": "add_knowledge",
+        "knowledgeId": "procedure-activate-cath-lab-done"
+      }
+    ]
+  },
+  "activate-or": {
+    "id": "activate-or",
+    "name": "Activate Emergency OR",
+    "category": "surgical-intervention",
+    "timeCost": 3,
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "procedure-activate-or-done" }
+    ]
+  },
+  "activate-obstetric-team": {
+    "id": "activate-obstetric-team",
+    "name": "Activate Obstetric Emergency Team",
+    "category": "obstetric-intervention",
+    "timeCost": 3,
+    "specialties": ["obstetrics"],
+    "defaultEffects": [
+      {
+        "type": "add_knowledge",
+        "knowledgeId": "procedure-activate-obstetric-team-done"
+      }
+    ]
+  },
+  "blood-transfusion": {
+    "id": "blood-transfusion",
+    "name": "Packed Red Blood Cell (pRBC) Transfusion",
+    "category": "transfusion",
+    "timeCost": 10,
+    "defaultEffects": [
+      {
+        "type": "add_knowledge",
+        "knowledgeId": "procedure-blood-transfusion-done"
+      }
+    ]
+  },
+  "fresh-frozen-plasma": {
+    "id": "fresh-frozen-plasma",
+    "name": "Fresh Frozen Plasma (FFP) Transfusion",
+    "category": "transfusion",
+    "timeCost": 15,
+    "defaultEffects": [
+      {
+        "type": "add_knowledge",
+        "knowledgeId": "procedure-fresh-frozen-plasma-done"
+      }
+    ]
+  },
+  "draw-blood-cultures": {
+    "id": "draw-blood-cultures",
+    "name": "Blood Culture Collection",
+    "category": "specimen-collection",
+    "timeCost": 5,
+    "defaultEffects": [
+      {
+        "type": "add_knowledge",
+        "knowledgeId": "procedure-draw-blood-cultures-done"
+      }
+    ]
+  },
+  "lumbar-puncture": {
+    "id": "lumbar-puncture",
+    "name": "Lumbar Puncture (Spinal Tap)",
+    "category": "neurological",
+    "timeCost": 20,
+    "defaultEffects": [
+      {
+        "type": "add_knowledge",
+        "knowledgeId": "procedure-lumbar-puncture-done"
+      }
+    ]
+  },
+  "12-lead-ecg-monitoring": {
+    "id": "12-lead-ecg-monitoring",
+    "name": "Continuous Cardiac Monitoring",
+    "category": "monitoring",
+    "timeCost": 3,
+    "defaultEffects": [
+      {
+        "type": "add_knowledge",
+        "knowledgeId": "procedure-12-lead-ecg-monitoring-done"
+      }
+    ]
+  },
+  "external-fetal-monitoring": {
+    "id": "external-fetal-monitoring",
+    "name": "External Fetal Monitoring (CTG)",
+    "category": "obstetric-monitoring",
+    "timeCost": 5,
+    "specialties": ["obstetrics"],
+    "defaultEffects": [
+      {
+        "type": "add_knowledge",
+        "knowledgeId": "procedure-external-fetal-monitoring-done"
+      }
+    ]
+  },
+  "admit-to-ward": {
+    "id": "admit-to-ward",
+    "name": "Admit Patient to Ward",
+    "category": "disposition",
+    "timeCost": 5,
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "procedure-admit-to-ward-done" }
+    ]
+  },
+  "severity-assessment": {
+    "id": "severity-assessment",
+    "name": "CURB-65 Severity Assessment",
+    "category": "clinical-scoring",
+    "timeCost": 3,
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "severity-assessed" }
+    ]
+  }
+}

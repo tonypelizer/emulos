@@ -66,7 +66,7 @@
       {
         "gameTimeThreshold": 45,
         "bonus": 150,
-        "label": "Diagnosis and definitive management within 45 minutes \u2014 Exceptional"
+        "label": "Diagnosis and definitive management within 45 minutes — Exceptional"
       },
       {
         "gameTimeThreshold": 75,
@@ -85,7 +85,7 @@
         "actionId": "serum-hcg-ordered",
         "points": 75,
         "isMandatory": true,
-        "label": "Quantitative serum \u03b2-hCG ordered"
+        "label": "Quantitative serum β-hCG ordered"
       },
       {
         "actionId": "tvus-ordered",
@@ -133,7 +133,7 @@
     "modifiers": [
       {
         "id": "ruptured-before-diagnosis",
-        "description": "Patient ruptured before ectopic was considered \u2014 delayed recognition",
+        "description": "Patient ruptured before ectopic was considered — delayed recognition",
         "type": "multiplier",
         "value": 0.6
       },
@@ -149,7 +149,7 @@
     "start": {
       "id": "start",
       "type": "presentation",
-      "text": "You are the emergency department registrar on a morning shift.\n\nPriya Nair, 28, is brought in by her partner. She is a physiotherapist presenting with a 2-day history of right-sided pelvic pain that worsened acutely an hour ago. She has had some light vaginal spotting since yesterday.\n\nHer last menstrual period was approximately 7 weeks ago. She reports her periods are usually regular. She is not currently using contraception.\n\nOn first impression: she is pale, sitting hunched over, and appears uncomfortable. She rates her pain 6/10 at rest.\n\nVitals: HR 96 | BP 108/68 | RR 18 | SpO\u2082 99% | Temp 37.1\u00b0C | Pain 6/10\n\nWhat is your first priority?",
+      "text": "You are the emergency department registrar on a morning shift.\n\nPriya Nair, 28, is brought in by her partner. She is a physiotherapist presenting with a 2-day history of right-sided pelvic pain that worsened acutely an hour ago. She has had some light vaginal spotting since yesterday.\n\nHer last menstrual period was approximately 7 weeks ago. She reports her periods are usually regular. She is not currently using contraception.\n\nOn first impression: she is pale, sitting hunched over, and appears uncomfortable. She rates her pain 6/10 at rest.\n\nVitals: HR 96 | BP 108/68 | RR 18 | SpO₂ 99% | Temp 37.1°C | Pain 6/10\n\nWhat is your first priority?",
       "effects": [],
       "choices": [
         {
@@ -159,14 +159,10 @@
           "timeCost": 5,
           "effects": [
             {
-              "type": "order_test",
-              "testId": "urine-pregnancy-test"
-            },
-            {
               "type": "add_score_event",
               "actionId": "obtain-urine-hcg",
               "points": 75,
-              "reason": "Urine pregnancy test ordered immediately \u2014 the single most important initial step in any woman of reproductive age with pelvic pain",
+              "reason": "Urine pregnancy test ordered immediately — the single most important initial step in any woman of reproductive age with pelvic pain",
               "category": "critical-action"
             }
           ],
@@ -275,23 +271,16 @@
           "timeCost": 2,
           "effects": [
             {
-              "type": "order_test",
-              "testId": "urine-pregnancy-test"
-            },
-            {
               "type": "add_score_event",
               "actionId": "obtain-urine-hcg",
               "points": 75,
-              "reason": "Urine pregnancy test ordered \u2014 essential first step in any woman of reproductive age with pelvic pain",
+              "reason": "Urine pregnancy test ordered — essential first step in any woman of reproductive age with pelvic pain",
               "category": "critical-action"
             }
           ],
           "condition": {
-            "op": "not",
-            "condition": {
-              "op": "test_ordered",
-              "testId": "urine-pregnancy-test"
-            }
+            "op": "test_ordered",
+            "testId": "urine-pregnancy-test"
           }
         }
       ]
@@ -299,7 +288,7 @@
     "ob-history-detail": {
       "id": "ob-history-detail",
       "type": "history",
-      "text": "Priya's OB/GYN history:\n\n\u2022 G1P0 \u2014 one prior pregnancy ending in spontaneous miscarriage at 8 weeks, 2 years ago\n\u2022 LMP: approximately 7 weeks ago; usually regular (28-day cycles)\n\u2022 Not using contraception; actively trying to conceive\n\u2022 History of pelvic inflammatory disease 3 years ago (treated with antibiotics)\n\u2022 Chlamydia infection 4 years ago (treated)\n\u2022 No known laparoscopic or tubal surgery\n\u2022 No current IUD\n\nShe is not aware of whether she is Rh positive or negative.\n\nThis history significantly elevates your concern for ectopic pregnancy. You now have a clear picture of her risk factors.\n\nWhat do you do next?",
+      "text": "Priya's OB/GYN history:\n\n• G1P0 — one prior pregnancy ending in spontaneous miscarriage at 8 weeks, 2 years ago\n• LMP: approximately 7 weeks ago; usually regular (28-day cycles)\n• Not using contraception; actively trying to conceive\n• History of pelvic inflammatory disease 3 years ago (treated with antibiotics)\n• Chlamydia infection 4 years ago (treated)\n• No known laparoscopic or tubal surgery\n• No current IUD\n\nShe is not aware of whether she is Rh positive or negative.\n\nThis history significantly elevates your concern for ectopic pregnancy. You now have a clear picture of her risk factors.\n\nWhat do you do next?",
       "effects": [
         {
           "type": "add_knowledge",
@@ -316,48 +305,26 @@
       ],
       "choices": [
         {
-          "id": "order-hcg-after-history",
-          "text": "Order urine pregnancy test and quantitative serum \u03b2-hCG urgently",
+          "id": "proceed-to-hcg-result",
+          "text": "Check the urine pregnancy test result (it should be ready)",
           "nextNodeId": "urine-hcg-result",
-          "timeCost": 5,
+          "timeCost": 2,
           "effects": [
-            {
-              "type": "order_test",
-              "testId": "urine-pregnancy-test"
-            },
-            {
-              "type": "order_test",
-              "testId": "serum-beta-hcg"
-            },
             {
               "type": "add_score_event",
               "actionId": "obtain-urine-hcg",
               "points": 75,
-              "reason": "Urine hCG ordered after history \u2014 good practice, though slightly delayed",
+              "reason": "Urine hCG ordered after history — good practice, though slightly delayed",
               "category": "critical-action"
             },
             {
               "type": "add_score_event",
               "actionId": "serum-hcg-ordered",
               "points": 75,
-              "reason": "Quantitative serum \u03b2-hCG ordered \u2014 essential for discriminatory zone interpretation",
+              "reason": "Quantitative serum β-hCG ordered — essential for discriminatory zone interpretation",
               "category": "critical-action"
             }
           ],
-          "condition": {
-            "op": "not",
-            "condition": {
-              "op": "test_ordered",
-              "testId": "urine-pregnancy-test"
-            }
-          }
-        },
-        {
-          "id": "proceed-to-hcg-result",
-          "text": "Check the urine pregnancy test result (it should be ready)",
-          "nextNodeId": "urine-hcg-result",
-          "timeCost": 2,
-          "effects": [],
           "condition": {
             "op": "test_ordered",
             "testId": "urine-pregnancy-test"
@@ -368,7 +335,7 @@
     "early-exam-node": {
       "id": "early-exam-node",
       "type": "examination",
-      "text": "Abdominal examination:\n\n\u2022 Abdomen soft, non-distended\n\u2022 Marked tenderness in the right iliac fossa and suprapubic region\n\u2022 Mild voluntary guarding in the right lower quadrant\n\u2022 No peritonism on percussion\n\u2022 Bowel sounds present\n\nPelvic examination (deferred \u2014 you choose not to perform it without knowing the pregnancy status first, which is appropriate).\n\nThe findings are consistent with a right adnexal process. You should now establish the pregnancy status before proceeding.",
+      "text": "Abdominal examination:\n\n• Abdomen soft, non-distended\n• Marked tenderness in the right iliac fossa and suprapubic region\n• Mild voluntary guarding in the right lower quadrant\n• No peritonism on percussion\n• Bowel sounds present\n\nPelvic examination (deferred — you choose not to perform it without knowing the pregnancy status first, which is appropriate).\n\nThe findings are consistent with a right adnexal process. You should now establish the pregnancy status before proceeding.",
       "effects": [
         {
           "type": "add_examination_finding",
@@ -383,23 +350,16 @@
           "timeCost": 2,
           "effects": [
             {
-              "type": "order_test",
-              "testId": "urine-pregnancy-test"
-            },
-            {
               "type": "add_score_event",
               "actionId": "obtain-urine-hcg",
               "points": 75,
-              "reason": "Urine hCG ordered \u2014 essential in any woman of reproductive age with pelvic pain",
+              "reason": "Urine hCG ordered — essential in any woman of reproductive age with pelvic pain",
               "category": "critical-action"
             }
           ],
           "condition": {
-            "op": "not",
-            "condition": {
-              "op": "test_ordered",
-              "testId": "urine-pregnancy-test"
-            }
+            "op": "test_ordered",
+            "testId": "urine-pregnancy-test"
           }
         }
       ]
@@ -407,7 +367,7 @@
     "urine-hcg-result": {
       "id": "urine-hcg-result",
       "type": "result",
-      "text": "URINE PREGNANCY TEST RESULT\n\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\nResult: POSITIVE\n\nPriya Nair is pregnant.\n\nYou now have a confirmed positive pregnancy test in a woman with:\n\u2022 7 weeks amenorrhoea\n\u2022 Right-sided pelvic pain (acute worsening)\n\u2022 Right shoulder-tip pain (possible diaphragmatic irritation from haemoperitoneum)\n\u2022 Vaginal spotting\n\u2022 Prior PID and chlamydia (major risk factors for ectopic)\n\u2022 HR 96, BP 108/68 (borderline low)\n\nEctopic pregnancy must be excluded urgently. What do you do next?",
+      "text": "URINE PREGNANCY TEST RESULT\n————————————————\nResult: POSITIVE\n\nPriya Nair is pregnant.\n\nYou now have a confirmed positive pregnancy test in a woman with:\n• 7 weeks amenorrhoea\n• Right-sided pelvic pain (acute worsening)\n• Right shoulder-tip pain (possible diaphragmatic irritation from haemoperitoneum)\n• Vaginal spotting\n• Prior PID and chlamydia (major risk factors for ectopic)\n• HR 96, BP 108/68 (borderline low)\n\nEctopic pregnancy must be excluded urgently. What do you do next?",
       "effects": [
         {
           "type": "result_test",
@@ -421,52 +381,36 @@
       "choices": [
         {
           "id": "order-tvus-and-bloods",
-          "text": "Order transvaginal ultrasound (TVUS) urgently and draw bloods (serum \u03b2-hCG, CBC, blood type)",
+          "text": "Order transvaginal ultrasound (TVUS) urgently and draw bloods (serum β-hCG, CBC, blood type)",
           "nextNodeId": "bloods-and-tvus-ordered",
           "timeCost": 10,
           "effects": [
             {
-              "type": "order_test",
-              "testId": "transvaginal-ultrasound"
-            },
-            {
-              "type": "order_test",
-              "testId": "serum-beta-hcg"
-            },
-            {
-              "type": "order_test",
-              "testId": "cbc"
-            },
-            {
-              "type": "order_test",
-              "testId": "rh-blood-type"
-            },
-            {
               "type": "add_score_event",
               "actionId": "tvus-ordered",
               "points": 150,
-              "reason": "TVUS ordered urgently \u2014 the definitive imaging modality for first-trimester pregnancy localisation",
+              "reason": "TVUS ordered urgently — the definitive imaging modality for first-trimester pregnancy localisation",
               "category": "critical-action"
             },
             {
               "type": "add_score_event",
               "actionId": "serum-hcg-ordered",
               "points": 75,
-              "reason": "Quantitative serum \u03b2-hCG ordered for discriminatory zone interpretation",
+              "reason": "Quantitative serum β-hCG ordered for discriminatory zone interpretation",
               "category": "critical-action"
             },
             {
               "type": "add_score_event",
               "actionId": "rh-status-checked",
               "points": 50,
-              "reason": "Rh blood type checked \u2014 essential for anti-D prophylaxis decision",
+              "reason": "Rh blood type checked — essential for anti-D prophylaxis decision",
               "category": "critical-action"
             },
             {
               "type": "add_score_event",
               "actionId": "iv-access-established",
               "points": 50,
-              "reason": "IV access and bloods drawn \u2014 appropriate preparation for potential surgical emergency",
+              "reason": "IV access and bloods drawn — appropriate preparation for potential surgical emergency",
               "category": "critical-action"
             }
           ],
@@ -476,21 +420,20 @@
           "id": "order-taus-only",
           "text": "Order a transabdominal ultrasound (it's quicker to arrange)",
           "nextNodeId": "taus-limited-result",
-          "timeCost": 15,
+          "timeCost": 3,
           "effects": [
-            {
-              "type": "order_test",
-              "testId": "transabdominal-ultrasound"
-            },
             {
               "type": "add_score_event",
               "actionId": "taus-instead-of-tvus",
               "points": -50,
-              "reason": "Transabdominal ultrasound alone is insufficient for first-trimester evaluation \u2014 TVUS has significantly higher sensitivity for early ectopic and IUP localisation",
+              "reason": "Transabdominal ultrasound alone is insufficient for first-trimester evaluation — TVUS has significantly higher sensitivity for early ectopic and IUP localisation",
               "category": "penalty"
             }
           ],
-          "condition": null
+          "condition": {
+            "op": "test_ordered",
+            "testId": "transabdominal-ultrasound"
+          }
         },
         {
           "id": "reassure-discharge",
@@ -526,37 +469,21 @@
       "id": "dangerous-discharge",
       "type": "outcome",
       "outcomeId": "outcome-discharge-catastrophe",
-      "text": "Priya is discharged home with a diagnosis of threatened miscarriage and advice to follow up with her GP in 3\u20135 days.\n\nSix hours later, she returns by ambulance in haemorrhagic shock. She had a ruptured right fallopian tube. She required emergency laparotomy, salpingectomy, and 4 units of packed red blood cells.\n\nA diagnosis of ectopic pregnancy was missed at the initial presentation.\n\nThis outcome reflects a failure to apply systematic clinical reasoning. In any pregnant patient with acute pelvic pain, risk factors for ectopic, and heamodynamic instability, ectopic pregnancy must be excluded with imaging before discharge \u2014 not assumed to be benign.",
+      "text": "Priya is discharged home with a diagnosis of threatened miscarriage and advice to follow up with her GP in 3–5 days.\n\nSix hours later, she returns by ambulance in haemorrhagic shock. She had a ruptured right fallopian tube. She required emergency laparotomy, salpingectomy, and 4 units of packed red blood cells.\n\nA diagnosis of ectopic pregnancy was missed at the initial presentation.\n\nThis outcome reflects a failure to apply systematic clinical reasoning. In any pregnant patient with acute pelvic pain, risk factors for ectopic, and heamodynamic instability, ectopic pregnancy must be excluded with imaging before discharge — not assumed to be benign.",
       "effects": []
     },
     "early-obs-consult": {
       "id": "early-obs-consult",
       "type": "decision",
-      "text": "You call the obstetrics registrar on-call. They are busy in theatre and advise you to complete the initial workup and call back with results.\n\nThey say: 'Get a TVUS and serum \u03b2-hCG and call me with the results. If she deteriorates haemodynamically, call me straight away.'\n\nWhat do you do now?",
+      "text": "You call the obstetrics registrar on-call. They are busy in theatre and advise you to complete the initial workup and call back with results.\n\nThey say: 'Get a TVUS and serum β-hCG and call me with the results. If she deteriorates haemodynamically, call me straight away.'\n\nWhat do you do now?",
       "effects": [],
       "choices": [
         {
           "id": "follow-obs-advice-tvus",
-          "text": "Order TVUS and serum \u03b2-hCG as advised, plus CBC and blood type",
+          "text": "Order TVUS and serum β-hCG as advised, plus CBC and blood type",
           "nextNodeId": "bloods-and-tvus-ordered",
           "timeCost": 10,
           "effects": [
-            {
-              "type": "order_test",
-              "testId": "transvaginal-ultrasound"
-            },
-            {
-              "type": "order_test",
-              "testId": "serum-beta-hcg"
-            },
-            {
-              "type": "order_test",
-              "testId": "cbc"
-            },
-            {
-              "type": "order_test",
-              "testId": "rh-blood-type"
-            },
             {
               "type": "add_score_event",
               "actionId": "tvus-ordered",
@@ -568,7 +495,7 @@
               "type": "add_score_event",
               "actionId": "serum-hcg-ordered",
               "points": 75,
-              "reason": "Quantitative serum \u03b2-hCG ordered",
+              "reason": "Quantitative serum β-hCG ordered",
               "category": "critical-action"
             },
             {
@@ -593,7 +520,7 @@
     "taus-limited-result": {
       "id": "taus-limited-result",
       "type": "result",
-      "text": "TRANSABDOMINAL ULTRASOUND REPORT\n\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\nUterus: Anteverted, non-gravid appearance. No definite intrauterine gestational sac identified.\nRight adnexa: Possible heterogeneous area, difficult to characterise \u2014 limited view due to body habitus and early gestational age.\nLeft adnexa: Normal.\nPouch of Douglas: Cannot adequately assess for free fluid on this view.\n\nREPORT: Inconclusive. Recommend transvaginal ultrasound for further evaluation.\n\nAs expected, the transabdominal ultrasound has not answered the question. TVUS is required. What do you do now?",
+      "text": "TRANSABDOMINAL ULTRASOUND REPORT\n————————————————————\nUterus: Anteverted, non-gravid appearance. No definite intrauterine gestational sac identified.\nRight adnexa: Possible heterogeneous area, difficult to characterise — limited view due to body habitus and early gestational age.\nLeft adnexa: Normal.\nPouch of Douglas: Cannot adequately assess for free fluid on this view.\n\nREPORT: Inconclusive. Recommend transvaginal ultrasound for further evaluation.\n\nAs expected, the transabdominal ultrasound has not answered the question. TVUS is required. What do you do now?",
       "effects": [
         {
           "type": "result_test",
@@ -603,38 +530,22 @@
       "choices": [
         {
           "id": "escalate-to-tvus",
-          "text": "Order TVUS now (as recommended), plus serum \u03b2-hCG, CBC, and Rh blood type",
+          "text": "Order TVUS now (as recommended), plus serum β-hCG, CBC, and Rh blood type",
           "nextNodeId": "bloods-and-tvus-ordered",
           "timeCost": 10,
           "effects": [
             {
-              "type": "order_test",
-              "testId": "transvaginal-ultrasound"
-            },
-            {
-              "type": "order_test",
-              "testId": "serum-beta-hcg"
-            },
-            {
-              "type": "order_test",
-              "testId": "cbc"
-            },
-            {
-              "type": "order_test",
-              "testId": "rh-blood-type"
-            },
-            {
               "type": "add_score_event",
               "actionId": "tvus-ordered",
               "points": 150,
-              "reason": "TVUS ordered after inconclusive TAUS \u2014 recognised the limitation and escalated correctly",
+              "reason": "TVUS ordered after inconclusive TAUS — recognised the limitation and escalated correctly",
               "category": "critical-action"
             },
             {
               "type": "add_score_event",
               "actionId": "serum-hcg-ordered",
               "points": 75,
-              "reason": "Serum \u03b2-hCG ordered",
+              "reason": "Serum β-hCG ordered",
               "category": "critical-action"
             },
             {
@@ -659,7 +570,7 @@
     "bloods-and-tvus-ordered": {
       "id": "bloods-and-tvus-ordered",
       "type": "investigation",
-      "text": "You have ordered TVUS, serum \u03b2-hCG, CBC, and Rh blood type. The ultrasound technician will be with her in approximately 20\u201325 minutes. Blood results will take 30\u201345 minutes.\n\nPriya is in the resuscitation bay. Her vitals just now: HR 102 | BP 102/64 | Pain 7/10.\n\nHer blood pressure is trending down and her heart rate is trending up. You are concerned about haemodynamic compromise.\n\nWhile waiting for imaging, what do you do?",
+      "text": "You have ordered TVUS, serum β-hCG, CBC, and Rh blood type. The ultrasound technician will be with her in approximately 20–25 minutes. Blood results will take 30–45 minutes.\n\nPriya is in the resuscitation bay. Her vitals just now: HR 102 | BP 102/64 | Pain 7/10.\n\nHer blood pressure is trending down and her heart rate is trending up. You are concerned about haemodynamic compromise.\n\nWhile waiting for imaging, what do you do?",
       "effects": [
         {
           "type": "adjust_vital",
@@ -683,7 +594,7 @@
               "type": "add_score_event",
               "actionId": "iv-fluids-resus",
               "points": 50,
-              "reason": "IV fluid resuscitation initiated \u2014 appropriate supportive care while awaiting imaging",
+              "reason": "IV fluid resuscitation initiated — appropriate supportive care while awaiting imaging",
               "category": "critical-action"
             },
             {
@@ -741,7 +652,7 @@
               "type": "add_score_event",
               "actionId": "ob-consult-activated",
               "points": 200,
-              "reason": "Obstetrics notified early \u2014 this is a potential surgical emergency requiring senior team involvement",
+              "reason": "Obstetrics notified early — this is a potential surgical emergency requiring senior team involvement",
               "category": "critical-action"
             },
             {
@@ -764,7 +675,7 @@
     "vitals-deteriorating": {
       "id": "vitals-deteriorating",
       "type": "event",
-      "text": "URGENT: Priya becomes acutely more unwell.\n\nRepeat vitals: HR 118 | BP 86/52 | RR 22 | SpO\u2082 97% | Pain 9/10\n\nShe is pale, diaphoretic, and reports sudden severe lower abdominal pain. She is becoming lightheaded.\n\nThis is haemodynamic compromise. The clinical picture is consistent with a ruptured ectopic pregnancy with haemoperitoneum.\n\nThis is a surgical emergency. What do you do immediately?",
+      "text": "URGENT: Priya becomes acutely more unwell.\n\nRepeat vitals: HR 118 | BP 86/52 | RR 22 | SpO₂ 97% | Pain 9/10\n\nShe is pale, diaphoretic, and reports sudden severe lower abdominal pain. She is becoming lightheaded.\n\nThis is haemodynamic compromise. The clinical picture is consistent with a ruptured ectopic pregnancy with haemoperitoneum.\n\nThis is a surgical emergency. What do you do immediately?",
       "effects": [
         {
           "type": "add_condition",
@@ -787,7 +698,7 @@
               "type": "add_score_event",
               "actionId": "ob-consult-activated",
               "points": 200,
-              "reason": "Obstetrics called emergently \u2014 correctly recognised haemorrhagic shock and escalated to surgical team",
+              "reason": "Obstetrics called emergently — correctly recognised haemorrhagic shock and escalated to surgical team",
               "category": "critical-action"
             },
             {
@@ -816,13 +727,13 @@
       "id": "emergency-surgical-pathway",
       "type": "outcome",
       "outcomeId": "outcome-ruptured-managed",
-      "text": "The obstetrics team arrives immediately. Priya is taken to emergency theatre.\n\nIntra-operatively: Right fallopian tube ruptured with 800 mL haemoperitoneum. Emergency right salpingectomy performed. Blood transfusion given intra-operatively.\n\nPriya recovers in ICU overnight and is discharged on day 4.\n\nOutcome: Ectopic pregnancy managed surgically following rupture. The diagnosis was delayed \u2014 earlier imaging and stabilisation would have allowed for safer planned intervention. The patient survived due to appropriate escalation when deterioration was recognised, but the delay to imaging was a missed opportunity for pre-rupture diagnosis and potentially laparoscopic (fertility-sparing) management.",
+      "text": "The obstetrics team arrives immediately. Priya is taken to emergency theatre.\n\nIntra-operatively: Right fallopian tube ruptured with 800 mL haemoperitoneum. Emergency right salpingectomy performed. Blood transfusion given intra-operatively.\n\nPriya recovers in ICU overnight and is discharged on day 4.\n\nOutcome: Ectopic pregnancy managed surgically following rupture. The diagnosis was delayed — earlier imaging and stabilisation would have allowed for safer planned intervention. The patient survived due to appropriate escalation when deterioration was recognised, but the delay to imaging was a missed opportunity for pre-rupture diagnosis and potentially laparoscopic (fertility-sparing) management.",
       "effects": []
     },
     "tvus-result": {
       "id": "tvus-result",
       "type": "result",
-      "text": "TRANSVAGINAL ULTRASOUND REPORT\n\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\nUterus: Anteverted, 8 \u00d7 5 \u00d7 4 cm. Endometrial stripe thickened (15 mm). No definite intrauterine gestational sac identified. No yolk sac or embryo within the uterine cavity.\n\nRight adnexa: Heterogeneous ring-like structure (2.8 cm) adjacent to and separate from the right ovary \u2014 consistent with an adnexal mass. No cardiac activity identified within this structure.\n\nLeft adnexa: Normal. Left ovary unremarkable.\n\nFree fluid: Small-to-moderate volume of echogenic free fluid in the pouch of Douglas and extending to the right paracolic gutter \u2014 consistent with haemoperitoneum.\n\nIMPRESSION: No intrauterine pregnancy identified. Right adnexal mass with free haemoperitoneum. Findings are highly suspicious for RIGHT ECTOPIC PREGNANCY.\n\n\u03b2-hCG (serum) is back: 4,200 mIU/mL \u2014 above the transvaginal discriminatory zone. A gestational sac should be visible with IUP at this level. None is seen.\n\nThis confirms the diagnosis. What is your management?",
+      "text": "TRANSVAGINAL ULTRASOUND REPORT\n————————————————————\nUterus: Anteverted, 8 × 5 × 4 cm. Endometrial stripe thickened (15 mm). No definite intrauterine gestational sac identified. No yolk sac or embryo within the uterine cavity.\n\nRight adnexa: Heterogeneous ring-like structure (2.8 cm) adjacent to and separate from the right ovary — consistent with an adnexal mass. No cardiac activity identified within this structure.\n\nLeft adnexa: Normal. Left ovary unremarkable.\n\nFree fluid: Small-to-moderate volume of echogenic free fluid in the pouch of Douglas and extending to the right paracolic gutter — consistent with haemoperitoneum.\n\nIMPRESSION: No intrauterine pregnancy identified. Right adnexal mass with free haemoperitoneum. Findings are highly suspicious for RIGHT ECTOPIC PREGNANCY.\n\nβ-hCG (serum) is back: 4,200 mIU/mL — above the transvaginal discriminatory zone. A gestational sac should be visible with IUP at this level. None is seen.\n\nThis confirms the diagnosis. What is your management?",
       "effects": [
         {
           "type": "result_test",
@@ -852,14 +763,14 @@
           "type": "add_score_event",
           "actionId": "ectopic-diagnosis-confirmed",
           "points": 200,
-          "reason": "Ectopic pregnancy correctly identified on TVUS + \u03b2-hCG above discriminatory zone",
+          "reason": "Ectopic pregnancy correctly identified on TVUS + β-hCG above discriminatory zone",
           "category": "critical-action"
         }
       ],
       "choices": [
         {
           "id": "call-obs-urgent",
-          "text": "Call obstetrics urgently \u2014 this requires surgical or medical (methotrexate) management",
+          "text": "Call obstetrics urgently — this requires surgical or medical (methotrexate) management",
           "nextNodeId": "obs-management-decision",
           "timeCost": 5,
           "effects": [
@@ -885,7 +796,7 @@
         },
         {
           "id": "update-obs-with-result",
-          "text": "Update the obstetrics registrar with these results \u2014 she is already aware",
+          "text": "Update the obstetrics registrar with these results — she is already aware",
           "nextNodeId": "obs-management-decision",
           "timeCost": 3,
           "effects": [],
@@ -904,7 +815,7 @@
               "type": "add_score_event",
               "actionId": "methotrexate-without-consult",
               "points": -100,
-              "reason": "Methotrexate is NOT an emergency physician's decision to make unilaterally \u2014 it requires OB consultation, haemodynamic stability assessment, and specific criteria (no rupture, hCG < 5,000). With free fluid on scan, rupture must be excluded first.",
+              "reason": "Methotrexate is NOT an emergency physician's decision to make unilaterally — it requires OB consultation, haemodynamic stability assessment, and specific criteria (no rupture, hCG < 5,000). With free fluid on scan, rupture must be excluded first.",
               "category": "penalty"
             }
           ],
@@ -916,7 +827,7 @@
       "id": "premature-methotrexate",
       "type": "outcome",
       "outcomeId": "outcome-mtx-error",
-      "text": "You administer methotrexate without obstetric consultation.\n\nThe obstetrics registrar is called by nursing staff and arrives immediately. They review the ultrasound findings \u2014 the free fluid in the pouch of Douglas represents active haemoperitoneum. This patient has a RUPTURED ectopic pregnancy.\n\nMethotrexate is contraindicated in ruptured ectopic pregnancy. The patient requires emergency surgery, not medical management.\n\nPriya is taken emergently to theatre for laparoscopic salpingectomy. The delay caused by the methotrexate administration (and associated workup) added time to her definitive care.\n\nThis outcome reflects an important principle: methotrexate requires:\n\u2022 Haemodynamic stability\n\u2022 No evidence of rupture\n\u2022 hCG < 5,000 mIU/mL (relative)\n\u2022 OB/GYN consultation and consent\n\u2022 Patient ability to follow up reliably",
+      "text": "You administer methotrexate without obstetric consultation.\n\nThe obstetrics registrar is called by nursing staff and arrives immediately. They review the ultrasound findings — the free fluid in the pouch of Douglas represents active haemoperitoneum. This patient has a RUPTURED ectopic pregnancy.\n\nMethotrexate is contraindicated in ruptured ectopic pregnancy. The patient requires emergency surgery, not medical management.\n\nPriya is taken emergently to theatre for laparoscopic salpingectomy. The delay caused by the methotrexate administration (and associated workup) added time to her definitive care.\n\nThis outcome reflects an important principle: methotrexate requires:\n• Haemodynamic stability\n• No evidence of rupture\n• hCG < 5,000 mIU/mL (relative)\n• OB/GYN consultation and consent\n• Patient ability to follow up reliably",
       "effects": []
     },
     "obs-management-decision": {
@@ -935,7 +846,7 @@
               "type": "add_score_event",
               "actionId": "anti-d-given",
               "points": 50,
-              "reason": "Anti-D immunoglobulin administered to Rh-negative patient after pregnancy loss \u2014 prevents Rh sensitisation in future pregnancies",
+              "reason": "Anti-D immunoglobulin administered to Rh-negative patient after pregnancy loss — prevents Rh sensitisation in future pregnancies",
               "category": "critical-action"
             },
             {
@@ -957,7 +868,7 @@
         },
         {
           "id": "handover-to-obs",
-          "text": "Complete handover to the OB team \u2014 the patient is in good hands now",
+          "text": "Complete handover to the OB team — the patient is in good hands now",
           "nextNodeId": "handover-without-anti-d",
           "timeCost": 5,
           "effects": [
@@ -965,7 +876,7 @@
               "type": "add_score_event",
               "actionId": "missed-anti-d",
               "points": -50,
-              "reason": "Anti-D immunoglobulin was not given before handover \u2014 the ED physician shares responsibility for this in an Rh-negative patient with bleeding in pregnancy",
+              "reason": "Anti-D immunoglobulin was not given before handover — the ED physician shares responsibility for this in an Rh-negative patient with bleeding in pregnancy",
               "category": "penalty"
             }
           ],
@@ -998,14 +909,14 @@
       "id": "handover-without-anti-d",
       "type": "outcome",
       "outcomeId": "outcome-good-missed-anti-d",
-      "text": "Priya is taken to theatre for emergency laparoscopy. A ruptured right ectopic pregnancy is found and a right salpingectomy is performed.\n\nPost-operatively, the obstetrics team notes that anti-D immunoglobulin was not given in the ED. They administer it post-operatively.\n\nPriya recovers well and is discharged on day 3.\n\nThe outcome was good, but anti-D was a missed step. In Rh-negative women, sensitisation from an unrecognised pregnancy can cause haemolytic disease of the newborn in a future pregnancy \u2014 a preventable complication with a single IM injection.",
+      "text": "Priya is taken to theatre for emergency laparoscopy. A ruptured right ectopic pregnancy is found and a right salpingectomy is performed.\n\nPost-operatively, the obstetrics team notes that anti-D immunoglobulin was not given in the ED. They administer it post-operatively.\n\nPriya recovers well and is discharged on day 3.\n\nThe outcome was good, but anti-D was a missed step. In Rh-negative women, sensitisation from an unrecognised pregnancy can cause haemolytic disease of the newborn in a future pregnancy — a preventable complication with a single IM injection.",
       "effects": []
     },
     "outcome-excellent": {
       "id": "outcome-excellent",
       "type": "outcome",
       "outcomeId": "outcome-excellent",
-      "text": "Priya Nair undergoes emergency laparoscopy.\n\nIntra-operative findings: Right fallopian tube ectopic pregnancy with a small amount of haemoperitoneum (approximately 150 mL). The tube has not fully ruptured.\n\nA right salpingotomy is performed, and the ectopic pregnancy is removed. Her left tube is intact and healthy.\n\nShe returns to the ward post-operatively in a stable condition, with good pain control and appropriate monitoring. She is discharged on day 2.\n\nPriya is counselled about her future fertility, with explanation that her left tube remains intact. She is given a follow-up plan for serial \u03b2-hCG levels until they reach zero, to confirm complete resolution.\n\nYour systematic approach \u2014 early pregnancy testing, urgent TVUS, serum \u03b2-hCG, Rh prophylaxis, and timely OB consultation \u2014 led to a near-optimal outcome. Excellent work.",
+      "text": "Priya Nair undergoes emergency laparoscopy.\n\nIntra-operative findings: Right fallopian tube ectopic pregnancy with a small amount of haemoperitoneum (approximately 150 mL). The tube has not fully ruptured.\n\nA right salpingotomy is performed, and the ectopic pregnancy is removed. Her left tube is intact and healthy.\n\nShe returns to the ward post-operatively in a stable condition, with good pain control and appropriate monitoring. She is discharged on day 2.\n\nPriya is counselled about her future fertility, with explanation that her left tube remains intact. She is given a follow-up plan for serial β-hCG levels until they reach zero, to confirm complete resolution.\n\nYour systematic approach — early pregnancy testing, urgent TVUS, serum β-hCG, Rh prophylaxis, and timely OB consultation — led to a near-optimal outcome. Excellent work.",
       "effects": []
     }
   }

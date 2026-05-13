@@ -121,6 +121,18 @@ export interface OrderedTest {
   result: TestResult | null;
 }
 
+export interface DispensedMedication {
+  readonly medicationId: string;
+  /** Game-time minute when the medication was administered. */
+  readonly dispensedAt: number;
+}
+
+export interface PerformedProcedure {
+  readonly procedureId: string;
+  /** Game-time minute when the procedure was performed. */
+  readonly performedAt: number;
+}
+
 export interface ActionRecord {
   readonly choiceId: string;
   readonly nodeId: string;
@@ -135,7 +147,14 @@ export interface PlayerState {
    */
   knowledge: string[];
   orderedTests: OrderedTest[];
+  dispensedMedications: DispensedMedication[];
+  performedProcedures: PerformedProcedure[];
   actionHistory: ActionRecord[];
+  /**
+   * Node IDs where the player has already used the Attending Physician hint.
+   * Prevents double-charging the score penalty for the same node.
+   */
+  hintsUsedAtNodes: string[];
 }
 
 // ─── Case progress ────────────────────────────────────────────────────────────

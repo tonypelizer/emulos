@@ -4,6 +4,7 @@
   flex-direction: column;
   overflow: hidden;
   background: var(--c-bg);
+  position: relative;
   /* Clamp the width on wider viewports — keeps reading comfortable */
   max-width: 680px;
   margin: 0 auto;

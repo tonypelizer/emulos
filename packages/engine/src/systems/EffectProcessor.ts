@@ -214,14 +214,20 @@ function applySingleEffect(
       // ── Scoring ──────────────────────────────────────────────────────────
 
       case "add_score_event": {
-        draft.score.events.push({
-          id: generateId(),
-          gameTime: draft.session.gameTime,
-          actionId: effect.actionId,
-          points: effect.points,
-          reason: effect.reason,
-          category: effect.category,
-        });
+        // Deduplicate: a given actionId is only scored once.
+        const alreadyScored = draft.score.events.some(
+          (e) => e.actionId === effect.actionId,
+        );
+        if (!alreadyScored) {
+          draft.score.events.push({
+            id: generateId(),
+            gameTime: draft.session.gameTime,
+            actionId: effect.actionId,
+            points: effect.points,
+            reason: effect.reason,
+            category: effect.category,
+          });
+        }
         break;
       }
 
@@ -285,6 +291,36 @@ function applySingleEffect(
           text: effect.text,
           isNew: true,
         });
+        break;
+      }
+
+      // ── Free-action tracking (handled by GameEngine.performFreeAction) ───
+      // These effect types are applied via applyEffects in the free-action
+      // pipeline.  They are defined here so the exhaustive check remains valid.
+
+      case "dispense_medication": {
+        const alreadyDispensed = draft.player.dispensedMedications.some(
+          (m) => m.medicationId === effect.medicationId,
+        );
+        if (!alreadyDispensed) {
+          draft.player.dispensedMedications.push({
+            medicationId: effect.medicationId,
+            dispensedAt: draft.session.gameTime,
+          });
+        }
+        break;
+      }
+
+      case "perform_procedure": {
+        const alreadyPerformed = draft.player.performedProcedures.some(
+          (p) => p.procedureId === effect.procedureId,
+        );
+        if (!alreadyPerformed) {
+          draft.player.performedProcedures.push({
+            procedureId: effect.procedureId,
+            performedAt: draft.session.gameTime,
+          });
+        }
         break;
       }
 

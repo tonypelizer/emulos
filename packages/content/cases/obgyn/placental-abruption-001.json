@@ -210,18 +210,6 @@
               "knowledgeId": "ctg-ordered"
             },
             {
-              "type": "order_test",
-              "testId": "ctg"
-            },
-            {
-              "type": "order_test",
-              "testId": "cbc"
-            },
-            {
-              "type": "order_test",
-              "testId": "coagulation-screen"
-            },
-            {
               "type": "add_score_event",
               "actionId": "coagulation-screen-sent",
               "points": 50,
@@ -229,19 +217,11 @@
               "category": "optional-bonus"
             },
             {
-              "type": "order_test",
-              "testId": "group-and-save"
-            },
-            {
               "type": "add_score_event",
               "actionId": "group-and-save-sent",
               "points": 50,
               "reason": "Group and save sent — blood group and crossmatch are critical before theatre and blood product administration",
               "category": "optional-bonus"
-            },
-            {
-              "type": "order_test",
-              "testId": "lactate"
             }
           ],
           "condition": null
@@ -260,15 +240,14 @@
               "category": "penalty"
             },
             {
-              "type": "order_test",
-              "testId": "transabdominal-ultrasound"
-            },
-            {
               "type": "add_knowledge",
               "knowledgeId": "time-lost"
             }
           ],
-          "condition": null
+          "condition": {
+            "op": "test_ordered",
+            "testId": "transabdominal-ultrasound"
+          }
         },
         {
           "id": "start-history-first",
@@ -365,7 +344,7 @@
           "id": "assessment-full-response",
           "text": "Placental abruption — this is a Category 1 emergency. CTG NOW if not applied. Call OB emergency if not done. IV access ×2. Bloods: CBC, coag screen, group and save, lactate.",
           "nextNodeId": "ctg-result",
-          "timeCost": 10,
+          "timeCost": 3,
           "effects": [
             {
               "type": "add_score_event",
@@ -443,33 +422,6 @@
               }
             },
             {
-              "type": "order_test",
-              "testId": "ctg",
-              "condition": {
-                "op": "not",
-                "condition": { "op": "test_ordered", "testId": "ctg" }
-              }
-            },
-            {
-              "type": "order_test",
-              "testId": "cbc",
-              "condition": {
-                "op": "not",
-                "condition": { "op": "test_ordered", "testId": "cbc" }
-              }
-            },
-            {
-              "type": "order_test",
-              "testId": "coagulation-screen",
-              "condition": {
-                "op": "not",
-                "condition": {
-                  "op": "test_ordered",
-                  "testId": "coagulation-screen"
-                }
-              }
-            },
-            {
               "type": "add_score_event",
               "actionId": "coagulation-screen-sent",
               "points": 50,
@@ -480,17 +432,6 @@
                 "condition": {
                   "op": "test_ordered",
                   "testId": "coagulation-screen"
-                }
-              }
-            },
-            {
-              "type": "order_test",
-              "testId": "group-and-save",
-              "condition": {
-                "op": "not",
-                "condition": {
-                  "op": "test_ordered",
-                  "testId": "group-and-save"
                 }
               }
             },
@@ -507,23 +448,18 @@
                   "testId": "group-and-save"
                 }
               }
-            },
-            {
-              "type": "order_test",
-              "testId": "lactate",
-              "condition": {
-                "op": "not",
-                "condition": { "op": "test_ordered", "testId": "lactate" }
-              }
             }
           ],
-          "condition": null
+          "condition": {
+            "op": "test_ordered",
+            "testId": "ctg"
+          }
         },
         {
           "id": "assessment-bloods-first",
           "text": "Draw urgent bloods to quantify the haemorrhage and assess coagulation before making a delivery decision",
           "nextNodeId": "bloods-only-result",
-          "timeCost": 10,
+          "timeCost": 3,
           "effects": [
             {
               "type": "add_score_event",
@@ -583,14 +519,6 @@
               "category": "penalty"
             },
             {
-              "type": "order_test",
-              "testId": "cbc"
-            },
-            {
-              "type": "order_test",
-              "testId": "coagulation-screen"
-            },
-            {
               "type": "add_score_event",
               "actionId": "coagulation-screen-sent",
               "points": 50,
@@ -598,19 +526,11 @@
               "category": "optional-bonus"
             },
             {
-              "type": "order_test",
-              "testId": "group-and-save"
-            },
-            {
               "type": "add_score_event",
               "actionId": "group-and-save-sent",
               "points": 50,
               "reason": "Group and save sent",
               "category": "optional-bonus"
-            },
-            {
-              "type": "order_test",
-              "testId": "lactate"
             },
             {
               "type": "add_knowledge",
@@ -624,7 +544,10 @@
               }
             }
           ],
-          "condition": null
+          "condition": {
+            "op": "test_ordered",
+            "testId": "cbc"
+          }
         }
       ]
     },
@@ -692,17 +615,12 @@
             {
               "type": "add_knowledge",
               "knowledgeId": "ctg-ordered"
-            },
-            {
-              "type": "order_test",
-              "testId": "ctg",
-              "condition": {
-                "op": "not",
-                "condition": { "op": "test_ordered", "testId": "ctg" }
-              }
             }
           ],
-          "condition": null
+          "condition": {
+            "op": "test_ordered",
+            "testId": "ctg"
+          }
         }
       ]
     },
@@ -721,10 +639,16 @@
           "condition": {
             "op": "and",
             "conditions": [
-              { "op": "test_ordered", "testId": "cbc" },
+              {
+                "op": "test_ordered",
+                "testId": "cbc"
+              },
               {
                 "op": "not",
-                "condition": { "op": "test_resulted", "testId": "cbc" }
+                "condition": {
+                  "op": "test_resulted",
+                  "testId": "cbc"
+                }
               }
             ]
           }
@@ -735,7 +659,10 @@
           "condition": {
             "op": "and",
             "conditions": [
-              { "op": "test_ordered", "testId": "coagulation-screen" },
+              {
+                "op": "test_ordered",
+                "testId": "coagulation-screen"
+              },
               {
                 "op": "not",
                 "condition": {
@@ -752,7 +679,10 @@
           "condition": {
             "op": "and",
             "conditions": [
-              { "op": "test_ordered", "testId": "group-and-save" },
+              {
+                "op": "test_ordered",
+                "testId": "group-and-save"
+              },
               {
                 "op": "not",
                 "condition": {
@@ -769,10 +699,16 @@
           "condition": {
             "op": "and",
             "conditions": [
-              { "op": "test_ordered", "testId": "lactate" },
+              {
+                "op": "test_ordered",
+                "testId": "lactate"
+              },
               {
                 "op": "not",
-                "condition": { "op": "test_resulted", "testId": "lactate" }
+                "condition": {
+                  "op": "test_resulted",
+                  "testId": "lactate"
+                }
               }
             ]
           }
@@ -926,7 +862,10 @@
           ],
           "condition": {
             "op": "not",
-            "condition": { "op": "has_knowledge", "knowledgeId": "time-lost" }
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "time-lost"
+            }
           }
         },
         {

@@ -102,6 +102,9 @@ function makeState(
           : null,
       })),
       actionHistory: [],
+      dispensedMedications: [],
+      performedProcedures: [],
+      hintsUsedAtNodes: [],
     },
     progress: {
       currentNodeId: "start",

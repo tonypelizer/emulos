@@ -10,8 +10,10 @@ import type {
   CaseDocument,
   ConditionDefinition,
   TestDefinition,
+  MedicationDefinition,
+  ProcedureDefinition,
 } from "./case.js";
-import type { ComputedScore } from "./state.js";
+import type { ComputedScore, NarrativeEntryType } from "./state.js";
 
 // ─── Indexed case document ────────────────────────────────────────────────────
 //
@@ -28,6 +30,10 @@ export interface IndexedCaseDocument {
   readonly conditionsById: ReadonlyMap<string, ConditionDefinition>;
   /** testId → TestDefinition — from tests-registry. */
   readonly testsById: ReadonlyMap<string, TestDefinition>;
+  /** medicationId → MedicationDefinition — from medications-registry. */
+  readonly medicationsById: ReadonlyMap<string, MedicationDefinition>;
+  /** procedureId → ProcedureDefinition — from procedures-registry. */
+  readonly proceduresById: ReadonlyMap<string, ProcedureDefinition>;
 }
 
 // ─── Session creation ─────────────────────────────────────────────────────────
@@ -93,4 +99,41 @@ export interface ScoreReport {
     readonly type: string;
     readonly value: number;
   }>;
+}
+
+// ─── Free actions ─────────────────────────────────────────────────────────────────────
+//
+// Free actions are player-initiated from the categorized menus (Tests,
+// Medications, Procedures). They do not advance the narrative node.
+
+export type FreeActionType =
+  | "order_test"
+  | "dispense_medication"
+  | "perform_procedure";
+
+export interface FreeActionRequest {
+  readonly type: FreeActionType;
+  /** testId | medicationId | procedureId depending on type. */
+  readonly itemId: string;
+}
+
+export interface FreeActionResult {
+  /** Narrative entries appended to the log as a result of this action. */
+  readonly newEntries: ReadonlyArray<{
+    text: string;
+    type: NarrativeEntryType;
+  }>;
+  /** True if the action was a duplicate (already ordered/dispensed/performed). */
+  readonly isDuplicate: boolean;
+}
+
+// ─── Hint system ──────────────────────────────────────────────────────────────
+
+export interface HintResult {
+  /** The hint text to display, or null if the current node has no hint. */
+  readonly hint: string | null;
+  /** True if this nodeId was already hinted this session (no re-charge). */
+  readonly alreadyUsed: boolean;
+  /** True if −10 score penalty was applied for this hint use. */
+  readonly penaltyApplied: boolean;
 }

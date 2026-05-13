@@ -6,11 +6,13 @@
  * imports from here — it never touches JSON files directly.
  *
  * Usage:
- *   import { getCase, conditionsRegistry, testsRegistry } from '@emulos/content';
+ *   import { getCase, conditionsRegistry, testsRegistry, medicationsRegistry, proceduresRegistry } from '@emulos/content';
  *   const engine = GameEngine.fromRawJson(
  *     getCase('chest-pain-001'),
  *     conditionsRegistry,
  *     testsRegistry,
+ *     medicationsRegistry,
+ *     proceduresRegistry,
  *   );
  */
 
@@ -24,6 +26,8 @@ import preeclampsia001 from "../cases/obgyn/preeclampsia-001.json";
 import placentalAbruption001 from "../cases/obgyn/placental-abruption-001.json";
 import conditionsRegistryJson from "../conditions/conditions-registry.json";
 import testsRegistryJson from "../tests-catalog/tests-registry.json";
+import medicationsRegistryJson from "../medications/medications-registry.json";
+import proceduresRegistryJson from "../procedures/procedures-registry.json";
 
 // ─── Registry exports ─────────────────────────────────────────────────────────
 
@@ -32,6 +36,12 @@ export const conditionsRegistry: unknown = conditionsRegistryJson;
 
 /** Raw tests-registry.json — pass directly to GameEngine.fromRawJson(). */
 export const testsRegistry: unknown = testsRegistryJson;
+
+/** Raw medications-registry.json — pass directly to GameEngine.fromRawJson(). */
+export const medicationsRegistry: unknown = medicationsRegistryJson;
+
+/** Raw procedures-registry.json — pass directly to GameEngine.fromRawJson(). */
+export const proceduresRegistry: unknown = proceduresRegistryJson;
 
 // ─── Case registry ────────────────────────────────────────────────────────────
 

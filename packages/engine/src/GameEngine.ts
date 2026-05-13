@@ -31,6 +31,8 @@ import type {
   SessionOptions,
   ScoreReport,
   ValidationResult,
+  FreeActionRequest,
+  HintResult,
 } from "@emulos/types";
 import { EngineError } from "@emulos/types";
 import { loadCase, validateCase } from "./CaseLoader.js";
@@ -42,11 +44,13 @@ import {
 import { applyEffects } from "./systems/EffectProcessor.js";
 import { advanceTime } from "./systems/TimeEngine.js";
 import { recalculateVitals } from "./systems/VitalsEngine.js";
-import { enterNode } from "./systems/NarrativeGraph.js";
+import { enterNode, resolveChoices } from "./systems/NarrativeGraph.js";
+import { evaluateOptionalCondition } from "./systems/RuleEngine.js";
 import {
   computeFinalScore,
   buildScoreReport,
 } from "./systems/ScoringEngine.js";
+import { generateId } from "./utils/id.js";
 
 // ─── GameEngine ───────────────────────────────────────────────────────────────
 
@@ -57,18 +61,29 @@ export class GameEngine {
 
   /**
    * Creates a GameEngine from pre-loaded raw JSON objects.
-   * This is the primary constructor — all three JSON sources must be provided.
+   * This is the primary constructor — all five JSON sources must be provided.
+   * rawMedications and rawProcedures default to empty objects for back-compat.
    *
    * @param rawCase - Parsed content from a case JSON file.
    * @param rawConditions - Parsed content from conditions-registry.json.
    * @param rawTests - Parsed content from tests-registry.json.
+   * @param rawMedications - Parsed content from medications-registry.json.
+   * @param rawProcedures - Parsed content from procedures-registry.json.
    */
   static fromRawJson(
     rawCase: unknown,
     rawConditions: unknown,
     rawTests: unknown,
+    rawMedications: unknown = {},
+    rawProcedures: unknown = {},
   ): GameEngine {
-    const caseDoc = loadCase(rawCase, rawConditions, rawTests);
+    const caseDoc = loadCase(
+      rawCase,
+      rawConditions,
+      rawTests,
+      rawMedications,
+      rawProcedures,
+    );
     return new GameEngine(caseDoc);
   }
 
@@ -173,13 +188,19 @@ export class GameEngine {
     //    Also detects threshold events and queues them.
     next = recalculateVitals(next, this.caseDoc);
 
+    // 4a. Deliver any test results whose defaultResultTime has now elapsed.
+    next = this.applyPendingTestResults(next);
+
     // 5. Enter the next node (applies entry effects, updates narrative log,
     //    processes pending events, resolves choices).
     next = enterNode(next, choice.nextNodeId, this.caseDoc);
 
     // 6. If the new node is an outcome node, compute the final score.
+    //    Force-apply any remaining pending test results first so their
+    //    scoring effects are captured before the final score is computed.
     const newNode = this.caseDoc.nodesById.get(next.progress.currentNodeId);
     if (newNode?.type === "outcome" || next.session.phase === "terminal") {
+      next = this.applyPendingTestResults(next, true);
       if (next.session.phase !== "terminal") {
         next = produce(next, (draft) => {
           draft.session.phase = "terminal";
@@ -189,6 +210,340 @@ export class GameEngine {
     }
 
     return next;
+  }
+
+  // ── Free-action pipeline ────────────────────────────────────────────────────
+
+  /**
+   * Handles a player-initiated free action from the categorized menus (Tests,
+   * Medications, Procedures).  Unlike processAction, a free action does NOT
+   * navigate the narrative node — it mutates state in place and re-resolves
+   * the current node's choices.
+   *
+   * Free actions are idempotent: ordering the same test or dispensing the same
+   * medication a second time returns the original state unchanged.
+   *
+   * @throws EngineError (INVALID_STATE) if the itemId is not in the registry.
+   */
+  performFreeAction(state: GameState, request: FreeActionRequest): GameState {
+    this.assertNotTerminal(state);
+
+    let next: GameState = state;
+
+    switch (request.type) {
+      case "order_test": {
+        const testDef = this.caseDoc.testsById.get(request.itemId);
+        if (!testDef) {
+          throw new EngineError(
+            `Test "${request.itemId}" not found in registry.`,
+            "INVALID_STATE",
+          );
+        }
+        const alreadyOrdered = state.player.orderedTests.some(
+          (t) => t.testId === request.itemId,
+        );
+        if (alreadyOrdered) return state;
+
+        // Apply the order_test effect (records the test as pending, no result yet).
+        next = applyEffects(
+          state,
+          [{ type: "order_test", testId: request.itemId }],
+          this.caseDoc,
+        );
+        // Determine whether this test's case effects include a result_test.
+        // If so, results are deferred: they fire via applyPendingTestResults()
+        // once defaultResultTime of game time has elapsed through other actions.
+        // Effects without result_test (e.g., blood cultures collection feedback)
+        // fire immediately since they represent the collection act itself.
+        const caseTestEffects =
+          this.caseDoc.caseData.freeActionEffects?.tests?.[request.itemId] ??
+          [];
+        const isDeferred = caseTestEffects.some(
+          (e) => e.type === "result_test",
+        );
+        if (isDeferred) {
+          // Show a pending message — results arrive automatically when enough
+          // game time has elapsed via medication/procedure actions.
+          next = produce(next, (draft) => {
+            draft.progress.narrativeLog.push({
+              id: generateId(),
+              gameTime: draft.session.gameTime,
+              type: "system",
+              text: `🧪 ${testDef.name} ordered — results expected in ~${testDef.defaultResultTime} min of game time.`,
+              isNew: true,
+            });
+          });
+        } else if (caseTestEffects.length > 0) {
+          // Immediate: fire collection/confirmation effects now (e.g., blood cultures).
+          next = applyEffects(next, caseTestEffects, this.caseDoc);
+        } else {
+          // No case effects — generic pending message; auto-result fires later.
+          next = produce(next, (draft) => {
+            draft.progress.narrativeLog.push({
+              id: generateId(),
+              gameTime: draft.session.gameTime,
+              type: "system",
+              text: `🧪 ${testDef.name} ordered — results expected in ~${testDef.defaultResultTime} min of game time.`,
+              isNew: true,
+            });
+          });
+        }
+        // Re-resolve choices: new knowledge from effects may unlock conditions.
+        next = resolveChoices(next, next.progress.currentNodeId, this.caseDoc);
+        break;
+      }
+
+      case "dispense_medication": {
+        const medDef = this.caseDoc.medicationsById.get(request.itemId);
+        if (!medDef) {
+          throw new EngineError(
+            `Medication "${request.itemId}" not found in registry.`,
+            "INVALID_STATE",
+          );
+        }
+        const alreadyGiven = state.player.dispensedMedications.some(
+          (m) => m.medicationId === request.itemId,
+        );
+        if (alreadyGiven) return state;
+
+        // Apply the dispense_medication effect plus all defaultEffects from registry.
+        next = applyEffects(
+          state,
+          [
+            { type: "dispense_medication", medicationId: request.itemId },
+            ...medDef.defaultEffects,
+          ],
+          this.caseDoc,
+        );
+        // Advance time by the medication's administration cost.
+        next = advanceTime(next, medDef.timeCost);
+        // Recalculate vitals — vital-adjusting defaultEffects + time change.
+        next = recalculateVitals(next, this.caseDoc);
+        // Deliver any test results whose defaultResultTime has now elapsed.
+        next = this.applyPendingTestResults(next);
+        // Append a narrative confirmation.
+        next = produce(next, (draft) => {
+          draft.progress.narrativeLog.push({
+            id: generateId(),
+            gameTime: draft.session.gameTime,
+            type: "system",
+            text: `💊 ${medDef.name} ${medDef.dosageLabel} administered.`,
+            isNew: true,
+          });
+        });
+        // Re-resolve choices: new knowledge (e.g. med-aspirin-given) may satisfy
+        // conditions on the current node's choices.
+        next = resolveChoices(next, next.progress.currentNodeId, this.caseDoc);
+        break;
+      }
+
+      case "perform_procedure": {
+        const procDef = this.caseDoc.proceduresById.get(request.itemId);
+        if (!procDef) {
+          throw new EngineError(
+            `Procedure "${request.itemId}" not found in registry.`,
+            "INVALID_STATE",
+          );
+        }
+        const alreadyDone = state.player.performedProcedures.some(
+          (p) => p.procedureId === request.itemId,
+        );
+        if (alreadyDone) return state;
+
+        // Apply the perform_procedure effect plus all defaultEffects.
+        next = applyEffects(
+          state,
+          [
+            { type: "perform_procedure", procedureId: request.itemId },
+            ...procDef.defaultEffects,
+          ],
+          this.caseDoc,
+        );
+        // Advance time by the procedure's time cost.
+        next = advanceTime(next, procDef.timeCost);
+        // Recalculate vitals.
+        next = recalculateVitals(next, this.caseDoc);
+        // Deliver any test results whose defaultResultTime has now elapsed.
+        next = this.applyPendingTestResults(next);
+        // Append a narrative confirmation.
+        next = produce(next, (draft) => {
+          draft.progress.narrativeLog.push({
+            id: generateId(),
+            gameTime: draft.session.gameTime,
+            type: "system",
+            text: `🩺 ${procDef.name} performed.`,
+            isNew: true,
+          });
+        });
+        // Re-resolve choices.
+        next = resolveChoices(next, next.progress.currentNodeId, this.caseDoc);
+        break;
+      }
+
+      default: {
+        const exhaustive: never = request.type;
+        throw new EngineError(
+          `Unknown free action type: ${String(exhaustive)}`,
+          "INVALID_STATE",
+        );
+      }
+    }
+
+    // Apply case-level free-action effects for medications and procedures.
+    // Test effects are handled in the order_test branch above — either fired
+    // immediately (no result_test) or deferred via applyPendingTestResults.
+    if (request.type !== "order_test") {
+      const freeActionEffects = this.caseDoc.caseData.freeActionEffects;
+      if (freeActionEffects) {
+        const category =
+          request.type === "dispense_medication" ? "medications" : "procedures";
+        const effects = freeActionEffects[category]?.[request.itemId];
+        if (effects && effects.length > 0) {
+          next = applyEffects(next, effects, this.caseDoc);
+          next = resolveChoices(
+            next,
+            next.progress.currentNodeId,
+            this.caseDoc,
+          );
+        }
+      }
+    }
+
+    // Check whether the case's endCondition is now satisfied.
+    // Force-apply any remaining pending test results before computing score so
+    // their scoring effects are captured even if the case ended before the
+    // test's defaultResultTime elapsed.
+    const endCondition = this.caseDoc.caseData.endCondition;
+    if (
+      endCondition !== undefined &&
+      evaluateOptionalCondition(endCondition, next)
+    ) {
+      next = this.applyPendingTestResults(next, true);
+      next = produce(next, (draft) => {
+        draft.session.phase = "terminal";
+      });
+      next = computeFinalScore(next, this.caseDoc);
+    }
+
+    return next;
+  }
+
+  // ── Deferred test result delivery ────────────────────────────────────────────
+
+  /**
+   * Checks all ordered-but-not-resulted tests and fires their case-level
+   * effects (or a generic result) for any test whose `defaultResultTime` has
+   * now elapsed.
+   *
+   * Called after every `advanceTime` in both `performFreeAction` and
+   * `processAction`.
+   *
+   * @param forceAll - When true, fires ALL pending tests regardless of
+   *   defaultResultTime.  Used at case termination to capture scoring effects
+   *   from tests that were ordered but had not yet resulted when the case ended.
+   */
+  private applyPendingTestResults(
+    state: GameState,
+    forceAll = false,
+  ): GameState {
+    const freeActionEffects = this.caseDoc.caseData.freeActionEffects;
+    let next = state;
+    let anyResulted = false;
+
+    for (const orderedTest of state.player.orderedTests) {
+      if (orderedTest.resultedAt !== null) continue;
+
+      const testDef = this.caseDoc.testsById.get(orderedTest.testId);
+      if (!testDef) continue;
+
+      const readyAt = orderedTest.orderedAt + testDef.defaultResultTime;
+      if (!forceAll && next.session.gameTime < readyAt) continue;
+
+      const caseEffects = freeActionEffects?.tests?.[orderedTest.testId];
+      if (caseEffects && caseEffects.length > 0) {
+        next = applyEffects(next, caseEffects, this.caseDoc);
+      } else {
+        // No case effects — apply generic result_test + a system log entry.
+        next = applyEffects(
+          next,
+          [{ type: "result_test", testId: orderedTest.testId }],
+          this.caseDoc,
+        );
+        next = produce(next, (draft) => {
+          draft.progress.narrativeLog.push({
+            id: generateId(),
+            gameTime: draft.session.gameTime,
+            type: "result",
+            text: `📋 ${testDef.name} — results available.`,
+            isNew: true,
+          });
+        });
+      }
+      anyResulted = true;
+    }
+
+    if (anyResulted) {
+      next = resolveChoices(next, next.progress.currentNodeId, this.caseDoc);
+    }
+
+    return next;
+  }
+
+  // ── Hint system ─────────────────────────────────────────────────────────────
+
+  /**
+   * Reveals the Attending Physician hint for the current narrative node.
+   *
+   * - If the node has no `hint` field, returns `{ hint: null }` — UI hides the button.
+   * - If this node was already hinted this session, returns the text with `alreadyUsed: true`
+   *   and does NOT re-apply the score penalty.
+   * - Otherwise applies a −10 score event and records the nodeId in `hintsUsedAtNodes`.
+   */
+  useHint(state: GameState): { newState: GameState; result: HintResult } {
+    this.assertNotTerminal(state);
+
+    const nodeId = state.progress.currentNodeId;
+    const node = this.caseDoc.nodesById.get(nodeId);
+    const hintText = node?.hint ?? null;
+
+    // No hint authored for this node.
+    if (hintText === null) {
+      return {
+        newState: state,
+        result: { hint: null, alreadyUsed: false, penaltyApplied: false },
+      };
+    }
+
+    // Hint already used at this node — return text without penalty.
+    if (state.player.hintsUsedAtNodes.includes(nodeId)) {
+      return {
+        newState: state,
+        result: { hint: hintText, alreadyUsed: true, penaltyApplied: false },
+      };
+    }
+
+    // First use: apply penalty + record node.
+    let next = applyEffects(
+      state,
+      [
+        {
+          type: "add_score_event",
+          actionId: `hint-used-${nodeId}`,
+          points: -10,
+          reason: "Attending Physician hint requested",
+          category: "penalty",
+        },
+      ],
+      this.caseDoc,
+    );
+    next = produce(next, (draft) => {
+      draft.player.hintsUsedAtNodes.push(nodeId);
+    });
+
+    return {
+      newState: next,
+      result: { hint: hintText, alreadyUsed: false, penaltyApplied: true },
+    };
   }
 
   // ── Query methods ───────────────────────────────────────────────────────────
@@ -208,7 +563,13 @@ export class GameEngine {
     if (!this.isTerminal(state)) return null;
     return buildScoreReport(state, this.caseDoc);
   }
-
+  /**
+   * Returns the IndexedCaseDocument for this engine instance.
+   * Used by GameService to expose catalog data (tests, meds, procedures) to the UI.
+   */
+  getCaseDoc(): IndexedCaseDocument {
+    return this.caseDoc;
+  }
   // ── Serialization ───────────────────────────────────────────────────────────
 
   /** Serializes the session state to a JSON string for persistence. */
@@ -234,8 +595,16 @@ export class GameEngine {
     rawCase: unknown,
     rawConditions: unknown,
     rawTests: unknown,
+    rawMedications: unknown = {},
+    rawProcedures: unknown = {},
   ): ValidationResult {
-    return validateCase(rawCase, rawConditions, rawTests);
+    return validateCase(
+      rawCase,
+      rawConditions,
+      rawTests,
+      rawMedications,
+      rawProcedures,
+    );
   }
 
   // ── Private helpers ─────────────────────────────────────────────────────────

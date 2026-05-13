@@ -1,0 +1,376 @@
+{
+  "aspirin": {
+    "id": "aspirin",
+    "name": "Aspirin",
+    "category": "antiplatelet",
+    "timeCost": 2,
+    "dosageLabel": "300 mg PO (chewed)",
+    "contraindications": [],
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "med-aspirin-given" }
+    ]
+  },
+  "clopidogrel": {
+    "id": "clopidogrel",
+    "name": "Clopidogrel (Plavix)",
+    "category": "antiplatelet",
+    "timeCost": 2,
+    "dosageLabel": "600 mg PO loading dose",
+    "contraindications": [],
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "med-clopidogrel-given" }
+    ]
+  },
+  "ticagrelor": {
+    "id": "ticagrelor",
+    "name": "Ticagrelor (Brilinta)",
+    "category": "antiplatelet",
+    "timeCost": 2,
+    "dosageLabel": "180 mg PO loading dose",
+    "contraindications": [],
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "med-ticagrelor-given" }
+    ]
+  },
+  "morphine": {
+    "id": "morphine",
+    "name": "Morphine Sulfate",
+    "category": "opioid-analgesic",
+    "timeCost": 3,
+    "dosageLabel": "5 mg IV",
+    "contraindications": [],
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "med-morphine-given" },
+      { "type": "adjust_vital", "vital": "painScore", "delta": -3 }
+    ]
+  },
+  "fentanyl": {
+    "id": "fentanyl",
+    "name": "Fentanyl",
+    "category": "opioid-analgesic",
+    "timeCost": 3,
+    "dosageLabel": "1 mcg/kg IV",
+    "contraindications": [],
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "med-fentanyl-given" },
+      { "type": "adjust_vital", "vital": "painScore", "delta": -4 }
+    ]
+  },
+  "heparin-unfractionated": {
+    "id": "heparin-unfractionated",
+    "name": "Heparin (Unfractionated)",
+    "category": "anticoagulant",
+    "timeCost": 5,
+    "dosageLabel": "60 units/kg IV bolus",
+    "contraindications": [],
+    "defaultEffects": [
+      {
+        "type": "add_knowledge",
+        "knowledgeId": "med-heparin-unfractionated-given"
+      }
+    ]
+  },
+  "enoxaparin": {
+    "id": "enoxaparin",
+    "name": "Enoxaparin (Lovenox)",
+    "category": "anticoagulant",
+    "timeCost": 5,
+    "dosageLabel": "1 mg/kg SC",
+    "contraindications": [],
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "med-enoxaparin-given" }
+    ]
+  },
+  "nitroglycerin-sl": {
+    "id": "nitroglycerin-sl",
+    "name": "Nitroglycerin",
+    "category": "nitrate",
+    "timeCost": 2,
+    "dosageLabel": "0.4 mg SL (sublingual)",
+    "contraindications": [],
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "med-nitroglycerin-sl-given" },
+      { "type": "adjust_vital", "vital": "painScore", "delta": -1 }
+    ]
+  },
+  "metoprolol-iv": {
+    "id": "metoprolol-iv",
+    "name": "Metoprolol",
+    "category": "beta-blocker",
+    "timeCost": 5,
+    "dosageLabel": "5 mg IV (slow push)",
+    "contraindications": [],
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "med-metoprolol-iv-given" },
+      { "type": "adjust_vital", "vital": "heartRate", "delta": -10 }
+    ]
+  },
+  "labetalol-iv": {
+    "id": "labetalol-iv",
+    "name": "Labetalol",
+    "category": "beta-blocker",
+    "timeCost": 5,
+    "dosageLabel": "20 mg IV over 2 min",
+    "contraindications": [],
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "med-labetalol-iv-given" }
+    ]
+  },
+  "hydralazine-iv": {
+    "id": "hydralazine-iv",
+    "name": "Hydralazine",
+    "category": "vasodilator",
+    "timeCost": 5,
+    "dosageLabel": "10 mg IV over 2 min",
+    "contraindications": [],
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "med-hydralazine-iv-given" }
+    ]
+  },
+  "magnesium-sulfate": {
+    "id": "magnesium-sulfate",
+    "name": "Magnesium Sulfate",
+    "category": "anticonvulsant",
+    "timeCost": 15,
+    "dosageLabel": "4–6 g IV loading dose over 15–20 min",
+    "contraindications": [],
+    "specialties": ["obstetrics"],
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "med-magnesium-sulfate-given" }
+    ]
+  },
+  "oxytocin": {
+    "id": "oxytocin",
+    "name": "Oxytocin (Pitocin)",
+    "category": "uterotonic",
+    "timeCost": 3,
+    "dosageLabel": "10 units IM",
+    "contraindications": [],
+    "specialties": ["obstetrics"],
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "med-oxytocin-given" }
+    ]
+  },
+  "methotrexate": {
+    "id": "methotrexate",
+    "name": "Methotrexate",
+    "category": "antimetabolite",
+    "timeCost": 5,
+    "dosageLabel": "50 mg/m² IM (single dose)",
+    "contraindications": [],
+    "specialties": ["obstetrics"],
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "med-methotrexate-given" }
+    ]
+  },
+  "ondansetron": {
+    "id": "ondansetron",
+    "name": "Ondansetron (Zofran)",
+    "category": "antiemetic",
+    "timeCost": 2,
+    "dosageLabel": "4 mg IV",
+    "contraindications": [],
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "med-ondansetron-given" }
+    ]
+  },
+  "acetaminophen-iv": {
+    "id": "acetaminophen-iv",
+    "name": "Acetaminophen IV (Ofirmev)",
+    "category": "analgesic-antipyretic",
+    "timeCost": 5,
+    "dosageLabel": "1000 mg IV over 15 min",
+    "contraindications": [],
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "med-acetaminophen-iv-given" },
+      { "type": "adjust_vital", "vital": "temperature", "delta": -0.5 },
+      { "type": "adjust_vital", "vital": "painScore", "delta": -2 }
+    ]
+  },
+  "ibuprofen": {
+    "id": "ibuprofen",
+    "name": "Ibuprofen",
+    "category": "nsaid",
+    "timeCost": 2,
+    "dosageLabel": "400 mg PO",
+    "contraindications": [],
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "med-ibuprofen-given" },
+      { "type": "adjust_vital", "vital": "temperature", "delta": -0.3 },
+      { "type": "adjust_vital", "vital": "painScore", "delta": -2 }
+    ]
+  },
+  "betamethasone": {
+    "id": "betamethasone",
+    "name": "Betamethasone",
+    "category": "corticosteroid",
+    "timeCost": 3,
+    "dosageLabel": "12 mg IM (fetal lung maturity)",
+    "contraindications": [],
+    "specialties": ["obstetrics"],
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "med-betamethasone-given" }
+    ]
+  },
+  "phenytoin-iv": {
+    "id": "phenytoin-iv",
+    "name": "Phenytoin (Dilantin)",
+    "category": "anticonvulsant",
+    "timeCost": 15,
+    "dosageLabel": "15 mg/kg IV (max 50 mg/min)",
+    "contraindications": [],
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "med-phenytoin-iv-given" }
+    ]
+  },
+  "dextrose-50": {
+    "id": "dextrose-50",
+    "name": "Dextrose 50%",
+    "category": "metabolic",
+    "timeCost": 3,
+    "dosageLabel": "50 mL (25 g) IV push",
+    "contraindications": [],
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "med-dextrose-50-given" }
+    ]
+  },
+  "naloxone": {
+    "id": "naloxone",
+    "name": "Naloxone (Narcan)",
+    "category": "opioid-antagonist",
+    "timeCost": 2,
+    "dosageLabel": "0.4 mg IV (may repeat q2–3 min)",
+    "contraindications": [],
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "med-naloxone-given" }
+    ]
+  },
+  "oxygen": {
+    "id": "oxygen",
+    "name": "Supplemental Oxygen",
+    "category": "supportive",
+    "timeCost": 2,
+    "dosageLabel": "15 L/min via non-rebreather mask",
+    "contraindications": [],
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "med-oxygen-given" },
+      { "type": "adjust_vital", "vital": "oxygenSaturation", "delta": 3 }
+    ]
+  },
+  "norepinephrine": {
+    "id": "norepinephrine",
+    "name": "Norepinephrine (Levophed)",
+    "category": "vasopressor",
+    "timeCost": 10,
+    "dosageLabel": "0.1–0.3 mcg/kg/min IV infusion",
+    "contraindications": [],
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "med-norepinephrine-given" }
+    ]
+  },
+  "dopamine": {
+    "id": "dopamine",
+    "name": "Dopamine",
+    "category": "vasopressor",
+    "timeCost": 10,
+    "dosageLabel": "5–20 mcg/kg/min IV infusion",
+    "contraindications": [],
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "med-dopamine-given" }
+    ]
+  },
+  "ceftriaxone": {
+    "id": "ceftriaxone",
+    "name": "Ceftriaxone",
+    "category": "antibiotic",
+    "timeCost": 5,
+    "dosageLabel": "1–2 g IV over 30 min",
+    "contraindications": [],
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "med-ceftriaxone-given" }
+    ]
+  },
+  "vancomycin": {
+    "id": "vancomycin",
+    "name": "Vancomycin",
+    "category": "antibiotic",
+    "timeCost": 60,
+    "dosageLabel": "25–30 mg/kg IV loading dose (over 60 min)",
+    "contraindications": [],
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "med-vancomycin-given" }
+    ]
+  },
+  "lorazepam-iv": {
+    "id": "lorazepam-iv",
+    "name": "Lorazepam (Ativan)",
+    "category": "benzodiazepine",
+    "timeCost": 5,
+    "dosageLabel": "2–4 mg IV (seizure management)",
+    "contraindications": [],
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "med-lorazepam-iv-given" }
+    ]
+  },
+  "adenosine": {
+    "id": "adenosine",
+    "name": "Adenosine",
+    "category": "antiarrhythmic",
+    "timeCost": 3,
+    "dosageLabel": "6 mg rapid IV push (may repeat 12 mg)",
+    "contraindications": [],
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "med-adenosine-given" }
+    ]
+  },
+  "amiodarone-iv": {
+    "id": "amiodarone-iv",
+    "name": "Amiodarone",
+    "category": "antiarrhythmic",
+    "timeCost": 10,
+    "dosageLabel": "300 mg IV bolus (VF/pVT arrest)",
+    "contraindications": [],
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "med-amiodarone-iv-given" }
+    ]
+  },
+  "normal-saline-bolus": {
+    "id": "normal-saline-bolus",
+    "name": "Normal Saline Bolus",
+    "category": "fluid",
+    "timeCost": 10,
+    "dosageLabel": "1000 mL IV over 10–20 min",
+    "contraindications": [],
+    "defaultEffects": [
+      {
+        "type": "add_knowledge",
+        "knowledgeId": "med-normal-saline-bolus-given"
+      }
+    ]
+  },
+  "amoxicillin-clavulanate-iv": {
+    "id": "amoxicillin-clavulanate-iv",
+    "name": "Amoxicillin-Clavulanate IV (Co-amoxiclav)",
+    "category": "antibiotic",
+    "timeCost": 10,
+    "dosageLabel": "1.2 g IV q8h",
+    "contraindications": [],
+    "defaultEffects": [
+      {
+        "type": "add_knowledge",
+        "knowledgeId": "med-amoxicillin-clavulanate-iv-given"
+      }
+    ]
+  },
+  "doxycycline-po": {
+    "id": "doxycycline-po",
+    "name": "Doxycycline PO",
+    "category": "antibiotic",
+    "timeCost": 2,
+    "dosageLabel": "100 mg PO BD",
+    "contraindications": [],
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "med-doxycycline-po-given" }
+    ]
+  }
+}

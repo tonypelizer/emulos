@@ -18,13 +18,34 @@ const TYPE_LABEL: Record<NarrativeEntry["type"], string> = {
 
 interface Props {
   entries: NarrativeEntry[];
+  onNewEntries?: (entries: NarrativeEntry[]) => void;
 }
 
-export function NarrativeLog({ entries }: Props) {
+export function NarrativeLog({ entries, onNewEntries }: Props) {
   const bottomRef = useRef<HTMLDivElement>(null);
+  // Initialised to current length so the first effect run (on mount) is a no-op.
+  const prevCountRef = useRef(entries.length);
+  // Stable ref so the effect dep array only needs [entries].
+  const onNewEntriesRef = useRef(onNewEntries);
+  useEffect(() => {
+    onNewEntriesRef.current = onNewEntries;
+  });
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    const prev = prevCountRef.current;
+    const next = entries.length;
+    prevCountRef.current = next;
+
+    if (next <= prev) return; // no new entries (covers initial mount)
+
+    const newEntries = entries.slice(prev);
+
+    if (onNewEntriesRef.current) {
+      // Popup handles the notification — no auto-scroll needed.
+      onNewEntriesRef.current(newEntries);
+    } else {
+      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
   }, [entries]);
 
   return (

@@ -106,6 +106,8 @@ function makeStubCaseDoc(
           },
         ],
       ])) as ReadonlyMap<string, unknown>,
+    medicationsById: new Map(),
+    proceduresById: new Map(),
   } as IndexedCaseDocument;
 }
 
@@ -161,7 +163,14 @@ function makeState(): GameState {
       collectedHistory: [],
       examinationFindings: [],
     },
-    player: { knowledge: [], orderedTests: [], actionHistory: [] },
+    player: {
+      knowledge: [],
+      orderedTests: [],
+      dispensedMedications: [],
+      performedProcedures: [],
+      actionHistory: [],
+      hintsUsedAtNodes: [],
+    },
     progress: {
       currentNodeId: "start",
       visitedNodeIds: ["start"],

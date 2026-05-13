@@ -154,7 +154,14 @@ function makeState(
       collectedHistory: [],
       examinationFindings: [],
     },
-    player: { knowledge: [], orderedTests: [], actionHistory: [] },
+    player: {
+      knowledge: [],
+      orderedTests: [],
+      dispensedMedications: [],
+      performedProcedures: [],
+      actionHistory: [],
+      hintsUsedAtNodes: [],
+    },
     progress: {
       currentNodeId: "end",
       visitedNodeIds: ["start", "end"],

@@ -95,7 +95,10 @@ export function createInitialState(
     player: {
       knowledge: [],
       orderedTests: [],
+      dispensedMedications: [],
+      performedProcedures: [],
       actionHistory: [],
+      hintsUsedAtNodes: [],
     },
     progress: {
       currentNodeId: "start",

@@ -181,6 +181,14 @@ export const EffectSchema = z.discriminatedUnion("type", [
       .enum(["narrative", "result", "event", "system"])
       .default("system"),
   }),
+  withCondition({
+    type: z.literal("dispense_medication"),
+    medicationId: z.string(),
+  }),
+  withCondition({
+    type: z.literal("perform_procedure"),
+    procedureId: z.string(),
+  }),
 ]);
 
 export type Effect = z.infer<typeof EffectSchema>;
@@ -234,6 +242,12 @@ export const CaseNodeSchema = z.object({
    * Required when type === 'outcome'.
    */
   outcomeId: z.string().optional(),
+  /**
+   * Plain-English attending-physician nudge for this node.
+   * Revealed on demand at a score penalty of −10 pts.
+   * Absent = no hint available at this node (button hidden).
+   */
+  hint: z.string().optional(),
 });
 
 export type CaseNode = z.infer<typeof CaseNodeSchema>;
@@ -350,6 +364,46 @@ export const CaseDocumentSchema = z.object({
    * Choice.nextNodeId references.  Every referenced nodeId must be a key here.
    */
   nodes: z.record(z.string(), CaseNodeSchema),
+  /**
+   * Optional map of case-specific effects keyed by testId / medicationId /
+   * procedureId.  Applied after every free action that matches an entry.
+   * Per-effect condition guards are evaluated at runtime before application.
+   * Absent = no case-level scoring for free actions.
+   */
+  freeActionEffects: z
+    .object({
+      tests: z.record(z.string(), z.array(EffectSchema)).default({}),
+      medications: z.record(z.string(), z.array(EffectSchema)).default({}),
+      procedures: z.record(z.string(), z.array(EffectSchema)).default({}),
+    })
+    .optional(),
+  /**
+   * Optional condition evaluated after every free action.  When it evaluates
+   * true the session transitions to terminal and the final score is computed.
+   * Enables a purely free-action play mode requiring no outcome node.
+   */
+  endCondition: ConditionExprSchema.optional(),
+  /**
+   * When true, the UI hides the Story tab and defaults to the Tests panel.
+   * The case is designed to be completed entirely through free actions
+   * (tests / medications / procedures).
+   * The narrative graph still exists and its text is shown in the log,
+   * but the player never drives it with choices.
+   */
+  freeActionMode: z.boolean().default(false),
+  /**
+   * Optional allowlists that restrict the free-action menus to only the
+   * specified item IDs.  Applied as a second pass after the specialty filter
+   * (A3), so the specialty filter still acts as a safety net for structural
+   * mismatches (e.g. OB items in a general case).
+   *
+   * When a list is absent the behaviour falls back to A3-only filtering.
+   * This allows per-case curation without requiring every case to maintain
+   * these lists — only cases that need precise control need to define them.
+   */
+  relevantTests: z.array(z.string()).optional(),
+  relevantMedications: z.array(z.string()).optional(),
+  relevantProcedures: z.array(z.string()).optional(),
 });
 
 export type CaseDocument = z.infer<typeof CaseDocumentSchema>;
@@ -402,6 +456,11 @@ export const TestDefinitionSchema = z.object({
   id: z.string(),
   name: z.string(),
   category: z.string(),
+  /**
+   * If present, only show this test when the case specialty matches one of
+   * these values.  Absent or empty array = shown for all specialties.
+   */
+  specialties: z.array(z.string()).default([]),
   /** Default game-time minutes until result is available. */
   defaultResultTime: z.number().nonnegative().default(30),
   /**
@@ -423,3 +482,55 @@ export type TestDefinition = z.infer<typeof TestDefinitionSchema>;
 
 export const TestsRegistrySchema = z.record(z.string(), TestDefinitionSchema);
 export type TestsRegistry = z.infer<typeof TestsRegistrySchema>;
+
+// ─── Medication registry ──────────────────────────────────────────────────────
+
+export const MedicationDefinitionSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  category: z.string(),
+  /** Game-time minutes consumed when administered. */
+  timeCost: z.number().nonnegative().default(2),
+  /** Displayed to player in the medication menu (e.g. "300 mg PO"). */
+  dosageLabel: z.string(),
+  /** conditionIds that contraindicate this medication. */
+  contraindications: z.array(z.string()).default([]),
+  /**
+   * If present, only show this medication when the case specialty matches one
+   * of these values.  Absent or empty array = shown for all specialties.
+   */
+  specialties: z.array(z.string()).default([]),
+  /** Effects automatically applied to state when a free-action dispenses this medication. */
+  defaultEffects: z.array(EffectSchema).default([]),
+});
+
+export type MedicationDefinition = z.infer<typeof MedicationDefinitionSchema>;
+export const MedicationsRegistrySchema = z.record(
+  z.string(),
+  MedicationDefinitionSchema,
+);
+export type MedicationsRegistry = z.infer<typeof MedicationsRegistrySchema>;
+
+// ─── Procedure registry ───────────────────────────────────────────────────────
+
+export const ProcedureDefinitionSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  category: z.string(),
+  /** Game-time minutes consumed when performed. */
+  timeCost: z.number().nonnegative().default(5),
+  /**
+   * If present, only show this procedure when the case specialty matches one
+   * of these values.  Absent or empty array = shown for all specialties.
+   */
+  specialties: z.array(z.string()).default([]),
+  /** Effects automatically applied to state when a free-action performs this procedure. */
+  defaultEffects: z.array(EffectSchema).default([]),
+});
+
+export type ProcedureDefinition = z.infer<typeof ProcedureDefinitionSchema>;
+export const ProceduresRegistrySchema = z.record(
+  z.string(),
+  ProcedureDefinitionSchema,
+);
+export type ProceduresRegistry = z.infer<typeof ProceduresRegistrySchema>;

@@ -19,6 +19,8 @@ import {
   CaseDocumentSchema,
   ConditionsRegistrySchema,
   TestsRegistrySchema,
+  MedicationsRegistrySchema,
+  ProceduresRegistrySchema,
   EngineError,
   type CaseDocument,
   type IndexedCaseDocument,
@@ -33,15 +35,19 @@ import { ZodError } from "zod";
  * Parses and validates a case JSON object alongside its registries.
  * Returns an IndexedCaseDocument ready for engine use.
  *
- * @param rawCase - The parsed JSON from a case file (unknown shape).
- * @param rawConditions - The parsed conditions-registry.json.
- * @param rawTests - The parsed tests-registry.json.
+ * @param rawCase - Parsed content from a case JSON file.
+ * @param rawConditions - Parsed content from conditions-registry.json.
+ * @param rawTests - Parsed content from tests-registry.json.
+ * @param rawMedications - Parsed content from medications-registry.json. Defaults to empty.
+ * @param rawProcedures - Parsed content from procedures-registry.json. Defaults to empty.
  * @throws EngineError (CASE_VALIDATION_FAILED) if any validation fails.
  */
 export function loadCase(
   rawCase: unknown,
   rawConditions: unknown,
   rawTests: unknown,
+  rawMedications: unknown = {},
+  rawProcedures: unknown = {},
 ): IndexedCaseDocument {
   const issues: ValidationIssue[] = [];
 
@@ -53,10 +59,22 @@ export function loadCase(
     "conditionsRegistry",
   );
   const testsResult = safeParse(TestsRegistrySchema, rawTests, "testsRegistry");
+  const medicationsResult = safeParse(
+    MedicationsRegistrySchema,
+    rawMedications,
+    "medicationsRegistry",
+  );
+  const proceduresResult = safeParse(
+    ProceduresRegistrySchema,
+    rawProcedures,
+    "proceduresRegistry",
+  );
 
   issues.push(...caseResult.issues);
   issues.push(...conditionsResult.issues);
   issues.push(...testsResult.issues);
+  issues.push(...medicationsResult.issues);
+  issues.push(...proceduresResult.issues);
 
   if (issues.length > 0) {
     throw buildValidationError(issues);
@@ -78,6 +96,20 @@ export function loadCase(
       testsResult.data as ReturnType<typeof TestsRegistrySchema.parse>,
     ),
   );
+  const medicationsById = new Map(
+    Object.entries(
+      medicationsResult.data as ReturnType<
+        typeof MedicationsRegistrySchema.parse
+      >,
+    ),
+  );
+  const proceduresById = new Map(
+    Object.entries(
+      proceduresResult.data as ReturnType<
+        typeof ProceduresRegistrySchema.parse
+      >,
+    ),
+  );
 
   // ── Step 3: Reference integrity ───────────────────────────────────────────
   const refIssues = validateReferences(
@@ -90,7 +122,14 @@ export function loadCase(
     throw buildValidationError(refIssues);
   }
 
-  return Object.freeze({ caseData, nodesById, conditionsById, testsById });
+  return Object.freeze({
+    caseData,
+    nodesById,
+    conditionsById,
+    testsById,
+    medicationsById,
+    proceduresById,
+  });
 }
 
 /**
@@ -101,9 +140,11 @@ export function validateCase(
   rawCase: unknown,
   rawConditions: unknown,
   rawTests: unknown,
+  rawMedications: unknown = {},
+  rawProcedures: unknown = {},
 ): ValidationResult {
   try {
-    loadCase(rawCase, rawConditions, rawTests);
+    loadCase(rawCase, rawConditions, rawTests, rawMedications, rawProcedures);
     return { valid: true, issues: [] };
   } catch (err) {
     if (err instanceof EngineError && err.code === "CASE_VALIDATION_FAILED") {

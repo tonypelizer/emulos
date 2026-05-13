@@ -613,12 +613,8 @@
           "id": "order-urinalysis",
           "text": "Order urinalysis with microscopy — first-line infectious screen for UTI",
           "nextNodeId": "urinalysis-result",
-          "timeCost": 20,
+          "timeCost": 3,
           "effects": [
-            {
-              "type": "order_test",
-              "testId": "urinalysis"
-            },
             {
               "type": "add_score_event",
               "actionId": "urinalysis-ordered",
@@ -628,39 +624,16 @@
             }
           ],
           "condition": {
-            "op": "not",
-            "condition": {
-              "op": "test_ordered",
-              "testId": "urinalysis"
-            }
+            "op": "test_ordered",
+            "testId": "urinalysis"
           }
         },
         {
           "id": "order-bloods-panel",
           "text": "Draw bloods: CBC, BMP, CRP, blood cultures ×2, lactate",
           "nextNodeId": "bloods-result",
-          "timeCost": 15,
+          "timeCost": 3,
           "effects": [
-            {
-              "type": "order_test",
-              "testId": "cbc"
-            },
-            {
-              "type": "order_test",
-              "testId": "bmp"
-            },
-            {
-              "type": "order_test",
-              "testId": "crp"
-            },
-            {
-              "type": "order_test",
-              "testId": "blood-cultures"
-            },
-            {
-              "type": "order_test",
-              "testId": "lactate"
-            },
             {
               "type": "add_score_event",
               "actionId": "bloods-drawn",
@@ -670,11 +643,8 @@
             }
           ],
           "condition": {
-            "op": "not",
-            "condition": {
-              "op": "test_ordered",
-              "testId": "cbc"
-            }
+            "op": "test_ordered",
+            "testId": "cbc"
           }
         },
         {
@@ -683,10 +653,6 @@
           "nextNodeId": "glucose-result",
           "timeCost": 5,
           "effects": [
-            {
-              "type": "order_test",
-              "testId": "bmp"
-            },
             {
               "type": "add_score_event",
               "actionId": "glucose-checked",
@@ -803,28 +769,8 @@
           "id": "urinalysis-order-bloods-also",
           "text": "Draw bloods before treating — I want to check severity and renal function",
           "nextNodeId": "bloods-result",
-          "timeCost": 15,
+          "timeCost": 3,
           "effects": [
-            {
-              "type": "order_test",
-              "testId": "cbc"
-            },
-            {
-              "type": "order_test",
-              "testId": "bmp"
-            },
-            {
-              "type": "order_test",
-              "testId": "crp"
-            },
-            {
-              "type": "order_test",
-              "testId": "blood-cultures"
-            },
-            {
-              "type": "order_test",
-              "testId": "lactate"
-            },
             {
               "type": "add_score_event",
               "actionId": "bloods-drawn",
@@ -834,11 +780,8 @@
             }
           ],
           "condition": {
-            "op": "not",
-            "condition": {
-              "op": "test_ordered",
-              "testId": "cbc"
-            }
+            "op": "test_ordered",
+            "testId": "cbc"
           }
         }
       ]
@@ -912,12 +855,8 @@
           "id": "bloods-order-urinalysis-also",
           "text": "Order urinalysis now to confirm infectious source",
           "nextNodeId": "urinalysis-result",
-          "timeCost": 20,
+          "timeCost": 3,
           "effects": [
-            {
-              "type": "order_test",
-              "testId": "urinalysis"
-            },
             {
               "type": "add_score_event",
               "actionId": "urinalysis-ordered",
@@ -927,11 +866,8 @@
             }
           ],
           "condition": {
-            "op": "not",
-            "condition": {
-              "op": "test_ordered",
-              "testId": "urinalysis"
-            }
+            "op": "test_ordered",
+            "testId": "urinalysis"
           }
         },
         {
@@ -984,10 +920,6 @@
               "points": 50,
               "reason": "IV fluid resuscitation initiated for tachycardia, dehydration, and borderline haemodynamics",
               "category": "critical-action"
-            },
-            {
-              "type": "order_test",
-              "testId": "urine-culture"
             },
             {
               "type": "adjust_vital",
@@ -1064,10 +996,6 @@
               "points": 50,
               "reason": "IV fluids initiated",
               "category": "critical-action"
-            },
-            {
-              "type": "order_test",
-              "testId": "urine-culture"
             },
             {
               "type": "adjust_vital",

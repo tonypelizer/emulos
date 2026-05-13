@@ -169,12 +169,8 @@
           "id": "start-confirm-pregnancy-and-history",
           "text": "Confirm pregnancy with a urine test and take a detailed obstetric history simultaneously",
           "nextNodeId": "pregnancy-and-history",
-          "timeCost": 8,
+          "timeCost": 3,
           "effects": [
-            {
-              "type": "order_test",
-              "testId": "urine-pregnancy-test"
-            },
             {
               "type": "add_score_event",
               "actionId": "pregnancy-confirmed",
@@ -183,7 +179,10 @@
               "category": "critical-action"
             }
           ],
-          "condition": null
+          "condition": {
+            "op": "test_ordered",
+            "testId": "urine-pregnancy-test"
+          }
         },
         {
           "id": "start-reassure-threatened-mc",
@@ -246,12 +245,8 @@
           "id": "vitals-to-history",
           "text": "Obtain a detailed obstetric history and confirm pregnancy status",
           "nextNodeId": "pregnancy-and-history",
-          "timeCost": 8,
+          "timeCost": 3,
           "effects": [
-            {
-              "type": "order_test",
-              "testId": "urine-pregnancy-test"
-            },
             {
               "type": "add_score_event",
               "actionId": "pregnancy-confirmed",
@@ -261,11 +256,8 @@
             }
           ],
           "condition": {
-            "op": "not",
-            "condition": {
-              "op": "test_ordered",
-              "testId": "urine-pregnancy-test"
-            }
+            "op": "test_ordered",
+            "testId": "urine-pregnancy-test"
           }
         },
         {
@@ -296,10 +288,6 @@
           "timeCost": 5,
           "effects": [
             {
-              "type": "order_test",
-              "testId": "urine-pregnancy-test"
-            },
-            {
               "type": "add_score_event",
               "actionId": "pregnancy-confirmed",
               "points": 75,
@@ -307,7 +295,10 @@
               "category": "critical-action"
             }
           ],
-          "condition": null
+          "condition": {
+            "op": "test_ordered",
+            "testId": "urine-pregnancy-test"
+          }
         }
       ]
     },
@@ -330,12 +321,8 @@
           "id": "exam-to-history",
           "text": "Confirm pregnancy status and take a full OB history",
           "nextNodeId": "pregnancy-and-history",
-          "timeCost": 8,
+          "timeCost": 3,
           "effects": [
-            {
-              "type": "order_test",
-              "testId": "urine-pregnancy-test"
-            },
             {
               "type": "add_score_event",
               "actionId": "pregnancy-confirmed",
@@ -345,11 +332,8 @@
             }
           ],
           "condition": {
-            "op": "not",
-            "condition": {
-              "op": "test_ordered",
-              "testId": "urine-pregnancy-test"
-            }
+            "op": "test_ordered",
+            "testId": "urine-pregnancy-test"
           }
         },
         {
@@ -439,53 +423,11 @@
       "effects": [],
       "choices": [
         {
-          "id": "order-tvus-urgent",
-          "text": "Order urgent transvaginal ultrasound (TVUS) — the definitive first-trimester imaging test",
-          "nextNodeId": "tvus-result",
-          "timeCost": 30,
-          "effects": [
-            {
-              "type": "order_test",
-              "testId": "transvaginal-ultrasound"
-            },
-            {
-              "type": "add_score_event",
-              "actionId": "tvus-ordered",
-              "points": 200,
-              "reason": "TVUS ordered urgently — the gold-standard imaging modality for first-trimester pregnancy localisation",
-              "category": "critical-action"
-            }
-          ],
-          "condition": {
-            "op": "not",
-            "condition": {
-              "op": "test_ordered",
-              "testId": "transvaginal-ultrasound"
-            }
-          }
-        },
-        {
           "id": "order-serum-hcg",
           "text": "Order quantitative serum β-hCG and blood type while waiting for TVUS",
           "nextNodeId": "serum-hcg-result",
-          "timeCost": 15,
+          "timeCost": 3,
           "effects": [
-            {
-              "type": "order_test",
-              "testId": "serum-beta-hcg"
-            },
-            {
-              "type": "order_test",
-              "testId": "rh-blood-type"
-            },
-            {
-              "type": "order_test",
-              "testId": "cbc"
-            },
-            {
-              "type": "order_test",
-              "testId": "progesterone-level"
-            },
             {
               "type": "add_score_event",
               "actionId": "serum-hcg-ordered",
@@ -509,23 +451,16 @@
             }
           ],
           "condition": {
-            "op": "not",
-            "condition": {
-              "op": "test_ordered",
-              "testId": "serum-beta-hcg"
-            }
+            "op": "test_ordered",
+            "testId": "serum-beta-hcg"
           }
         },
         {
           "id": "order-taus-instead",
           "text": "Order transabdominal ultrasound (TAUS) — it is available sooner",
           "nextNodeId": "taus-suboptimal",
-          "timeCost": 20,
+          "timeCost": 3,
           "effects": [
-            {
-              "type": "order_test",
-              "testId": "transabdominal-ultrasound"
-            },
             {
               "type": "add_score_event",
               "actionId": "taus-instead-of-tvus-penalty",
@@ -539,11 +474,8 @@
             }
           ],
           "condition": {
-            "op": "not",
-            "condition": {
-              "op": "test_ordered",
-              "testId": "transvaginal-ultrasound"
-            }
+            "op": "test_ordered",
+            "testId": "transvaginal-ultrasound"
           }
         },
         {
@@ -551,7 +483,15 @@
           "text": "Review the TVUS result (scan complete)",
           "nextNodeId": "tvus-result",
           "timeCost": 0,
-          "effects": [],
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "tvus-ordered",
+              "points": 200,
+              "reason": "TVUS ordered urgently — the gold-standard imaging modality for first-trimester pregnancy localisation",
+              "category": "critical-action"
+            }
+          ],
           "condition": {
             "op": "test_ordered",
             "testId": "transvaginal-ultrasound"
@@ -614,12 +554,8 @@
           "id": "hcg-to-tvus",
           "text": "Proceed to TVUS urgently — β-hCG 2,200 is above discriminatory zone, IUP should be visible",
           "nextNodeId": "tvus-result",
-          "timeCost": 30,
+          "timeCost": 3,
           "effects": [
-            {
-              "type": "order_test",
-              "testId": "transvaginal-ultrasound"
-            },
             {
               "type": "add_score_event",
               "actionId": "tvus-ordered",
@@ -629,11 +565,8 @@
             }
           ],
           "condition": {
-            "op": "not",
-            "condition": {
-              "op": "test_ordered",
-              "testId": "transvaginal-ultrasound"
-            }
+            "op": "test_ordered",
+            "testId": "transvaginal-ultrasound"
           }
         },
         {
@@ -677,12 +610,8 @@
           "id": "taus-now-order-tvus",
           "text": "Order TVUS immediately — the TAUS is non-diagnostic and TVUS is essential",
           "nextNodeId": "tvus-result",
-          "timeCost": 30,
+          "timeCost": 3,
           "effects": [
-            {
-              "type": "order_test",
-              "testId": "transvaginal-ultrasound"
-            },
             {
               "type": "add_score_event",
               "actionId": "tvus-ordered",
@@ -691,7 +620,10 @@
               "category": "critical-action"
             }
           ],
-          "condition": null
+          "condition": {
+            "op": "test_ordered",
+            "testId": "transvaginal-ultrasound"
+          }
         },
         {
           "id": "taus-discharge-with-repeat",
@@ -874,10 +806,6 @@
               "points": 50,
               "reason": "Anti-D immunoglobulin given for Rh-negative patient with confirmed pregnancy and bleeding",
               "category": "critical-action"
-            },
-            {
-              "type": "order_test",
-              "testId": "blood-cultures"
             }
           ],
           "condition": null

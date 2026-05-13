@@ -20,6 +20,8 @@ export type {
   PlayerState,
   OrderedTest,
   TestResult,
+  DispensedMedication,
+  PerformedProcedure,
   ActionRecord,
   CaseProgressState,
   ResolvedChoice,
@@ -51,6 +53,10 @@ export type {
   ConditionsRegistry,
   TestDefinition,
   TestsRegistry,
+  MedicationDefinition,
+  MedicationsRegistry,
+  ProcedureDefinition,
+  ProceduresRegistry,
 } from "./case.js";
 
 export {
@@ -65,6 +71,10 @@ export {
   ConditionsRegistrySchema,
   TestDefinitionSchema,
   TestsRegistrySchema,
+  MedicationDefinitionSchema,
+  MedicationsRegistrySchema,
+  ProcedureDefinitionSchema,
+  ProceduresRegistrySchema,
 } from "./case.js";
 
 export type {
@@ -75,6 +85,10 @@ export type {
   ValidationIssue,
   ScoreReport,
   EngineErrorCode,
+  FreeActionType,
+  FreeActionRequest,
+  FreeActionResult,
+  HintResult,
 } from "./engine.js";
 
 export { EngineError } from "./engine.js";

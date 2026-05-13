@@ -15,6 +15,7 @@
 
 import { describe, it, expect, beforeAll } from "vitest";
 import { GameEngine } from "../../src/GameEngine.js";
+import type { FreeActionRequest } from "@emulos/types";
 
 // JSON imports — Vite resolves these natively in Vitest.
 import chestPain001 from "../../../content/cases/general/chest-pain-001.json";
@@ -35,12 +36,24 @@ beforeAll(() => {
 
 // ─── Helper ───────────────────────────────────────────────────────────────────
 
-/** Replays a sequence of choice IDs from the start, returning the terminal state. */
-function playThrough(choices: string[], seed = "integration-test-seed") {
+/**
+ * A step in a play-through sequence.
+ * - A plain string is a narrative choice ID passed to processAction.
+ * - An object with `freeAction` invokes performFreeAction (ordering a test,
+ *   dispensing a medication, or performing a procedure from the menu).
+ */
+type Step = string | { freeAction: FreeActionRequest };
+
+/** Replays a sequence of steps from the start, returning the terminal state. */
+function playThrough(steps: Step[], seed = "integration-test-seed") {
   let state = engine.createSession({ seed });
-  for (const choiceId of choices) {
+  for (const step of steps) {
     if (engine.isTerminal(state)) break;
-    state = engine.processAction(state, choiceId);
+    if (typeof step === "object" && "freeAction" in step) {
+      state = engine.performFreeAction(state, step.freeAction);
+    } else {
+      state = engine.processAction(state, step);
+    }
   }
   return state;
 }
@@ -78,7 +91,8 @@ describe("Integration — session creation", () => {
 
 describe("Integration — optimal path (ECG → STEMI recognition → full pre-PCI → cath lab)", () => {
   // 100% score path:
-  //   start → ecg-ordered (immediate-ecg +100)
+  //   [free action] order 12-lead ECG via the Tests menu
+  //   start → ecg-ordered (immediate-ecg, now gated by test_ordered, +100)
   //   ecg-ordered → stemi-confirmed (interpret-stemi-correct +75)
   //   stemi-confirmed → stemi-aspirin-given (give-aspirin +100)
   //   stemi-aspirin-given → stemi-iv-established (asp-iv-access +50)
@@ -86,8 +100,9 @@ describe("Integration — optimal path (ECG → STEMI recognition → full pre-P
   //   treatment-decision → cath-lab-activated (primary-pci +250)
   //   cath-lab-activated → pre-pci-complete (full-pre-pci-regimen +75+50)
   //   pre-pci-complete → outcome-excellent (transfer-to-cath-lab)
-  const OPTIMAL_PATH = [
-    "immediate-ecg", // start → ecg-ordered
+  const OPTIMAL_PATH: Step[] = [
+    { freeAction: { type: "order_test", itemId: "12-lead-ecg" } }, // Free-action: order ECG
+    "immediate-ecg", // start → ecg-ordered (review ECG, gated by test_ordered)
     "interpret-stemi-correct", // ecg-ordered → stemi-confirmed
     "give-aspirin", // stemi-confirmed → stemi-aspirin-given
     "asp-iv-access", // stemi-aspirin-given → stemi-iv-established
@@ -158,7 +173,8 @@ describe("Integration — optimal path (ECG → STEMI recognition → full pre-P
 // ─── 3. Thrombolytics path ────────────────────────────────────────────────────
 
 describe("Integration — suboptimal path (thrombolytics → rescue PCI)", () => {
-  const LYTIC_PATH = [
+  const LYTIC_PATH: Step[] = [
+    { freeAction: { type: "order_test", itemId: "12-lead-ecg" } }, // Free-action: order ECG
     "immediate-ecg", // start → ecg-ordered
     "interpret-stemi-correct", // ecg-ordered → stemi-confirmed
     "go-to-treatment-decision", // stemi-confirmed → treatment-decision
@@ -190,6 +206,7 @@ describe("Integration — suboptimal path (thrombolytics → rescue PCI)", () =>
 
   it("final score is lower than the optimal path", () => {
     const optimalState = playThrough([
+      { freeAction: { type: "order_test", itemId: "12-lead-ecg" } },
       "immediate-ecg",
       "interpret-stemi-correct",
       "give-aspirin",
@@ -214,7 +231,8 @@ describe("Integration — delay path (ECG misread as benign → catastrophic del
   // Player misreads the ECG as benign repolarisation, triggering catastrophic delay.
   // The vf-arrest-event fires immediately via trigger_event.
   // The player then resuscitates and eventually reaches a terminal shock-pci outcome.
-  const DELAY_PATH = [
+  const DELAY_PATH: Step[] = [
+    { freeAction: { type: "order_test", itemId: "12-lead-ecg" } }, // Free-action: order ECG
     "immediate-ecg", // start → ecg-ordered
     "interpret-benign", // ecg-ordered → catastrophic-delay (30 min timeCost) → vf-arrest-event fires immediately (delayMinutes: 0)
     "cpr-and-defib", // vf-arrest-event → resuscitation
@@ -244,7 +262,8 @@ describe("Integration — delay path (ECG misread as benign → catastrophic del
 // ─── 5. Determinism ───────────────────────────────────────────────────────────
 
 describe("Integration — determinism", () => {
-  const CHOICES = [
+  const CHOICES: Step[] = [
+    { freeAction: { type: "order_test", itemId: "12-lead-ecg" } },
     "immediate-ecg",
     "interpret-stemi-correct",
     "give-aspirin",
@@ -283,6 +302,7 @@ describe("Integration — error handling", () => {
 
   it("throws INVALID_STATE when processing an action on a terminal session", () => {
     const terminalState = playThrough([
+      { freeAction: { type: "order_test", itemId: "12-lead-ecg" } },
       "immediate-ecg",
       "interpret-stemi-correct",
       "give-aspirin",
@@ -308,6 +328,11 @@ describe("Integration — error handling", () => {
 describe("Integration — serialization", () => {
   it("serializes and deserializes a mid-session state preserving all fields", () => {
     let state = engine.createSession({ seed: "serialize-test" });
+    // Order the ECG via free action then navigate to the result node.
+    state = engine.performFreeAction(state, {
+      type: "order_test",
+      itemId: "12-lead-ecg",
+    });
     state = engine.processAction(state, "immediate-ecg");
 
     const json = engine.serializeState(state);
@@ -324,6 +349,11 @@ describe("Integration — serialization", () => {
 
   it("continues gameplay correctly from a deserialized state", () => {
     let state = engine.createSession({ seed: "resume-test" });
+    // Order the ECG via free action then navigate to the result node.
+    state = engine.performFreeAction(state, {
+      type: "order_test",
+      itemId: "12-lead-ecg",
+    });
     state = engine.processAction(state, "immediate-ecg");
 
     const json = engine.serializeState(state);

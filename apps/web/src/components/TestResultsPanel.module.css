@@ -1,0 +1,91 @@
+.root {
+  flex-shrink: 0;
+  background: var(--c-surface-raised);
+  border-top: 1px solid var(--c-border);
+  padding: var(--sp-3) var(--sp-4);
+}
+
+.heading {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--c-text-dim);
+  margin-bottom: var(--sp-2);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  list-style: none;
+}
+
+/* ── A single test row ──────────────────────────────────────────────── */
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--r-md);
+  border: 1px solid var(--c-border);
+  background: var(--c-surface);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.statusDot {
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.statusPending {
+  background: var(--c-warning-border);
+  box-shadow: 0 0 0 2px var(--c-warning-bg);
+}
+
+.statusResulted {
+  background: var(--c-ok-border);
+  box-shadow: 0 0 0 2px var(--c-ok-bg);
+}
+
+.testName {
+  flex: 1;
+  font-weight: 500;
+  color: var(--c-text);
+}
+
+.testStatus {
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.pendingLabel {
+  color: var(--c-warning);
+}
+
+.resultedLabel {
+  color: var(--c-ok);
+}
+
+/* ── Result detail (expandable) ─────────────────────────────────────── */
+
+.resultNarrative {
+  margin-top: var(--sp-1);
+  padding-left: calc(8px + var(--sp-3)); /* align under test name */
+  font-size: 0.8125rem;
+  color: var(--c-text-muted);
+  font-style: italic;
+  line-height: 1.5;
+}
+
+/* ── Container layout: scrollable if many tests ─────────────────────── */
+
+.scrollArea {
+  max-height: 120px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}

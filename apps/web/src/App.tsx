@@ -12,10 +12,19 @@ export function App() {
     gameState,
     report,
     error,
+    currentHint,
+    freeActionMode,
+    caseTitle,
+    lastActionEvents,
     goTo,
     startCase,
     makeChoice,
+    performFreeAction,
+    useHint,
     dismissError,
+    availableTests,
+    availableMedications,
+    availableProcedures,
   } = useGame();
 
   return (
@@ -68,7 +77,19 @@ export function App() {
         />
       )}
       {screen === "play" && gameState !== null && (
-        <GameplayScreen state={gameState} onChoice={makeChoice} />
+        <GameplayScreen
+          state={gameState}
+          onChoice={makeChoice}
+          onFreeAction={performFreeAction}
+          onHint={useHint}
+          currentHint={currentHint}
+          freeActionMode={freeActionMode}
+          availableTests={availableTests}
+          availableMedications={availableMedications}
+          availableProcedures={availableProcedures}
+          caseTitle={caseTitle}
+          lastActionEvents={lastActionEvents}
+        />
       )}
       {screen === "summary" && gameState !== null && report !== null && (
         <EndSummaryScreen

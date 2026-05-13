@@ -1,0 +1,341 @@
+/* ── Root: only wraps the tab bar; drawer floats above ─────────────── */
+.root {
+  position: relative;
+  flex-shrink: 0;
+  background: var(--c-surface);
+}
+
+/* ── Drawer — slides up from behind the tab bar ────────────────────── */
+.drawer {
+  position: absolute;
+  bottom: 100%; /* anchored just above the tab bar */
+  left: 0;
+  right: 0;
+  max-height: 62vh;
+  background: var(--c-surface);
+  border-top: 2px solid var(--c-border-strong);
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
+  overflow: hidden;
+  z-index: 10;
+  /* Hidden: translated fully down + invisible so no bleed through the tab bar */
+  transform: translateY(100%);
+  visibility: hidden;
+  transition:
+    transform 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+    visibility 0s linear 0.28s;
+  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.18);
+}
+
+.drawerOpen {
+  transform: translateY(0);
+  visibility: visible;
+  /* Become visible immediately on open; stay visible until animation done on close */
+  transition:
+    transform 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+    visibility 0s linear 0s;
+}
+
+/* Scrollable content inside drawer */
+.drawerInner {
+  max-height: 62vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* Drag handle pill at the top of the drawer */
+.drawerInner::before {
+  content: "";
+  display: block;
+  width: 36px;
+  height: 4px;
+  background: var(--c-border-strong);
+  border-radius: 2px;
+  margin: var(--sp-2) auto var(--sp-1);
+  flex-shrink: 0;
+}
+
+/* ── Backdrop — transparent click-catcher ──────────────────────────── */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9;
+  background: transparent;
+}
+
+/* ── Tab bar ────────────────────────────────────────────────────────── */
+
+.tabBar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+  border-top: 1px solid var(--c-border);
+  background: var(--c-surface);
+  /* Must sit above the backdrop so tab buttons remain clickable when drawer is open */
+  position: relative;
+  z-index: 11;
+}
+
+.tabBtn {
+  padding: var(--sp-2) var(--sp-1);
+  padding-block: var(--sp-3);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--c-text-muted);
+  background: transparent;
+  border: none;
+  border-top: 2px solid transparent;
+  cursor: pointer;
+  transition:
+    color var(--transition-fast),
+    background var(--transition-fast),
+    border-color var(--transition-fast);
+  text-align: center;
+  line-height: 1.3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.tabBtn:hover {
+  color: var(--c-accent);
+  background: var(--c-accent-soft);
+}
+
+.tabBtn.active {
+  color: var(--c-accent);
+  border-top-color: var(--c-accent);
+  background: var(--c-accent-soft);
+}
+
+.tabBtn:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: -2px;
+}
+
+.tabIcon {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.tabLabel {
+  display: block;
+}
+
+/* Badge for pending choice count on Story tab */
+.tabBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: var(--r-full);
+  background: var(--c-accent);
+  color: var(--c-accent-text);
+  font-size: 0.625rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* ── Story tab content ─────────────────────────────────────────────── */
+
+.storyPane {
+  padding: var(--sp-3) var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.storyHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--sp-1);
+}
+
+.storyHeading {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--c-text-dim);
+  margin-bottom: 0;
+}
+
+.choiceList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  list-style: none;
+}
+
+.choiceBtn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  text-align: left;
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--r-md);
+  border: 1px solid var(--c-border);
+  background: var(--c-surface);
+  color: var(--c-text);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.4;
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.choiceBtn:hover:not(:disabled) {
+  background: var(--c-accent-soft);
+  border-color: var(--c-accent);
+  box-shadow: var(--shadow-sm);
+}
+
+.choiceBtn:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 2px;
+}
+
+.choiceBtn:active:not(:disabled) {
+  background: var(--c-accent);
+  border-color: var(--c-accent);
+  color: var(--c-accent-text);
+  transform: scale(0.99);
+}
+
+.choiceBtnDisabled {
+  opacity: 0.4;
+}
+
+.choiceBtnText {
+  flex: 1;
+}
+
+.choiceDoneIcon {
+  flex-shrink: 0;
+  margin-left: var(--sp-3);
+  color: var(--c-ok);
+  font-size: 0.875rem;
+}
+
+.choiceHint {
+  font-size: 0.8125rem;
+  color: var(--c-accent);
+  margin-top: var(--sp-1);
+  padding-left: var(--sp-1);
+}
+
+/* ── Empty / awaiting state ─────────────────────────────────────────── */
+
+.emptyStory {
+  padding: var(--sp-6) var(--sp-4);
+  text-align: center;
+  color: var(--c-text-dim);
+  font-size: 0.875rem;
+  font-style: italic;
+}
+
+/* ── Hint (Attending Physician) pane ────────────────────────────────── */
+
+.hintPane {
+  padding: var(--sp-4) var(--sp-4) var(--sp-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.hintPaneHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  padding-bottom: var(--sp-3);
+  border-bottom: 1px solid var(--c-border);
+}
+
+.hintPaneIcon {
+  font-size: 1.75rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.hintPaneTitle {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--c-text);
+  margin-bottom: var(--sp-1);
+}
+
+.hintPaneMeta {
+  font-size: 0.75rem;
+  color: var(--c-text-dim);
+  margin: 0;
+}
+
+.hintRevealBox {
+  padding: var(--sp-4);
+  border-radius: var(--r-md);
+  background: var(--c-accent-soft);
+  border: 1px solid var(--c-accent);
+}
+
+.hintRevealLabel {
+  display: block;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--c-accent);
+  margin-bottom: var(--sp-2);
+}
+
+.hintRevealText {
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: var(--c-text);
+  margin: 0;
+}
+
+.hintAsk {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  align-items: flex-start;
+}
+
+.hintAskText {
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--c-text-muted);
+  margin: 0;
+}
+
+.hintAskBtn {
+  padding: var(--sp-3) var(--sp-5);
+  border-radius: var(--r-md);
+  background: var(--c-accent);
+  color: var(--c-accent-text);
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    transform 0.1s;
+}
+
+.hintAskBtn:hover {
+  background: var(--c-accent-hover);
+}
+
+.hintAskBtn:active {
+  transform: scale(0.98);
+}
+
+.hintAskBtn:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 3px;
+}

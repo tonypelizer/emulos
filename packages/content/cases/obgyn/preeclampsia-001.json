@@ -225,10 +225,6 @@
           "timeCost": 5,
           "effects": [
             {
-              "type": "order_test",
-              "testId": "urinalysis"
-            },
-            {
               "type": "add_score_event",
               "actionId": "urinalysis-ordered",
               "points": 75,
@@ -366,64 +362,11 @@
       "effects": [],
       "choices": [
         {
-          "id": "order-urinalysis-and-bloods",
-          "text": "Order both urinalysis AND blood tests (CBC, metabolic panel) — get the full picture simultaneously",
-          "nextNodeId": "urinalysis-result",
-          "timeCost": 15,
-          "effects": [
-            {
-              "type": "order_test",
-              "testId": "urinalysis"
-            },
-            {
-              "type": "order_test",
-              "testId": "cbc"
-            },
-            {
-              "type": "order_test",
-              "testId": "bmp"
-            },
-            {
-              "type": "order_test",
-              "testId": "crp"
-            },
-            {
-              "type": "order_test",
-              "testId": "lactate"
-            },
-            {
-              "type": "add_score_event",
-              "actionId": "urinalysis-ordered",
-              "points": 75,
-              "reason": "Urinalysis ordered — proteinuria is the key diagnostic criterion for preeclampsia",
-              "category": "critical-action"
-            },
-            {
-              "type": "add_score_event",
-              "actionId": "bloods-drawn",
-              "points": 50,
-              "reason": "Blood tests drawn — essential for severity assessment, platelet count, and renal/liver function",
-              "category": "critical-action"
-            }
-          ],
-          "condition": {
-            "op": "not",
-            "condition": {
-              "op": "test_ordered",
-              "testId": "urinalysis"
-            }
-          }
-        },
-        {
           "id": "order-urinalysis-only",
           "text": "Order urinalysis first — proteinuria is the key diagnostic test",
           "nextNodeId": "urinalysis-result",
-          "timeCost": 10,
+          "timeCost": 3,
           "effects": [
-            {
-              "type": "order_test",
-              "testId": "urinalysis"
-            },
             {
               "type": "add_score_event",
               "actionId": "urinalysis-ordered",
@@ -433,31 +376,16 @@
             }
           ],
           "condition": {
-            "op": "not",
-            "condition": {
-              "op": "test_ordered",
-              "testId": "urinalysis"
-            }
+            "op": "test_ordered",
+            "testId": "urinalysis"
           }
         },
         {
           "id": "order-bloods-only",
           "text": "Order blood tests only (CBC, metabolic panel) — I'll check proteinuria later",
           "nextNodeId": "bloods-result",
-          "timeCost": 15,
+          "timeCost": 3,
           "effects": [
-            {
-              "type": "order_test",
-              "testId": "cbc"
-            },
-            {
-              "type": "order_test",
-              "testId": "bmp"
-            },
-            {
-              "type": "order_test",
-              "testId": "crp"
-            },
             {
               "type": "add_score_event",
               "actionId": "bloods-drawn",
@@ -474,11 +402,8 @@
             }
           ],
           "condition": {
-            "op": "not",
-            "condition": {
-              "op": "test_ordered",
-              "testId": "cbc"
-            }
+            "op": "test_ordered",
+            "testId": "cbc"
           }
         },
         {
@@ -486,7 +411,22 @@
           "text": "Review the urinalysis result (already sent)",
           "nextNodeId": "urinalysis-result",
           "timeCost": 0,
-          "effects": [],
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "urinalysis-ordered",
+              "points": 75,
+              "reason": "Urinalysis ordered — proteinuria is the key diagnostic criterion for preeclampsia",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "bloods-drawn",
+              "points": 50,
+              "reason": "Blood tests drawn — essential for severity assessment, platelet count, and renal/liver function",
+              "category": "critical-action"
+            }
+          ],
           "condition": {
             "op": "test_ordered",
             "testId": "urinalysis"
@@ -536,8 +476,8 @@
       ],
       "choices": [
         {
-          "id": "urinalysis-to-bloods",
-          "text": "Review blood results (CBC, metabolic panel) before classifying severity",
+          "id": "urinalysis-review-bloods",
+          "text": "Review blood results (already sent)",
           "nextNodeId": "bloods-result",
           "timeCost": 0,
           "effects": [
@@ -547,34 +487,8 @@
               "points": 50,
               "reason": "Blood tests ordered to complete severity workup",
               "category": "critical-action"
-            },
-            {
-              "type": "order_test",
-              "testId": "cbc"
-            },
-            {
-              "type": "order_test",
-              "testId": "bmp"
-            },
-            {
-              "type": "order_test",
-              "testId": "crp"
             }
           ],
-          "condition": {
-            "op": "not",
-            "condition": {
-              "op": "test_ordered",
-              "testId": "cbc"
-            }
-          }
-        },
-        {
-          "id": "urinalysis-review-bloods",
-          "text": "Review blood results (already sent)",
-          "nextNodeId": "bloods-result",
-          "timeCost": 0,
-          "effects": [],
           "condition": {
             "op": "test_ordered",
             "testId": "cbc"
