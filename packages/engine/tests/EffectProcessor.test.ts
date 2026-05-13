@@ -66,6 +66,7 @@ function makeStubCaseDoc(
         criticalActions: [],
         modifiers: overrides.modifiers ?? [],
       },
+      freeActionMode: false,
       nodes: {
         start: {
           id: "start",
