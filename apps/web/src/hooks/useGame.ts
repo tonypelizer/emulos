@@ -152,10 +152,18 @@ export function useGame() {
         const { newState, result } = service.current.useHint(prev.gameState);
         // If no hint is available, keep currentHint as-is (button is hidden anyway).
         if (result.hint === null) return prev;
+        // Collect the penalty event that was just added, if any.
+        const prevEventIds = new Set(
+          prev.gameState.score.events.map((e) => e.id),
+        );
+        const newEvents = newState.score.events.filter(
+          (e) => !prevEventIds.has(e.id),
+        );
         return {
           ...prev,
           gameState: newState,
           currentHint: result.hint,
+          lastActionEvents: newEvents,
           error: null,
         };
       } catch (err) {
@@ -180,6 +188,9 @@ export function useGame() {
     lastActionEvents: state.lastActionEvents,
     freeActionMode: service.current.isFreeActionMode(),
     caseTitle: service.current.getCaseTitle(),
+    nodeHasHint: state.gameState
+      ? service.current.nodeHasHint(state.gameState)
+      : false,
     goTo,
     startCase,
     makeChoice,

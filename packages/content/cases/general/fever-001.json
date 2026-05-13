@@ -151,34 +151,46 @@
     "start": {
       "id": "start",
       "type": "presentation",
-      "hint": "Look at the vitals — SpO₂ is 94%. That's low! In medicine, a patient struggling to breathe gets oxygen first, history second. Apply supplemental oxygen as your very first step.",
+      "hint": "Look at the vitals — SpO₂ is 94%. That's low! In medicine, a patient struggling to breathe gets oxygen first, history second. Tap the Meds tab (💊) and give supplemental oxygen as your very first step.",
+      "conditionalHints": [
+        {
+          "condition": {
+            "op": "has_knowledge",
+            "knowledgeId": "oxygen-applied"
+          },
+          "hint": "Good — oxygen is on. The next step is already on screen: choose 'Oxygen is running — now take a focused history' from the options below. Work through the respiratory symptoms, systemic history, and PMHx sections, then proceed to investigations. A chest X-ray and blood cultures before antibiotics are your two most critical next steps."
+        }
+      ],
       "text": "CASE BRIEF\nDaniel Okafor, 34M — Secondary school teacher\n\n\nTRIAGE VITALS\nHR 104 | BP 118/76 | RR 22 | Temp 38.9°C | SpO₂ 94% | Pain 4/10\n\n\nHISTORY\nPresenting complaint: Fever and worsening cough × 3 days. 'I thought it was just a cold, but I'm not getting better.'\n\nRespiratory: Productive cough — initially dry, now yellow-green sputum. Sharp right-sided chest pain worse with breathing and coughing (pleuritic). Progressive dyspnoea — winded walking to the bathroom. No haemoptysis. No wheeze.\n\nSystemic: Fever onset 72 h ago. One episode of rigors night 1. Sweats, myalgia, fatigue — off work yesterday. No recent travel. No known sick contacts. Poor oral intake × 2 days.\n\nUrinary: No dysuria, frequency, haematuria, or loin pain.\n\nPMHx / Background:\n• Mild intermittent asthma — last used salbutamol 3 months ago\n• NKDA | Medications: salbutamol PRN\n• Smoker — 10 cigarettes/day × 12 years (~6 pack-years)\n• Lives alone. No flu vaccination this year.\n\n─────────────────────────────────────────────\nEXAMINATION\nGeneral: Alert, flushed, mildly distressed; splinting on the right.\nHands/neck: No clubbing, cyanosis, or lymphadenopathy.\n\nChest:\n• Reduced expansion right side\n• Percussion: dull right lower zone\n• Auscultation: bronchial breath sounds + increased vocal resonance + fine inspiratory crackles at right base; reduced air entry right lower lobe\n• No wheeze\n\nAbdomen: Soft, non-tender. No rash, no oedema.\n\n─────────────────────────────────────────────\nCLINICAL IMPRESSION\nRight lower zone signs consistent with lobar consolidation. Combined with pleuritic chest pain, purulent sputum, rigors, and fever × 3 days in a smoker — community-acquired pneumonia is the leading diagnosis.\n\nSpO₂ 94% requires immediate supplemental oxygen. Confirm with CXR, draw bloods and blood cultures before antibiotics, assess severity with CURB-65, administer antibiotics early, and decide on disposition.",
       "effects": [],
       "choices": [
         {
           "id": "start-oxygen-then-hx",
           "text": "Apply oxygen immediately (SpO₂ 94%), then take a focused history",
-          "nextNodeId": "history-hub",
+          "nextNodeId": "start-oxygen-result",
           "timeCost": 5,
           "effects": [
             {
-              "type": "add_score_event",
-              "actionId": "oxygen-given",
-              "points": 50,
-              "reason": "Supplemental oxygen applied promptly for SpO₂ 94% — correct first step",
-              "category": "critical-action"
-            },
-            {
-              "type": "adjust_vital",
-              "vital": "oxygenSaturation",
-              "delta": 2
-            },
-            {
               "type": "add_knowledge",
               "knowledgeId": "oxygen-applied"
+            },
+            {
+              "type": "dispense_medication",
+              "medicationId": "oxygen"
             }
           ],
           "condition": null
+        },
+        {
+          "id": "start-oxygen-applied-proceed",
+          "text": "Oxygen is running — now take a focused history",
+          "nextNodeId": "history-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": {
+            "op": "has_knowledge",
+            "knowledgeId": "oxygen-applied"
+          }
         },
         {
           "id": "start-history-only",
@@ -194,7 +206,13 @@
               "category": "penalty"
             }
           ],
-          "condition": null
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "oxygen-applied"
+            }
+          }
         },
         {
           "id": "start-order-cxr-immediately",
@@ -230,6 +248,35 @@
               "category": "penalty"
             }
           ],
+          "condition": null
+        }
+      ]
+    },
+    "start-oxygen-result": {
+      "id": "start-oxygen-result",
+      "type": "result",
+      "text": "You apply supplemental oxygen via non-rebreather mask at 15 L/min.\n\nDaniel's breathing visibly relaxes as the mask seats. Within moments his SpO₂ begins to climb.\n\n• ✓ Correct first step — oxygen before history in a hypoxic patient\n• SpO₂ improving from 94% — recheck after stabilisation",
+      "effects": [
+        {
+          "type": "add_score_event",
+          "actionId": "oxygen-given",
+          "points": 50,
+          "reason": "Supplemental oxygen applied promptly for SpO₂ 94% — correct first step",
+          "category": "critical-action"
+        },
+        {
+          "type": "adjust_vital",
+          "vital": "oxygenSaturation",
+          "delta": 2
+        }
+      ],
+      "choices": [
+        {
+          "id": "oxygen-result-to-history",
+          "text": "Now take a focused history",
+          "nextNodeId": "history-hub",
+          "timeCost": 0,
+          "effects": [],
           "condition": null
         }
       ]
@@ -1433,7 +1480,6 @@
       { "op": "has_knowledge", "knowledgeId": "admitted-to-ward" }
     ]
   },
-  "freeActionMode": true,
   "relevantTests": [
     "chest-xray",
     "cbc",

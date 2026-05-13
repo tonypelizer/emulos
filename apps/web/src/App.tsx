@@ -16,6 +16,7 @@ export function App() {
     freeActionMode,
     caseTitle,
     lastActionEvents,
+    nodeHasHint,
     goTo,
     startCase,
     makeChoice,
@@ -89,6 +90,7 @@ export function App() {
           availableProcedures={availableProcedures}
           caseTitle={caseTitle}
           lastActionEvents={lastActionEvents}
+          nodeHasHint={nodeHasHint}
         />
       )}
       {screen === "summary" && gameState !== null && report !== null && (

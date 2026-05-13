@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type {
   GameState,
   FreeActionRequest,
@@ -31,6 +31,7 @@ interface Props {
   caseTitle: string;
   /** New score events from the most recent action — used for penalty feedback. */
   lastActionEvents: ScoreEvent[];
+  nodeHasHint: boolean;
 }
 
 export function GameplayScreen({
@@ -45,6 +46,7 @@ export function GameplayScreen({
   availableProcedures,
   caseTitle,
   lastActionEvents,
+  nodeHasHint,
 }: Props) {
   // Case brief shown once when the case loads.
   const [hasDismissedBrief, setHasDismissedBrief] = useState(false);
@@ -81,6 +83,20 @@ export function GameplayScreen({
   );
   const showPenaltyToast = penaltyEvents.length > 0 && popupQueue.length === 0;
 
+  // When a hint penalty fires (no popup path), advance prevScoreTotalRef so
+  // the penalty doesn't bleed into the next free-action popup's score delta.
+  useEffect(() => {
+    const hintPenalty = lastActionEvents.find((e) =>
+      e.actionId.startsWith("hint-used-"),
+    );
+    if (hintPenalty) {
+      prevScoreTotalRef.current = state.score.events.reduce(
+        (s, e) => s + e.points,
+        0,
+      );
+    }
+  }, [lastActionEvents, state.score.events]);
+
   const briefText = state.progress.narrativeLog[0]?.text ?? "";
   const patientName = `${state.patient.demographics.name}, ${state.patient.demographics.age}${state.patient.demographics.sex === "male" ? "M" : state.patient.demographics.sex === "female" ? "F" : "O"}`;
 
@@ -96,7 +112,7 @@ export function GameplayScreen({
         />
       )}
 
-      <PatientHeader patient={state.patient} session={state.session} />
+      <PatientHeader patient={state.patient} session={state.session} score={state.score} />
       <VitalsPanel vitals={state.patient.vitals} />
       <NarrativeLog
         entries={state.progress.narrativeLog}
@@ -121,6 +137,7 @@ export function GameplayScreen({
         freeActionMode={freeActionMode}
         currentNodeId={state.progress.currentNodeId}
         hintsUsedAtNodes={state.player.hintsUsedAtNodes}
+        nodeHasHint={nodeHasHint}
       />
 
       {/* Penalty toast for story-choice penalties (no popup produced) */}

@@ -51,6 +51,11 @@ export function enterNode(
   // Clear the isNew flag on all existing narrative entries.
   let next = clearNewFlags(state);
 
+  // Check first-visit BEFORE updating visitedNodeIds so we can suppress
+  // repeated text on hub nodes (e.g. history-hub, investigation-hub) that
+  // the player returns to multiple times.
+  const isFirstVisit = !next.progress.visitedNodeIds.includes(nodeId);
+
   // Update navigation state.
   next = produce(next, (draft) => {
     draft.progress.currentNodeId = nodeId;
@@ -59,16 +64,19 @@ export function enterNode(
     }
   });
 
-  // Append the node's narrative text to the log.
-  next = produce(next, (draft) => {
-    draft.progress.narrativeLog.push({
-      id: generateId(),
-      gameTime: draft.session.gameTime,
-      type: nodeTypeToNarrativeType(node.type),
-      text: node.text,
-      isNew: true,
+  // Append the node's narrative text to the log on first visit only.
+  // Revisiting a hub node should not repeat its intro text or trigger a popup.
+  if (isFirstVisit) {
+    next = produce(next, (draft) => {
+      draft.progress.narrativeLog.push({
+        id: generateId(),
+        gameTime: draft.session.gameTime,
+        type: nodeTypeToNarrativeType(node.type),
+        text: node.text,
+        isNew: true,
+      });
     });
-  });
+  }
 
   // Apply the node's entry effects.
   if (node.effects.length > 0) {
@@ -82,6 +90,20 @@ export function enterNode(
   // If pending events changed currentNodeId (e.g., an event node was entered),
   // we must resolve choices from that node, not the original nodeId argument.
   next = resolveChoices(next, next.progress.currentNodeId, caseDoc);
+
+  // Auto-advance: if the current node resolved to exactly one non-disabled
+  // choice that has zero time cost and no effects, it's a pure "continue"
+  // step — follow it automatically so the player never has to tap a single
+  // forced button just to proceed.
+  const active = next.progress.activeChoices.filter((c) => !c.disabled);
+  if (active.length === 1) {
+    const [onlyChoice] = active;
+    const currentNode = caseDoc.nodesById.get(next.progress.currentNodeId);
+    const rawChoice = currentNode?.choices.find((c) => c.id === onlyChoice!.id);
+    if (rawChoice && rawChoice.timeCost === 0 && rawChoice.effects.length === 0) {
+      return enterNode(next, rawChoice.nextNodeId, caseDoc);
+    }
+  }
 
   return next;
 }

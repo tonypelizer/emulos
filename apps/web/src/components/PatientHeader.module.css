@@ -37,6 +37,38 @@
   flex-shrink: 0;
 }
 
+.right {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  flex-shrink: 0;
+}
+
+.scoreChip {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  background: rgba(255,255,255,0.15);
+  border-radius: var(--r-full, 999px);
+  padding: 2px var(--sp-2);
+}
+
+.scoreNeg {
+  background: rgba(220, 38, 38, 0.35);
+}
+
+.scoreIcon {
+  font-size: 0.75rem;
+  opacity: 0.9;
+}
+
+.scoreValue {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
 .timerIcon {
   font-size: 0.875rem;
   opacity: 0.8;

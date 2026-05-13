@@ -1,4 +1,4 @@
-import type { PatientState, SessionState } from "@emulos/types";
+import type { PatientState, SessionState, ScoreState } from "@emulos/types";
 import styles from "./PatientHeader.module.css";
 
 function formatTime(minutes: number): string {
@@ -10,9 +10,10 @@ function formatTime(minutes: number): string {
 interface Props {
   patient: PatientState;
   session: SessionState;
+  score: ScoreState;
 }
 
-export function PatientHeader({ patient, session }: Props) {
+export function PatientHeader({ patient, session, score }: Props) {
   const { demographics } = patient;
   const sexShort =
     demographics.sex === "male"
@@ -20,6 +21,8 @@ export function PatientHeader({ patient, session }: Props) {
       : demographics.sex === "female"
         ? "F"
         : "O";
+
+  const totalPoints = score.events.reduce((s, e) => s + e.points, 0);
 
   return (
     <header className={styles.root}>
@@ -30,16 +33,25 @@ export function PatientHeader({ patient, session }: Props) {
           {sexShort} · {demographics.weight}kg
         </span>
       </div>
-      <div
-        className={styles.timer}
-        aria-label={`Game time: ${formatTime(session.gameTime)}`}
-      >
-        <span className={styles.timerIcon} aria-hidden="true">
-          ⏱
-        </span>
-        <span className={styles.timerValue}>
-          {formatTime(session.gameTime)}
-        </span>
+      <div className={styles.right}>
+        <div
+          className={`${styles.scoreChip} ${totalPoints < 0 ? styles.scoreNeg : ""}`}
+          aria-label={`Score: ${totalPoints} points`}
+        >
+          <span className={styles.scoreIcon} aria-hidden="true">★</span>
+          <span className={styles.scoreValue}>{totalPoints >= 0 ? "+" : ""}{totalPoints}</span>
+        </div>
+        <div
+          className={styles.timer}
+          aria-label={`Game time: ${formatTime(session.gameTime)}`}
+        >
+          <span className={styles.timerIcon} aria-hidden="true">
+            ⏱
+          </span>
+          <span className={styles.timerValue}>
+            {formatTime(session.gameTime)}
+          </span>
+        </div>
       </div>
     </header>
   );

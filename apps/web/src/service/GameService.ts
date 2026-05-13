@@ -136,6 +136,10 @@ export class GameService {
     return this.engine.useHint(state);
   }
 
+  nodeHasHint(state: GameState): boolean {
+    return this.engine?.hasHint(state) ?? false;
+  }
+
   isFreeActionMode(): boolean {
     return this.engine?.getCaseDoc().caseData.freeActionMode ?? false;
   }

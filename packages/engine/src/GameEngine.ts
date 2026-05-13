@@ -492,6 +492,24 @@ export class GameEngine {
   // ── Hint system ─────────────────────────────────────────────────────────────
 
   /**
+   * Returns true if the current node has any hint text that would be returned
+   * by useHint() — used by the UI to disable the hint button on nodes with no
+   * authored guidance rather than silently doing nothing when clicked.
+   */
+  hasHint(state: GameState): boolean {
+    const nodeId = state.progress.currentNodeId;
+    const node = this.caseDoc.nodesById.get(nodeId);
+    if (!node) return false;
+    if (node.hint) return true;
+    if (node.conditionalHints) {
+      for (const ch of node.conditionalHints) {
+        if (evaluateOptionalCondition(ch.condition, state)) return true;
+      }
+    }
+    return false;
+  }
+
+  /**
    * Reveals the Attending Physician hint for the current narrative node.
    *
    * - If the node has no `hint` field, returns `{ hint: null }` — UI hides the button.
@@ -504,7 +522,21 @@ export class GameEngine {
 
     const nodeId = state.progress.currentNodeId;
     const node = this.caseDoc.nodesById.get(nodeId);
-    const hintText = node?.hint ?? null;
+
+    // Resolve the hint text: check conditionalHints first (first match wins),
+    // then fall back to the plain hint field.
+    let hintText: string | null = null;
+    if (node?.conditionalHints) {
+      for (const ch of node.conditionalHints) {
+        if (evaluateOptionalCondition(ch.condition, state)) {
+          hintText = ch.hint;
+          break;
+        }
+      }
+    }
+    if (hintText === null) {
+      hintText = node?.hint ?? null;
+    }
 
     // No hint authored for this node.
     if (hintText === null) {

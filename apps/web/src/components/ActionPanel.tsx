@@ -28,11 +28,12 @@ interface Props {
   currentHint: string | null;
   currentNodeId: string;
   hintsUsedAtNodes: string[];
+  nodeHasHint: boolean;
   freeActionMode?: boolean;
 }
 
 const TAB_CONFIG: { id: Tab; icon: string; label: string }[] = [
-  { id: "story", icon: "📋", label: "Story" },
+  { id: "story", icon: "🩻", label: "Actions" },
   { id: "tests", icon: "🧪", label: "Tests" },
   { id: "meds", icon: "💊", label: "Meds" },
   { id: "procedures", icon: "🩺", label: "Procedures" },
@@ -53,12 +54,11 @@ export function ActionPanel({
   currentHint,
   currentNodeId,
   hintsUsedAtNodes,
+  nodeHasHint,
   freeActionMode = false,
 }: Props) {
   const hintAlreadyUsed = hintsUsedAtNodes.includes(currentNodeId);
   const [openTab, setOpenTab] = useState<Tab | null>(null);
-
-  // In free action mode hide the Story tab but keep everything else (including Hint).
   const visibleTabs = freeActionMode
     ? TAB_CONFIG.filter((t) => t.id !== "story")
     : TAB_CONFIG;
@@ -106,7 +106,6 @@ export function ActionPanel({
     }),
   );
 
-  const activeChoiceCount = choices.filter((c) => !c.disabled).length;
   const isOpen = openTab !== null;
 
   return (
@@ -121,7 +120,7 @@ export function ActionPanel({
           {openTab === "story" && (
             <div className={styles.storyPane}>
               <div className={styles.storyHeader}>
-                <h2 className={styles.storyHeading}>What do you do?</h2>
+                <h2 className={styles.storyHeading}>Clinical Actions</h2>
               </div>
               {choices.length === 0 ? (
                 <p className={styles.emptyStory}>Awaiting input…</p>
@@ -189,7 +188,7 @@ export function ActionPanel({
                       ? "You already asked for a hint here. Navigate to a new decision to ask again."
                       : "Not sure what to do next? Your Attending is available for guidance."}
                   </p>
-                  {!hintAlreadyUsed && (
+                  {!hintAlreadyUsed && nodeHasHint && (
                     <button
                       className={styles.hintAskBtn}
                       onClick={() => {
@@ -199,6 +198,11 @@ export function ActionPanel({
                     >
                       Ask Attending (−10 pts)
                     </button>
+                  )}
+                  {!hintAlreadyUsed && !nodeHasHint && (
+                    <p className={styles.hintAskText}>
+                      No attending guidance is available at this step.
+                    </p>
                   )}
                 </div>
               )}
@@ -248,39 +252,22 @@ export function ActionPanel({
 
       {/* ── Tab bar (always visible at the bottom) ─────────────────── */}
       <div className={styles.tabBar} role="tablist" aria-label="Action tabs">
-        {visibleTabs.map((tab) => {
-          const badge =
-            tab.id === "story" && activeChoiceCount > 0
-              ? activeChoiceCount
-              : undefined;
-
-          return (
+        {visibleTabs.map((tab) => (
             <button
               key={tab.id}
               role="tab"
               aria-selected={openTab === tab.id}
               aria-expanded={openTab === tab.id}
               id={`tab-${tab.id}`}
-              className={`${styles.tabBtn} ${
-                openTab === tab.id ? styles.active : ""
-              }`}
+              className={`${styles.tabBtn} ${openTab === tab.id ? styles.active : ""}`}
               onClick={() => toggleTab(tab.id)}
             >
               <span className={styles.tabIcon} aria-hidden="true">
                 {tab.icon}
               </span>
               <span className={styles.tabLabel}>{tab.label}</span>
-              {badge !== undefined && (
-                <span
-                  className={styles.tabBadge}
-                  aria-label={`${badge} choices`}
-                >
-                  {badge}
-                </span>
-              )}
             </button>
-          );
-        })}
+          ))}
       </div>
     </div>
   );

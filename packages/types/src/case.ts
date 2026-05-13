@@ -248,6 +248,20 @@ export const CaseNodeSchema = z.object({
    * Absent = no hint available at this node (button hidden).
    */
   hint: z.string().optional(),
+  /**
+   * State-dependent hints that override `hint` when their condition is met.
+   * Evaluated in order — first match wins. Allows the hint to adapt based on
+   * what the player has already done (e.g., different text after oxygen is
+   * applied vs before).
+   */
+  conditionalHints: z
+    .array(
+      z.object({
+        condition: ConditionExprSchema,
+        hint: z.string(),
+      }),
+    )
+    .optional(),
 });
 
 export type CaseNode = z.infer<typeof CaseNodeSchema>;
