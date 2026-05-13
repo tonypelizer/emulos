@@ -1007,10 +1007,9 @@
     "ward-deterioration": {
       "id": "ward-deterioration",
       "type": "event",
-      "text": "30 minutes later — Ward Nurse Alert\n\nThe ward nurse pages you. Daniel's observations:\n\nHR 118 | BP 98/60 | RR 26 | SpO₂ 89% on 2L O₂ | Temp 39.6°C\n\nHe is increasingly confused and cannot tell you today's date. He meets Sepsis-3 criteria.\n\nHe was admitted to the ward with no antibiotics started, no clear diagnosis, and no management plan. This is a patient safety failure — untreated moderate-severe CAP deteriorates to sepsis within hours.",
+      "text": "30 minutes later — Ward Nurse Alert\n\nThe ward nurse pages you urgently. Daniel's observations:\n\nHR 118 | BP 98/60 | RR 26 | SpO₂ 89% on 2L O₂ | Temp 39.6°C\n\nHe is increasingly confused and cannot tell you today's date. He now meets Sepsis-3 criteria — new organ dysfunction has developed since admission.\n\nThe ward team have no management plan to act on. There are no standing antibiotic orders, no fluid plan, no escalation criteria documented.",
       "effects": [
         { "type": "add_knowledge", "knowledgeId": "sepsis-developed" },
-        { "type": "add_knowledge", "knowledgeId": "ward-no-treatment-end" },
         {
           "type": "add_score_event",
           "actionId": "admitted-without-treatment",
@@ -1059,8 +1058,10 @@
       "id": "ward-admitted-no-treatment",
       "type": "outcome",
       "outcomeId": "outcome-ward-no-treatment",
-      "text": "Daniel deteriorates to sepsis on the ward.\n\nWith no antibiotics, no clear diagnosis documented, and no management plan, the ward team escalates to the medical registrar. He is transferred to the High Dependency Unit.\n\nHDU course: IV antibiotics commenced on HDU admission, vasopressors required overnight, non-invasive ventilation for 18 hours. He is stepped down on day 4 and discharged day 9.\n\n─────────────────────────────────────────────\nDEBRIEF\n\nAdmitting a patient to a ward is a disposition decision, not a management plan.\n\nA patient with:\n• Confirmed CAP (clinical + radiological features)\n• SpO\u2082 94% requiring supplemental oxygen\n• Fever, tachycardia, elevated inflammatory markers\n\n...requires antibiotics within the hour of diagnosis — not after admission paperwork.\n\nThe sequence should always be: Diagnose → Treat → Admit. Not: Admit → (nothing).",
-      "effects": []
+      "text": "Daniel deteriorates to sepsis on the ward.\n\nWithin 30 minutes of admission, his observations collapse. The ward team have no management plan to act on — no standing antibiotic orders, no fluid prescription, no escalation criteria documented. They escalate to the medical registrar, who transfers him to the High Dependency Unit.\n\nHDU course: IV antibiotics commenced, vasopressors required overnight, non-invasive ventilation for 18 hours. Stepped down day 4, discharged day 9.\n\n─────────────────────────────────────────────\nDEBRIEF\n\nYou admitted Daniel to the ward before establishing treatment.\n\nAdmission is a disposition decision — it determines where the patient goes, not what happens to them. The ward is a monitoring environment, not a resuscitation space. Without IV antibiotics, IV fluids, and a documented management plan already in motion at the time of admission:\n• The ward team received an acutely unwell, untreated patient\n• There were no standing orders to guide escalation\n• When Daniel deteriorated, there was nothing in place to fall back on\n\nThe correct sequence for moderate-severe CAP:\n  ✗  Admit → then treat (too late — patient deteriorates in transit)\n  ✓  Diagnose → treat (IV antibiotics + O₂ + fluids in ED) → then admit with a plan\n\nDoor-to-antibiotic time is measured from diagnosis, not from ward arrival. Starting antibiotics in the ED before admission is a measurable quality standard — and the standard you missed here.",
+      "effects": [
+        { "type": "add_knowledge", "knowledgeId": "ward-no-treatment-end" }
+      ]
     },
     "delayed-treatment-path": {
       "id": "delayed-treatment-path",
