@@ -78,13 +78,13 @@ export function VitalsPanel({ vitals }: Props) {
     <section className={styles.root} aria-label="Patient vitals" role="region">
       <VitalItem
         label="HR"
-        value={String(vitals.heartRate)}
+        value={String(Math.round(vitals.heartRate))}
         unit=" bpm"
         status={hrStatus(vitals.heartRate)}
       />
       <VitalItem
         label="BP"
-        value={`${vitals.bloodPressure.systolic}/${vitals.bloodPressure.diastolic}`}
+        value={`${Math.round(vitals.bloodPressure.systolic)}/${Math.round(vitals.bloodPressure.diastolic)}`}
         unit=" mmHg"
         status={bpStatus(
           vitals.bloodPressure.systolic,
@@ -93,13 +93,13 @@ export function VitalsPanel({ vitals }: Props) {
       />
       <VitalItem
         label="RR"
-        value={String(vitals.respiratoryRate)}
+        value={String(Math.round(vitals.respiratoryRate))}
         unit=" /min"
         status={rrStatus(vitals.respiratoryRate)}
       />
       <VitalItem
         label="SpO₂"
-        value={String(vitals.oxygenSaturation)}
+        value={String(Math.round(vitals.oxygenSaturation))}
         unit="%"
         status={spo2Status(vitals.oxygenSaturation)}
       />

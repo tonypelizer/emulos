@@ -171,7 +171,7 @@
           "id": "start-oxygen-then-hx",
           "text": "Apply oxygen immediately (SpO₂ 94%), then take a focused history",
           "nextNodeId": "start-oxygen-result",
-          "timeCost": 5,
+          "timeCost": 2,
           "effects": [
             {
               "type": "add_knowledge",
@@ -511,7 +511,7 @@
     "investigation-hub": {
       "id": "investigation-hub",
       "type": "decision",
-      "text": "You have enough clinical information to direct your investigation. Daniel remains on supplemental oxygen if you applied it. SpO₂ 94–96% on air.\n\nCurrent working differential:\n1. Community-acquired pneumonia (most likely)\n2. Viral LRTI / bronchitis (possible but less likely given purulent sputum, rigors, exam)\n3. Urinary source (very unlikely — no urinary symptoms)\n\nWhat investigations do you want to order?",
+      "text": "You have enough clinical information to direct your investigation.\n\nCurrent working differential:\n1. Community-acquired pneumonia (most likely)\n2. Viral LRTI / bronchitis (possible but less likely given purulent sputum, rigors, exam)\n3. Urinary source (very unlikely — no urinary symptoms)\n\nWhat investigations do you want to order?",
       "hint": "For suspected pneumonia, three investigations are critical: a Chest X-ray (to visualise the lungs), blood tests including CBC, CRP and blood cultures (to confirm infection and identify the organism), and blood cultures MUST be drawn before any antibiotics are given or they become useless. Order the CXR and bloods first.",
       "effects": [],
       "choices": [
@@ -519,7 +519,7 @@
           "id": "order-cxr",
           "text": "Order a chest X-ray (PA erect)",
           "nextNodeId": "cxr-result",
-          "timeCost": 3,
+          "timeCost": 30,
           "effects": [
             {
               "type": "order_test",
@@ -536,7 +536,7 @@
           "condition": {
             "op": "not",
             "condition": {
-              "op": "test_resulted",
+              "op": "test_ordered",
               "testId": "chest-xray"
             }
           }
@@ -695,7 +695,7 @@
     "bloods-result": {
       "id": "bloods-result",
       "type": "result",
-      "text": "BLOOD RESULTS\n─────────────────────────────────────────────────────────────────\nCBC:\n  WBC: 14.8 ×10⁹/L ↑ (ref 4–11) — Neutrophilia: 12.1 ×10⁹/L ↑\n  Haemoglobin: 143 g/L (normal)\n  Platelets: 198 ×10⁹/L (normal)\n\nBMP:\n  Na 136 mEq/L | K 3.9 mEq/L | Cr 104 μmol/L (mild ↑, likely pre-renal)\n  Glucose 6.1 mmol/L\n\nCRP: 142 mg/L ↑↑ (ref <5) — significantly elevated, bacterial infection likely\nProcalcitonin: 2.8 ng/mL ↑ — supports bacterial source, consider sepsis workup\nLactate: 1.9 mmol/L (normal < 2.0) — No active tissue hypoperfusion at this time\n\nBlood cultures: ×2 sets collected. Preliminary pending (final result 48–72h).\n\n─────────────────────────────────────────────────────────────────\nINTERPRETATION:\nSignificant leukocytosis with neutrophilia and markedly elevated CRP strongly support a bacterial infection. PCT 2.8 ng/mL indicates a significant bacterial systemic response — this is NOT a simple viral illness.\n\nCreatinine mildly elevated — likely dehydration (poor PO intake). Monitor closely.\nLactate is reassuring — no septic shock at this time — but this must be rechecked if he deteriorates.",
+      "text": "15 minutes later — Laboratory\n\nBLOOD RESULTS\n─────────────────────────────────────────────────────────────────\nCBC:\n  WBC: 14.8 ×10⁹/L ↑ (ref 4–11) — Neutrophilia: 12.1 ×10⁹/L ↑\n  Haemoglobin: 143 g/L (normal)\n  Platelets: 198 ×10⁹/L (normal)\n\nBMP:\n  Na 136 mEq/L | K 3.9 mEq/L | Cr 104 μmol/L (mild ↑, likely pre-renal)\n  Glucose 6.1 mmol/L\n\nCRP: 142 mg/L ↑↑ (ref <5) — significantly elevated, bacterial infection likely\nProcalcitonin: 2.8 ng/mL ↑ — supports bacterial source, consider sepsis workup\nLactate: 1.9 mmol/L (normal < 2.0) — No active tissue hypoperfusion at this time\n\nBlood cultures: ×2 sets collected. Preliminary pending (final result 48–72h).\n\n─────────────────────────────────────────────────────────────────\nINTERPRETATION:\nSignificant leukocytosis with neutrophilia and markedly elevated CRP strongly support a bacterial infection. PCT 2.8 ng/mL indicates a significant bacterial systemic response — this is NOT a simple viral illness.\n\nCreatinine mildly elevated — likely dehydration (poor PO intake). Monitor closely.\nLactate is reassuring — no septic shock at this time — but this must be rechecked if he deteriorates.",
       "effects": [
         {
           "type": "result_test",
@@ -731,7 +731,7 @@
           "id": "bloods-to-cxr",
           "text": "Order a chest X-ray now (if not already done)",
           "nextNodeId": "cxr-result",
-          "timeCost": 3,
+          "timeCost": 30,
           "effects": [
             {
               "type": "order_test",
@@ -748,7 +748,7 @@
           "condition": {
             "op": "not",
             "condition": {
-              "op": "test_resulted",
+              "op": "test_ordered",
               "testId": "chest-xray"
             }
           }
@@ -766,7 +766,7 @@
     "cxr-result": {
       "id": "cxr-result",
       "type": "result",
-      "text": "CHEST X-RAY — PA ERECT\n─────────────────────────────────────────────────\nLungs: RIGHT LOWER LOBE CONSOLIDATION — dense, homogeneous opacity in the right lower zone with air bronchograms visible. No pneumothorax. No pleural effusion (small effusion cannot be excluded on PA).\nLeft lung: clear\nHeart size: Normal\nMediastinum: Normal\nNo bony abnormality\n\n─────────────────────────────────────────────────\nREPORT: Right lower lobe consolidation — consistent with lobar pneumonia.\nClinical correlation recommended.\n\nThis confirms your clinical diagnosis. Combined with:\n• Fever, rigors, purulent sputum, pleuritic pain\n• Examination: dullness, bronchial breathing, crackles in right lower zone\n• CXR: right lower lobe consolidation\n\nDiagnosis: Community-Acquired Pneumonia (CAP) — right lower lobe\n\nYour next step is to assess severity and determine appropriate treatment and disposition.",
+      "text": "30 minutes later — Radiology\n\nCHEST X-RAY — PA ERECT\n─────────────────────────────────────────────────\nLungs: RIGHT LOWER LOBE CONSOLIDATION — dense, homogeneous opacity in the right lower zone with air bronchograms visible. No pneumothorax. No pleural effusion (small effusion cannot be excluded on PA).\nLeft lung: clear\nHeart size: Normal\nMediastinum: Normal\nNo bony abnormality\n\n─────────────────────────────────────────────────\nREPORT: Right lower lobe consolidation — consistent with lobar pneumonia.\nClinical correlation recommended.\n\nThis confirms your clinical diagnosis. Combined with:\n• Fever, rigors, purulent sputum, pleuritic pain\n• Examination: dullness, bronchial breathing, crackles in right lower zone\n• CXR: right lower lobe consolidation\n\nDiagnosis: Community-Acquired Pneumonia (CAP) — right lower lobe\n\nYour next step is to assess severity and determine appropriate treatment and disposition.",
       "effects": [
         {
           "type": "result_test",

@@ -98,7 +98,6 @@ export function GameplayScreen({
   }, [lastActionEvents, state.score.events]);
 
   const briefText = state.progress.narrativeLog[0]?.text ?? "";
-  const patientName = `${state.patient.demographics.name}, ${state.patient.demographics.age}${state.patient.demographics.sex === "male" ? "M" : state.patient.demographics.sex === "female" ? "F" : "O"}`;
 
   return (
     <div className={styles.root}>
@@ -107,7 +106,6 @@ export function GameplayScreen({
         <CaseBriefModal
           text={briefText}
           caseTitle={caseTitle}
-          patientName={patientName}
           onBegin={() => setHasDismissedBrief(true)}
         />
       )}

@@ -5,16 +5,10 @@ import styles from "./CaseBriefModal.module.css";
 interface Props {
   text: string;
   caseTitle: string;
-  patientName: string;
   onBegin: () => void;
 }
 
-export function CaseBriefModal({
-  text,
-  caseTitle,
-  patientName,
-  onBegin,
-}: Props) {
+export function CaseBriefModal({ text, caseTitle, onBegin }: Props) {
   const [tipsOpen, setTipsOpen] = useState(false);
 
   return (
@@ -27,18 +21,9 @@ export function CaseBriefModal({
       <div className={styles.panel}>
         {/* ── Header ─────────────────────────────────────────────── */}
         <header className={styles.header}>
-          <div className={styles.headerMeta}>
+          <div className={styles.headerTop}>
             <span className={styles.caseLabel}>Case Brief</span>
             <h1 className={styles.caseTitle}>{caseTitle}</h1>
-          </div>
-          <div
-            className={styles.patientBadge}
-            aria-label={`Patient: ${patientName}`}
-          >
-            <span className={styles.patientIcon} aria-hidden="true">
-              🏥
-            </span>
-            <span>{patientName}</span>
           </div>
         </header>
 
