@@ -348,6 +348,13 @@ export const ScoringDefSchema = z.object({
   timeBonuses: z.array(TimeBonusSchema).default([]),
   criticalActions: z.array(CriticalActionDefSchema).default([]),
   modifiers: z.array(ModifierDefSchema).default([]),
+  /**
+   * Points deducted (negative number) when a player performs a free action
+   * (test / medication / procedure) that has no authored effects in
+   * freeActionEffects.  These items are shown in the UI but are not clinically
+   * relevant to the case.  Defaults to -25 if absent.
+   */
+  irrelevantActionPenalty: z.number().default(-25),
 });
 
 export type ScoringDef = z.infer<typeof ScoringDefSchema>;

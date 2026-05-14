@@ -65,6 +65,7 @@ function makeStubCaseDoc(
         timeBonuses: [],
         criticalActions: [],
         modifiers: overrides.modifiers ?? [],
+        irrelevantActionPenalty: -25,
       },
       freeActionMode: false,
       nodes: {

@@ -277,16 +277,8 @@ export class GameEngine {
           // Immediate: fire collection/confirmation effects now (e.g., blood cultures).
           next = applyEffects(next, caseTestEffects, this.caseDoc);
         } else {
-          // No case effects — generic pending message; auto-result fires later.
-          next = produce(next, (draft) => {
-            draft.progress.narrativeLog.push({
-              id: generateId(),
-              gameTime: draft.session.gameTime,
-              type: "system",
-              text: `🧪 ${testDef.name} ordered — results expected in ~${testDef.defaultResultTime} min of game time.`,
-              isNew: true,
-            });
-          });
+          // No case effects — not relevant to this case; apply generic penalty.
+          next = this.applyIrrelevantAction(next, request);
         }
         // Re-resolve choices: new knowledge from effects may unlock conditions.
         next = resolveChoices(next, next.progress.currentNodeId, this.caseDoc);
@@ -392,20 +384,18 @@ export class GameEngine {
     // Apply case-level free-action effects for medications and procedures.
     // Test effects are handled in the order_test branch above — either fired
     // immediately (no result_test) or deferred via applyPendingTestResults.
+    // If no case effects are authored for this item, it is not relevant to this
+    // case — apply a generic "not clinically indicated" penalty.
     if (request.type !== "order_test") {
       const freeActionEffects = this.caseDoc.caseData.freeActionEffects;
-      if (freeActionEffects) {
-        const category =
-          request.type === "dispense_medication" ? "medications" : "procedures";
-        const effects = freeActionEffects[category]?.[request.itemId];
-        if (effects && effects.length > 0) {
-          next = applyEffects(next, effects, this.caseDoc);
-          next = resolveChoices(
-            next,
-            next.progress.currentNodeId,
-            this.caseDoc,
-          );
-        }
+      const category =
+        request.type === "dispense_medication" ? "medications" : "procedures";
+      const effects = freeActionEffects?.[category]?.[request.itemId];
+      if (effects && effects.length > 0) {
+        next = applyEffects(next, effects, this.caseDoc);
+        next = resolveChoices(next, next.progress.currentNodeId, this.caseDoc);
+      } else {
+        next = this.applyIrrelevantAction(next, request);
       }
     }
 
@@ -426,6 +416,62 @@ export class GameEngine {
     }
 
     return next;
+  }
+
+  /**
+   * Applies a generic "not clinically indicated" penalty + narrative when a
+   * free action item has no authored case-level effects, indicating it is not
+   * relevant to this case.
+   *
+   * Uses `scoring.irrelevantActionPenalty` from the case (defaulting to −25).
+   * The actionId is per-item so the penalty fires at most once per item.
+   */
+  private applyIrrelevantAction(
+    state: GameState,
+    request: FreeActionRequest,
+  ): GameState {
+    const penalty =
+      this.caseDoc.caseData.scoring.irrelevantActionPenalty ?? -25;
+    const itemName =
+      request.type === "dispense_medication"
+        ? (this.caseDoc.medicationsById.get(request.itemId)?.name ??
+          request.itemId)
+        : request.type === "perform_procedure"
+          ? (this.caseDoc.proceduresById.get(request.itemId)?.name ??
+            request.itemId)
+          : (this.caseDoc.testsById.get(request.itemId)?.name ??
+            request.itemId);
+
+    const attendingRemarks = [
+      `⚠️ ${itemName} — not clinically indicated in this patient's presentation.`,
+      `👨‍⚕️ Your attending glances up from the notes. "${itemName}?" A long pause. "...Why?" They go back to writing.`,
+      `👨‍⚕️ "I've been a consultant for 22 years," your attending says quietly, not looking up. "${itemName}." A pause. "Just... no."`,
+      `👨‍⚕️ Your attending stops mid-sip of coffee. Stares at the order. Stares at you. Stares back at the order. Says nothing. Walks away.`,
+      `👨‍⚕️ "Okay, let me ask you something." Your attending turns around slowly. "What — and I mean this in the nicest possible way — are you doing?"`,
+      `👨‍⚕️ Your attending looks at the ${itemName} order and then at the patient. "This is a respiratory case." They tap the chart. "Re. Spi. Ra. To. Ry."`,
+      `👨‍⚕️ Your attending squints. "${itemName}. For a 34-year-old with pneumonia." They nod slowly. "Fascinating choice. Expensive. Wrong, but fascinating."`,
+      `👨‍⚕️ The ward nurse looks at the ${itemName} order and then at you with a raised eyebrow. Your attending appears from around the corner. "Yeah, no. Cancel that."`,
+    ];
+    const text =
+      attendingRemarks[Math.floor(Math.random() * attendingRemarks.length)]!;
+
+    return produce(state, (draft) => {
+      draft.progress.narrativeLog.push({
+        id: generateId(),
+        gameTime: draft.session.gameTime,
+        type: "system",
+        text,
+        isNew: true,
+      });
+      draft.score.events.push({
+        id: generateId(),
+        gameTime: draft.session.gameTime,
+        actionId: `irrelevant-${request.type}-${request.itemId}`,
+        points: penalty,
+        reason: `${itemName} — not clinically indicated`,
+        category: "penalty",
+      });
+    });
   }
 
   // ── Deferred test result delivery ────────────────────────────────────────────

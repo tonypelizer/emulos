@@ -145,7 +145,8 @@
         "type": "flat-delta",
         "value": -200
       }
-    ]
+    ],
+    "irrelevantActionPenalty": -30
   },
   "nodes": {
     "start": {
@@ -1391,7 +1392,6 @@
         { "type": "add_knowledge", "knowledgeId": "oxygen-applied" }
       ],
       "amoxicillin-clavulanate-iv": [
-        { "type": "add_knowledge", "knowledgeId": "antibiotics-given" },
         {
           "type": "append_narrative",
           "narrativeType": "narrative",
@@ -1405,7 +1405,19 @@
           "category": "critical-action"
         },
         { "type": "adjust_vital", "vital": "heartRate", "delta": -8 },
-        { "type": "adjust_vital", "vital": "oxygenSaturation", "delta": 2 }
+        { "type": "adjust_vital", "vital": "oxygenSaturation", "delta": 2 },
+        {
+          "type": "add_score_event",
+          "actionId": "redundant-beta-lactam",
+          "points": -50,
+          "reason": "Two beta-lactam antibiotics prescribed — amoxicillin-clavulanate and ceftriaxone have overlapping cover. Dual beta-lactam therapy adds toxicity without benefit; dual-agent CAP therapy means a beta-lactam plus an atypical agent (e.g. doxycycline), not two beta-lactams.",
+          "category": "penalty",
+          "condition": {
+            "op": "has_knowledge",
+            "knowledgeId": "antibiotics-given"
+          }
+        },
+        { "type": "add_knowledge", "knowledgeId": "antibiotics-given" }
       ],
       "doxycycline-po": [
         { "type": "add_knowledge", "knowledgeId": "atypical-cover-given" },
@@ -1439,7 +1451,6 @@
         { "type": "adjust_vital", "vital": "painScore", "delta": -2 }
       ],
       "ceftriaxone": [
-        { "type": "add_knowledge", "knowledgeId": "antibiotics-given" },
         {
           "type": "append_narrative",
           "narrativeType": "narrative",
@@ -1453,7 +1464,19 @@
           "category": "critical-action"
         },
         { "type": "adjust_vital", "vital": "heartRate", "delta": -6 },
-        { "type": "adjust_vital", "vital": "oxygenSaturation", "delta": 1 }
+        { "type": "adjust_vital", "vital": "oxygenSaturation", "delta": 1 },
+        {
+          "type": "add_score_event",
+          "actionId": "redundant-beta-lactam",
+          "points": -50,
+          "reason": "Two beta-lactam antibiotics prescribed — amoxicillin-clavulanate and ceftriaxone have overlapping cover. Dual beta-lactam therapy adds toxicity without benefit; dual-agent CAP therapy means a beta-lactam plus an atypical agent (e.g. doxycycline), not two beta-lactams.",
+          "category": "penalty",
+          "condition": {
+            "op": "has_knowledge",
+            "knowledgeId": "antibiotics-given"
+          }
+        },
+        { "type": "add_knowledge", "knowledgeId": "antibiotics-given" }
       ],
       "ibuprofen": [
         {
@@ -1466,8 +1489,8 @@
         {
           "type": "add_score_event",
           "actionId": "nsaid-renal-concern",
-          "points": -15,
-          "reason": "NSAIDs given in the context of mild pre-renal creatinine elevation — renal risk without adequate justification when paracetamol is available",
+          "points": -75,
+          "reason": "NSAIDs prescribed to a patient with pre-renal creatinine elevation — NSAIDs inhibit renal prostaglandins and can precipitate acute kidney injury. Paracetamol is the correct first-line analgesic here.",
           "category": "penalty"
         }
       ]
@@ -1586,7 +1609,13 @@
     "abg",
     "respiratory-viral-panel",
     "urinalysis",
-    "sputum-culture"
+    "sputum-culture",
+    "troponin-i",
+    "12-lead-ecg",
+    "lipid-panel",
+    "echo",
+    "coagulation-screen",
+    "urine-culture"
   ],
   "relevantMedications": [
     "oxygen",
@@ -1595,13 +1624,23 @@
     "normal-saline-bolus",
     "acetaminophen-iv",
     "ceftriaxone",
-    "ibuprofen"
+    "ibuprofen",
+    "morphine",
+    "vancomycin",
+    "norepinephrine",
+    "ondansetron",
+    "aspirin"
   ],
   "relevantProcedures": [
     "iv-access-peripheral",
     "draw-blood-cultures",
     "severity-assessment",
     "admit-to-ward",
-    "12-lead-ecg-monitoring"
+    "12-lead-ecg-monitoring",
+    "intubation-rsi",
+    "chest-tube",
+    "foley-catheter",
+    "lumbar-puncture",
+    "nasogastric-tube"
   ]
 }
