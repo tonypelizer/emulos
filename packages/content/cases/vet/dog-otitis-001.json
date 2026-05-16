@@ -127,7 +127,17 @@
         "value": -100
       }
     ],
-    "irrelevantActionPenalty": -25
+    "irrelevantActionPenalty": -25,
+    "irrelevantActionRemarks": [
+      "⚠️ {item} — not indicated for a dog with otitis externa.",
+      "👩‍⚕️ Bella wags her tail. Your supervisor does not. \"{item}. For an ear infection.\"",
+      "👩‍⚕️ Your supervisor stares at the {item} order for a long moment. \"She has a smelly ear, not... this.\"",
+      "👩‍⚕️ Mr. Thompson is trying to keep Bella from licking your shoe. Your supervisor is trying to understand why you ordered {item}. Neither is succeeding.",
+      "👩‍⚕️ \"You know Bella is here for an ear problem,\" your supervisor says. \"Just checking we're looking at the same patient.\"",
+      "👩‍⚕️ Bella sneezes. Your supervisor looks at the {item} order and quietly crosses it out. \"No.\"",
+      "👩‍⚕️ \"Walk me through your thinking,\" your supervisor says. You sense this is not a genuine invitation.",
+      "👩‍⚕️ Your supervisor clicks their pen three times. The sound of profound clinical disappointment."
+    ]
   },
   "nodes": {
     "start": {

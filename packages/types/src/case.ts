@@ -355,6 +355,13 @@ export const ScoringDefSchema = z.object({
    * relevant to the case.  Defaults to -25 if absent.
    */
   irrelevantActionPenalty: z.number().default(-25),
+  /**
+   * Optional case-specific remarks shown when the player performs an
+   * irrelevant free action.  Each string may contain `{item}` which is
+   * replaced with the item name at runtime.  When absent the engine falls
+   * back to its built-in generic remarks.
+   */
+  irrelevantActionRemarks: z.array(z.string()).optional(),
 });
 
 export type ScoringDef = z.infer<typeof ScoringDefSchema>;

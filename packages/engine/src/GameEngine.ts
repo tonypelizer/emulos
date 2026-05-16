@@ -229,6 +229,7 @@ export class GameEngine {
     this.assertNotTerminal(state);
 
     let next: GameState = state;
+    const freeActionEffects = this.caseDoc.caseData.freeActionEffects;
 
     switch (request.type) {
       case "order_test": {
@@ -298,6 +299,17 @@ export class GameEngine {
         );
         if (alreadyGiven) return state;
 
+        const effects = freeActionEffects?.medications?.[request.itemId];
+        if (!effects || effects.length === 0) {
+          next = this.applyIrrelevantAction(state, request);
+          next = resolveChoices(
+            next,
+            next.progress.currentNodeId,
+            this.caseDoc,
+          );
+          break;
+        }
+
         // Apply the dispense_medication effect plus all defaultEffects from registry.
         next = applyEffects(
           state,
@@ -326,6 +338,9 @@ export class GameEngine {
         // Re-resolve choices: new knowledge (e.g. med-aspirin-given) may satisfy
         // conditions on the current node's choices.
         next = resolveChoices(next, next.progress.currentNodeId, this.caseDoc);
+
+        next = applyEffects(next, effects, this.caseDoc);
+        next = resolveChoices(next, next.progress.currentNodeId, this.caseDoc);
         break;
       }
 
@@ -341,6 +356,17 @@ export class GameEngine {
           (p) => p.procedureId === request.itemId,
         );
         if (alreadyDone) return state;
+
+        const effects = freeActionEffects?.procedures?.[request.itemId];
+        if (!effects || effects.length === 0) {
+          next = this.applyIrrelevantAction(state, request);
+          next = resolveChoices(
+            next,
+            next.progress.currentNodeId,
+            this.caseDoc,
+          );
+          break;
+        }
 
         // Apply the perform_procedure effect plus all defaultEffects.
         next = applyEffects(
@@ -369,6 +395,9 @@ export class GameEngine {
         });
         // Re-resolve choices.
         next = resolveChoices(next, next.progress.currentNodeId, this.caseDoc);
+
+        next = applyEffects(next, effects, this.caseDoc);
+        next = resolveChoices(next, next.progress.currentNodeId, this.caseDoc);
         break;
       }
 
@@ -378,24 +407,6 @@ export class GameEngine {
           `Unknown free action type: ${String(exhaustive)}`,
           "INVALID_STATE",
         );
-      }
-    }
-
-    // Apply case-level free-action effects for medications and procedures.
-    // Test effects are handled in the order_test branch above — either fired
-    // immediately (no result_test) or deferred via applyPendingTestResults.
-    // If no case effects are authored for this item, it is not relevant to this
-    // case — apply a generic "not clinically indicated" penalty.
-    if (request.type !== "order_test") {
-      const freeActionEffects = this.caseDoc.caseData.freeActionEffects;
-      const category =
-        request.type === "dispense_medication" ? "medications" : "procedures";
-      const effects = freeActionEffects?.[category]?.[request.itemId];
-      if (effects && effects.length > 0) {
-        next = applyEffects(next, effects, this.caseDoc);
-        next = resolveChoices(next, next.progress.currentNodeId, this.caseDoc);
-      } else {
-        next = this.applyIrrelevantAction(next, request);
       }
     }
 
@@ -442,16 +453,21 @@ export class GameEngine {
           : (this.caseDoc.testsById.get(request.itemId)?.name ??
             request.itemId);
 
-    const attendingRemarks = [
+    const genericRemarks = [
       `⚠️ ${itemName} — not clinically indicated in this patient's presentation.`,
       `👨‍⚕️ Your attending glances up from the notes. "${itemName}?" A long pause. "...Why?" They go back to writing.`,
       `👨‍⚕️ "I've been a consultant for 22 years," your attending says quietly, not looking up. "${itemName}." A pause. "Just... no."`,
       `👨‍⚕️ Your attending stops mid-sip of coffee. Stares at the order. Stares at you. Stares back at the order. Says nothing. Walks away.`,
       `👨‍⚕️ "Okay, let me ask you something." Your attending turns around slowly. "What — and I mean this in the nicest possible way — are you doing?"`,
-      `👨‍⚕️ Your attending looks at the ${itemName} order and then at the patient. "This is a respiratory case." They tap the chart. "Re. Spi. Ra. To. Ry."`,
-      `👨‍⚕️ Your attending squints. "${itemName}. For a 34-year-old with pneumonia." They nod slowly. "Fascinating choice. Expensive. Wrong, but fascinating."`,
-      `👨‍⚕️ The ward nurse looks at the ${itemName} order and then at you with a raised eyebrow. Your attending appears from around the corner. "Yeah, no. Cancel that."`,
+      `👨‍⚕️ Your attending looks at the ${itemName} order, then at the chart, then back at you. They tap the presenting complaint. Once. Deliberately.`,
+      `👨‍⚕️ Your attending squints. "${itemName}." They nod slowly. "Fascinating choice. Expensive. Wrong, but fascinating."`,
+      `👨‍⚕️ The nurse looks at the ${itemName} order and then at you with a raised eyebrow. Your attending appears from around the corner. "Yeah, no. Cancel that."`,
     ];
+    const caseRemarks =
+      this.caseDoc.caseData.scoring.irrelevantActionRemarks?.map((r) =>
+        r.replace("{item}", itemName),
+      );
+    const attendingRemarks = caseRemarks?.length ? caseRemarks : genericRemarks;
     const text =
       attendingRemarks[Math.floor(Math.random() * attendingRemarks.length)]!;
 

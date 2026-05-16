@@ -59,13 +59,13 @@
     "timeBonuses": [
       {
         "gameTimeThreshold": 25,
-        "bonus": 200,
+        "bonus": 100,
         "label": "Diagnosis and treatment within 25 minutes — efficient workup"
       },
       {
         "gameTimeThreshold": 40,
-        "bonus": 100,
-        "label": "Treatment initiated within 40 minutes"
+        "bonus": 200,
+        "label": "Thorough workup completed within 40 minutes"
       }
     ],
     "criticalActions": [
@@ -138,7 +138,17 @@
         "value": 0.3
       }
     ],
-    "irrelevantActionPenalty": -25
+    "irrelevantActionPenalty": -25,
+    "irrelevantActionRemarks": [
+      "⚠️ {item} — not indicated for a cat with a lower urinary tract infection.",
+      "👩‍⚕️ Mrs. Chen looks at you uncertainly. Your supervisor mouths the word 'no' from across the room.",
+      "👩‍⚕️ Your supervisor sets down their coffee. \"{item}.\" They look at Luna — a 5-year-old cat with cystitis — and back at you. \"For... this?\"",
+      "👩‍⚕️ Luna is unimpressed. Your supervisor is also unimpressed. You sense a theme developing.",
+      "👩‍⚕️ \"She has a UTI,\" your supervisor says slowly. \"{item}.\" They write something in their notebook. You suspect it is not a compliment.",
+      "👩‍⚕️ Your supervisor tilts their head like Luna does when she hears a strange sound. \"{item}? That's... a choice.\"",
+      "👩‍⚕️ \"I want you to imagine,\" your supervisor begins, \"explaining to Mrs. Chen why her cat received {item} for a bladder infection.\"",
+      "👩‍⚕️ Luna flicks her tail once. Your supervisor sighs. Both are judging you."
+    ]
   },
   "nodes": {
     "start": {
