@@ -7,12 +7,10 @@
     "difficulty": "beginner",
     "estimatedMinutes": 20,
     "tags": [
-      "UTI",
       "feline",
-      "urinary",
-      "antibiotics",
+      "lower urinary tract",
       "urine culture",
-      "cystitis"
+      "acute presentation"
     ],
     "author": "emulos-content-team",
     "expansionPack": "vet",
@@ -147,7 +145,7 @@
       "id": "start",
       "type": "presentation",
       "hint": "Luna's owner is worried because the cat is straining to urinate and there's blood in the urine. In cats this could be bacterial UTI, idiopathic FLUTD, or even a urethral obstruction (dangerous in males, rarer in females). Your first step is to take a complete history from the owner — how long, what symptoms, diet, and any prior episodes. Then examine Luna.",
-      "text": "CASE BRIEF\nLuna — 5F (spayed) domestic shorthair cat, 4.2 kg\n\n\nCHECK-IN COMPLAINT\nMrs. Chen presents Luna at your veterinary clinic. She explains: 'Luna has been going in and out of her litter box all night but barely producing anything — and I can see blood in the little bit she does pass. She cried out twice when she tried to go. This started two days ago.'\n\n\nINITIAL ASSESSMENT\nHR 185 bpm | BP 128/84 | RR 26 | Temp 39.4°C | SpO₂ 99% | Pain 2/10\n\n• Luna is alert and responsive, mildly tense when you handle her\n• Mucous membranes pink and moist; CRT < 2 seconds\n• Coat is well-groomed; body condition score 4/9 (lean-normal)\n• Mild pain response on caudal abdominal palpation\n\n\nOWNER OBSERVATIONS\n• Blood-tinged urine in litter box × 2 days\n• Frequent trips to box with minimal output (stranguria / pollakiuria)\n• Crying out occasionally during attempts to urinate\n• Appetite reduced since yesterday\n• No vomiting, no diarrhoea\n\n─────────────────────────────────────────────\nCLINICAL IMPRESSION\nA 5-year-old spayed female cat presenting with haematuria, stranguria, and pollakiuria × 2 days. Top differentials: bacterial UTI, idiopathic feline lower urinary tract disease (iFLUTD), urolithiasis. Urethral obstruction is less common in females but must be considered. Collect history, perform physical examination, then run a urinalysis on a cystocentesis sample.",
+      "text": "CASE BRIEF\nLuna — 5F (spayed) domestic shorthair cat, 4.2 kg\n\n\nCHECK-IN COMPLAINT\nMrs. Chen presents Luna at your veterinary clinic. She explains: 'Luna has been going in and out of her litter box all night but barely producing anything — and I can see blood in the little bit she does pass. She cried out twice when she tried to go. This started two days ago.'\n\n\nINITIAL ASSESSMENT\nHR 185 bpm | BP 128/84 | RR 26 | Temp 39.4°C | SpO₂ 99% | Pain 2/10\n\n• Luna is alert and responsive, mildly tense when you handle her\n• Mucous membranes pink and moist; CRT < 2 seconds\n• Coat is well-groomed; body condition score 4/9 (lean-normal)\n• Mild pain response on caudal abdominal palpation\n\n\nOWNER OBSERVATIONS\n• Blood-tinged urine in litter box × 2 days\n• Frequent trips to box with minimal output (stranguria / pollakiuria)\n• Crying out occasionally during attempts to urinate\n• Appetite reduced since yesterday\n• No vomiting, no diarrhoea\n\n─────────────────────────────────────────────\nCLINICAL IMPRESSION\nA 5-year-old spayed female cat presenting with haematuria, stranguria, and pollakiuria × 2 days. Top differentials include infectious cystitis, idiopathic feline lower urinary tract disease (iFLUTD), and urolithiasis. Urethral obstruction is less common in females but must be ruled out. Collect history and perform a physical examination.",
       "effects": [],
       "choices": [
         {
@@ -285,7 +283,7 @@
     "history-urinary": {
       "id": "history-urinary",
       "type": "history",
-      "text": "Mrs. Chen describes Luna's urinary symptoms in detail:\n\n• Started 2 days ago — Luna began visiting the litter box much more frequently than usual\n• She sits in the box, strains, and produces only a few drops each time (pollakiuria + stranguria)\n• The urine is blood-tinged — Mrs. Chen noticed pink-red spots in the clay litter\n• Luna has cried out twice during attempts to urinate — audible vocalisation suggesting pain\n• She has not gone 'normally' since this started\n• No evidence of urinating anywhere other than the litter box (no periuria noted)\n• No blood seen near the vulva between attempts (no continuous haemorrhage)\n\nThe combination of haematuria + stranguria + pollakiuria in an intact/spayed female cat has a broad differential, but bacterial UTI with cystitis is a strong candidate. Idiopathic FLUTD (Pandora syndrome) is also possible — it is actually more common in cats overall, but less likely in a 5-year-old with a confirmed fever.",
+      "text": "Mrs. Chen describes Luna's urinary symptoms in detail:\n\n• Started 2 days ago — Luna began visiting the litter box much more frequently than usual\n• She sits in the box, strains, and produces only a few drops each time (pollakiuria + stranguria)\n• The urine is blood-tinged — Mrs. Chen noticed pink-red spots in the clay litter\n• Luna has cried out twice during attempts to urinate — audible vocalisation suggesting pain\n• She has not gone 'normally' since this started\n• No evidence of urinating anywhere other than the litter box (no periuria noted)\n• No blood seen near the vulva between attempts (no continuous haemorrhage)\n\nThe combination of haematuria + stranguria + pollakiuria in a spayed female cat has a broad differential. A thorough physical examination and urinalysis will be required to narrow the diagnosis.",
       "effects": [
         {
           "type": "add_knowledge",
@@ -318,7 +316,7 @@
     "history-diet-water": {
       "id": "history-diet-water",
       "type": "history",
-      "text": "Diet and water intake:\n\n• Luna eats exclusively dry kibble (no wet food) — Mrs. Chen has never offered wet food\n• Water intake: Mrs. Chen provides a single ceramic bowl of still water. She estimates Luna drinks 'a normal amount' but admits she's never closely monitored it\n• No dietary changes in the past month\n• No treats other than occasional dry kibble pieces\n\nClinical relevance — IMPORTANT:\nDry-food-only diets are a well-established risk factor for feline lower urinary tract disease. Cats evolved as desert predators and get most of their hydration from prey (roughly 70% water). Dry kibble contains only 10–12% moisture. Chronically low water intake produces concentrated urine (high specific gravity) — which predisposes to UTI, crystal formation, and idiopathic FLUTD.\n\nRecommending increased wet food and a water fountain will be an important part of Luna's discharge advice.",
+      "text": "Diet and water intake:\n\n• Luna eats exclusively dry kibble (no wet food) — Mrs. Chen has never offered wet food\n• Water intake: Mrs. Chen provides a single ceramic bowl of still water. She estimates Luna drinks 'a normal amount' but admits she's never closely monitored it\n• No dietary changes in the past month\n• No treats other than occasional dry kibble pieces\n\nClinical relevance — IMPORTANT:\nDry-food-only diets are a well-established risk factor for feline lower urinary tract disease. Cats evolved as desert predators and get most of their hydration from prey (roughly 70% water). Dry kibble contains only 10–12% moisture. Chronically low water intake produces concentrated urine (high specific gravity) — which predisposes to UTI, crystal formation, and idiopathic FLUTD.\n\nRecommending dietary changes may be part of Luna's discharge advice depending on what you find.",
       "effects": [
         {
           "type": "add_knowledge",
@@ -343,7 +341,7 @@
     "history-environment": {
       "id": "history-environment",
       "type": "history",
-      "text": "Living environment and potential stressors:\n\n• Luna is strictly indoor — never goes outside\n• Single-cat household\n• One litter box (scooped daily, changed weekly)\n• Recent changes: Mrs. Chen's adult son moved in approximately 3 weeks ago — new person in the household, some rearranging of furniture, occasional loud music late at night\n• Luna has been hiding under the bed more than usual since the son arrived\n\nClinical context:\nEnvironmental stress is the primary trigger for idiopathic FLUTD (iFLUTD) in cats. A new person, changed layout, and disrupted routine all represent significant stressors for a cat. However, iFLUTD typically self-resolves within 3–7 days and does not cause fever — Luna's temperature of 39.4°C suggests an infectious or inflammatory process beyond pure iFLUTD. Bacterial UTI, potentially superimposed on stress-related FLUTD, remains the leading diagnosis.",
+      "text": "Living environment and potential stressors:\n\n• Luna is strictly indoor — never goes outside\n• Single-cat household\n• One litter box (scooped daily, changed weekly)\n• Recent changes: Mrs. Chen's adult son moved in approximately 3 weeks ago — new person in the household, some rearranging of furniture, occasional loud music late at night\n• Luna has been hiding under the bed more than usual since the son arrived\n\nClinical context:\nEnvironmental stress is a known trigger for idiopathic FLUTD (iFLUTD) in cats. A new person, changed layout, and disrupted routine all represent significant stressors. Note Luna's temperature of 39.4°C when weighing your differentials.",
       "effects": [
         {
           "type": "add_knowledge",
@@ -364,7 +362,7 @@
     "history-pmhx": {
       "id": "history-pmhx",
       "type": "history",
-      "text": "Past medical history:\n\n• Spayed at 6 months of age — no complications\n• Vaccinations: up to date (FVRCP + Rabies — last updated 10 months ago)\n• No prior urinary episodes — this is the first time\n• No known drug allergies\n• No prior illnesses or hospitalisations\n• No medications currently\n• Annual wellness exams — last exam 10 months ago; all normal at that time\n\nNote: Being a first episode with fever and positive urine findings raises the suspicion of a true bacterial UTI rather than idiopathic FLUTD. Cats with iFLUTD typically have recurrent episodes and no fever.",
+      "text": "Past medical history:\n\n• Spayed at 6 months of age — no complications\n• Vaccinations: up to date (FVRCP + Rabies — last updated 10 months ago)\n• No prior urinary episodes — this is the first time\n• No known drug allergies\n• No prior illnesses or hospitalisations\n• No medications currently\n• Annual wellness exams — last exam 10 months ago; all normal at that time\n\nNote: Consider whether the clinical picture fits a first infectious episode or a pattern more consistent with idiopathic disease.",
       "effects": [
         {
           "type": "add_knowledge",
@@ -437,7 +435,7 @@
     "exam-abdominal": {
       "id": "exam-abdominal",
       "type": "examination",
-      "text": "You gently palpate Luna's abdomen.\n\n• Bladder: Small and firm, located in the caudal abdomen. Mild pain response — Luna tenses and vocalises softly when you palpate the bladder. A small amount of urine is present. The bladder wall feels slightly thickened.\n• Urethra: No firm, cord-like obstruction palpable in the perineal region. Luna was able to produce a few drops during check-in, confirming the urethra is patent.\n• Kidneys: Normal size bilaterally, smooth contour, non-painful on palpation — no evidence of nephromegaly or renomegaly suggesting upper tract involvement.\n• No palpable abdominal masses, no mesenteric lymphadenopathy.\n• No peritoneal signs.\n\nFindings: Small, mildly painful bladder with wall thickening. Urethra patent. Kidneys normal. No obstruction. These findings are consistent with cystitis — the bladder itself is inflamed.",
+      "text": "You gently palpate Luna's abdomen.\n\n• Bladder: Small and firm, located in the caudal abdomen. Mild pain response — Luna tenses and vocalises softly when you palpate the bladder. A small amount of urine is present. The bladder wall feels slightly thickened.\n• Urethra: No firm, cord-like obstruction palpable in the perineal region. Luna was able to produce a few drops during check-in, confirming the urethra is patent.\n• Kidneys: Normal size bilaterally, smooth contour, non-painful on palpation — no evidence of nephromegaly or renomegaly suggesting upper tract involvement.\n• No palpable abdominal masses, no mesenteric lymphadenopathy.\n• No peritoneal signs.\n\nFindings: Small, mildly painful bladder with wall thickening. Urethra patent. Kidneys normal. No obstruction.",
       "effects": [
         {
           "type": "add_knowledge",
@@ -502,8 +500,8 @@
     "investigation-hub": {
       "id": "investigation-hub",
       "type": "decision",
-      "hint": "The single most important test here is a urinalysis on a cystocentesis sample. Cystocentesis (a sterile needle aspirate from the bladder) gives you an uncontaminated sample — unlike free-catch, which can be contaminated by vulvar bacteria. From the sample you can run a dipstick + sediment exam in-house in 10 minutes. Also send a urine culture for antimicrobial stewardship. CBC and chemistry add context. Ultrasound rules out stones.",
-      "text": "Physical examination suggests cystitis. Your working differential:\n1. Bacterial UTI (most likely — fever, first episode, positive palpation findings)\n2. Idiopathic FLUTD (possible — environmental stress, dry diet)\n3. Urolithiasis (possible — collect urine, consider ultrasound)\n\nWhat investigations do you want to run?",
+      "hint": "Urine analysis is the key investigation. Consider the collection method carefully — sample quality and culture reliability vary significantly by technique. Also consider whether imaging is warranted to rule out structural causes.",
+      "text": "Physical examination reveals an abnormal urinary tract. Your working differential:\n1. Infectious cystitis — fever present, first episode, painful bladder on palpation\n2. Idiopathic FLUTD — possible; environmental stressors and concentrated diet noted\n3. Urolithiasis — possible; requires investigation to exclude\n\nWhat investigations do you want to run?",
       "effects": [],
       "choices": [
         {
@@ -635,7 +633,7 @@
     "urinalysis-result": {
       "id": "urinalysis-result",
       "type": "result",
-      "hint": "The UA is abnormal — high WBCs, bacteria, blood, and high specific gravity. This pattern (pyuria + bacteriuria + haematuria) is the hallmark of bacterial UTI in cats. The high SG (1.042) tells you the kidneys are concentrating urine well — no renal insufficiency. Send this sample for culture before starting antibiotics so you can target therapy.",
+      "hint": "The UA findings are significant. Interpret each component carefully — the combination of findings in the sediment and dipstick will establish or exclude a diagnosis of infectious cystitis. The specific gravity tells you about kidney concentrating function.",
       "text": "URINALYSIS RESULTS (cystocentesis sample)\n\nMacroscopic:\n• Colour: Amber\n• Turbidity: Cloudy\n• Specific gravity: 1.042 (concentrated — normal ≥1.035 for cats)\n\nDipstick:\n• Leukocyte esterase: 3+\n• Nitrites: Positive\n• Blood: 3+\n• Protein: 1+\n• pH: 6.5\n\nSediment exam (400× microscopy):\n• WBCs: 42/hpf (normal 0–5/hpf)\n• RBCs: 18/hpf (normal 0–5/hpf)\n• Bacteria: Many rod-shaped organisms\n• No casts, no crystals\n\nINTERPRETATION\nThe findings are diagnostic of bacterial cystitis:\n• Pyuria (42 WBCs/hpf) — white cells in the bladder = inflammation/infection\n• Bacteriuria — rod-shaped organisms (likely E. coli or Pasteurella)\n• Haematuria — bleeding from inflamed mucosa\n• High specific gravity — kidneys are concentrating normally; no renal involvement at this stage\n• Absence of crystals — makes struvite or oxalate urolithiasis less likely, though ultrasound can confirm\n\nDIAGNOSIS CONFIRMED: Bacterial Urinary Tract Infection (Cystitis)",
       "effects": [
         {
@@ -690,7 +688,7 @@
     "urine-culture-result": {
       "id": "urine-culture-result",
       "type": "result",
-      "text": "Urine culture submitted.\n\nYou submit the cystocentesis sample to the laboratory for aerobic culture and sensitivity testing.\n\nPreliminary report: Cloudy urine. Gram-negative rods on direct smear.\nFull culture with sensitivity results: 3–5 days (will be available for follow-up visit)\n\nWhy this matters:\n• Culture-directed therapy is the standard of care for UTI\n• It identifies the causative organism and its antibiotic sensitivities\n• It allows de-escalation or adjustment if empiric therapy fails\n• It reduces unnecessary use of broad-spectrum antibiotics (antimicrobial stewardship)\n\nYou will start empiric antibiotics based on common uropathogens in cats. Amoxicillin-clavulanate and trimethoprim-sulfa are first-line choices for feline UTI — both have good gram-negative and gram-positive coverage with low resistance rates in community-acquired cat UTI.",
+      "text": "Urine culture submitted.\n\nYou submit the cystocentesis sample to the laboratory for aerobic culture and sensitivity testing.\n\nPreliminary report: Cloudy urine. Gram-negative rods on direct smear.\nFull culture with sensitivity results: 3–5 days (will be available for follow-up visit)\n\nWhy this matters:\n• Culture-directed therapy is the standard of care for UTI\n• It identifies the causative organism and its antibiotic sensitivities\n• It allows de-escalation or adjustment if empiric therapy fails\n• It reduces unnecessary use of broad-spectrum antibiotics (antimicrobial stewardship)\n\nYou will start empiric antibiotics based on the most likely causative organisms for this type of infection. Culture results will be available within 3–5 days and can be used to confirm the choice or adjust if needed.",
       "effects": [
         {
           "type": "add_knowledge",
@@ -759,7 +757,7 @@
     "ultrasound-result": {
       "id": "ultrasound-result",
       "type": "result",
-      "text": "ABDOMINAL ULTRASOUND\n\nBladder:\n• Wall thickening: 3.5 mm (normal < 1.7 mm) — consistent with cystitis\n• Bladder contents: Increased echogenicity (cellular debris / pus / blood)\n• Uroliths (stones): None identified\n• Urethra: Patent — no obstruction\n\nKidneys:\n• Bilateral normal size and echogenicity\n• No renal pelvis dilation (rules out hydronephrosis or upper tract obstruction)\n• No pyelonephritis changes\n\nOther: No free abdominal fluid. No other masses.\n\nINTERPRETATION\nUltrasound confirms cystitis (thickened bladder wall, echogenic contents) WITHOUT urolithiasis or urethral obstruction. This is reassuring — no stones means antimicrobial therapy alone should be sufficient. Upper tract is normal — infection appears confined to the lower urinary tract.",
+      "text": "ABDOMINAL ULTRASOUND\n\nBladder:\n• Wall thickening: 3.5 mm (normal < 1.7 mm) — consistent with cystitis\n• Bladder contents: Increased echogenicity (cellular debris / pus / blood)\n• Uroliths (stones): None identified\n• Urethra: Patent — no obstruction\n\nKidneys:\n• Bilateral normal size and echogenicity\n• No renal pelvis dilation (rules out hydronephrosis or upper tract obstruction)\n• No pyelonephritis changes\n\nOther: No free abdominal fluid. No other masses.\n\nINTERPRETATION\nUltrasound confirms bladder wall thickening with echogenic contents, WITHOUT urolithiasis or urethral obstruction. Upper tract is normal — no evidence of upper urinary tract involvement.",
       "effects": [
         {
           "type": "add_knowledge",
@@ -788,7 +786,7 @@
     "treatment-hub": {
       "id": "treatment-hub",
       "type": "decision",
-      "hint": "First-line antibiotics for feline UTI are amoxicillin-clavulanate (Clavamox — 62.5 mg PO BID × 10–14 days) or trimethoprim-sulfa (15 mg/kg PO BID × 10–14 days). Both provide excellent gram-negative and gram-positive coverage. Fluoroquinolones (like enrofloxacin) should be reserved for culture-confirmed resistant cases — using them first-line depletes your last-resort drugs and risks retinal toxicity in cats at high doses. After prescribing, educate Mrs. Chen on wet food, a water fountain to increase hydration, and return in 7 days.",
+      "hint": "You have a confirmed diagnosis. Select an antibiotic appropriate for the organisms most commonly responsible for this presentation in cats, and consider stewardship principles — reserve broad-spectrum agents for culture-confirmed resistant cases. Educate Mrs. Chen on diet, water intake, and when to return.",
       "text": "You have confirmed bacterial cystitis in Luna.\n\nUrinalysis: 42 WBCs/hpf, rod-shaped bacteria, haematuria, SG 1.042\nDiagnosis: Bacterial UTI — Cystitis (lower tract, no obstruction, no upper tract signs)\n\nChoose your treatment approach:",
       "effects": [],
       "choices": [

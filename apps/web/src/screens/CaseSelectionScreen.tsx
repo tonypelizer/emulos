@@ -111,7 +111,7 @@ const ALL_CASES: CaseListing[] = [
     estimatedMinutes: 20,
     chiefComplaint:
       "5F spayed DSH cat — haematuria, stranguria, pollakiuria × 2 days. Owner reports crying when urinating.",
-    tags: ["UTI", "Feline", "Urinary", "Cystitis"],
+    tags: ["Feline", "Lower Urinary Tract", "Acute Presentation"],
   },
   {
     id: "dog-otitis-001",
@@ -122,7 +122,7 @@ const ALL_CASES: CaseListing[] = [
     estimatedMinutes: 20,
     chiefComplaint:
       "4F spayed Golden Retriever — head shaking, pawing at right ear × 4 days. Brown discharge and musty odour.",
-    tags: ["Otitis", "Canine", "Ear", "Yeast", "Malassezia"],
+    tags: ["Canine", "Ear", "Dermatology", "Acute Presentation"],
   },
 ];
 
