@@ -1,6 +1,7 @@
 import { useGame } from "./hooks/useGame";
 import { SplashScreen } from "./screens/SplashScreen";
 import { MainMenuScreen } from "./screens/MainMenuScreen";
+import { ExpansionSelectScreen } from "./screens/ExpansionSelectScreen";
 import { CaseSelectionScreen } from "./screens/CaseSelectionScreen";
 import { GameplayScreen } from "./screens/GameplayScreen";
 import { EndSummaryScreen } from "./screens/EndSummaryScreen";
@@ -9,6 +10,7 @@ import { ScoreBreakdownScreen } from "./screens/ScoreBreakdownScreen";
 export function App() {
   const {
     screen,
+    selectedExpansionId,
     gameState,
     report,
     error,
@@ -18,6 +20,7 @@ export function App() {
     lastActionEvents,
     nodeHasHint,
     goTo,
+    selectExpansion,
     startCase,
     makeChoice,
     performFreeAction,
@@ -69,12 +72,19 @@ export function App() {
 
       {screen === "splash" && <SplashScreen onEnter={() => goTo("menu")} />}
       {screen === "menu" && (
-        <MainMenuScreen onSelectCases={() => goTo("select")} />
+        <MainMenuScreen onSelectCases={() => goTo("expansions")} />
+      )}
+      {screen === "expansions" && (
+        <ExpansionSelectScreen
+          onSelectExpansion={selectExpansion}
+          onBack={() => goTo("menu")}
+        />
       )}
       {screen === "select" && (
         <CaseSelectionScreen
+          expansionId={selectedExpansionId}
           onSelectCase={startCase}
-          onBack={() => goTo("menu")}
+          onBack={() => goTo("expansions")}
         />
       )}
       {screen === "play" && gameState !== null && (
@@ -91,6 +101,7 @@ export function App() {
           caseTitle={caseTitle}
           lastActionEvents={lastActionEvents}
           nodeHasHint={nodeHasHint}
+          expansionId={selectedExpansionId}
         />
       )}
       {screen === "summary" && gameState !== null && report !== null && (

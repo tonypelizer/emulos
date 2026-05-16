@@ -314,5 +314,157 @@
       },
       "narrative": "Blood group A positive. No atypical red cell antibodies detected. Sample held for crossmatch — 2 units compatible packed red cells available within 20 minutes."
     }
+  },
+  "urinalysis-feline": {
+    "id": "urinalysis-feline",
+    "name": "Urinalysis with Sediment Exam (Feline)",
+    "category": "microbiology",
+    "specialties": ["veterinary"],
+    "defaultResultTime": 10,
+    "genericResult": {
+      "summary": "Feline UA resulted",
+      "values": {
+        "color": "amber",
+        "turbidity": "cloudy",
+        "specificGravity": 1.042,
+        "pH": 6.5,
+        "leukocyteEsterase": "3+",
+        "nitrites": "positive",
+        "blood": "3+",
+        "protein": "1+",
+        "WBC_per_hpf": 42,
+        "RBC_per_hpf": 18,
+        "bacteria": "many rod-shaped"
+      },
+      "narrative": "Urinalysis (cystocentesis sample): Amber, cloudy urine. Leukocyte esterase 3+, nitrites positive, blood 3+, protein 1+. Specific gravity 1.042 (concentrated). Sediment exam: 42 WBCs/hpf, 18 RBCs/hpf, many rod-shaped bacteria. Findings are highly consistent with bacterial urinary tract infection."
+    }
+  },
+  "urine-culture-feline": {
+    "id": "urine-culture-feline",
+    "name": "Urine Culture & Sensitivity (Feline)",
+    "category": "microbiology",
+    "specialties": ["veterinary"],
+    "defaultResultTime": 4320,
+    "genericResult": {
+      "summary": "Urine culture sent (results 3–5 days)",
+      "values": {},
+      "narrative": "Urine culture submitted from cystocentesis sample. Preliminary report pending 3–5 days. Culture-guided therapy enables targeted antibiotic selection and reduces resistance pressure."
+    }
+  },
+  "feline-cbc": {
+    "id": "feline-cbc",
+    "name": "Complete Blood Count (Feline)",
+    "category": "hematology",
+    "specialties": ["veterinary"],
+    "defaultResultTime": 30,
+    "genericResult": {
+      "summary": "Feline CBC resulted",
+      "values": {
+        "WBC_k_uL": 14.2,
+        "neutrophils_k_uL": 10.8,
+        "lymphocytes_k_uL": 2.6,
+        "Hgb_g_dL": 11.8,
+        "HCT_percent": 35,
+        "Plt_k_uL": 310
+      },
+      "narrative": "CBC: Mild leukocytosis (14.2 × 10³/µL) with neutrophilia (10.8 × 10³/µL) — consistent with active bacterial infection. Haematocrit 35% (low-normal for cats; reference 30–45%). Platelets normal. Results support a localised bacterial process."
+    }
+  },
+  "feline-chemistry-panel": {
+    "id": "feline-chemistry-panel",
+    "name": "Chemistry Panel (Feline)",
+    "category": "chemistries",
+    "specialties": ["veterinary"],
+    "defaultResultTime": 30,
+    "genericResult": {
+      "summary": "Feline chemistry panel resulted",
+      "values": {
+        "BUN_mg_dL": 28,
+        "creatinine_mg_dL": 1.2,
+        "ALT_U_L": 45,
+        "ALP_U_L": 22,
+        "glucose_mg_dL": 118,
+        "totalProtein_g_dL": 7.4
+      },
+      "narrative": "Chemistry panel: BUN 28 mg/dL and creatinine 1.2 mg/dL are within normal feline reference ranges (BUN 14–36, Cr 0.6–2.4 mg/dL). Liver values normal. Glucose mildly elevated — likely stress hyperglycaemia (common in cats). Renal function intact; no evidence of upper tract involvement or azotaemia."
+    }
+  },
+  "abdominal-ultrasound-feline": {
+    "id": "abdominal-ultrasound-feline",
+    "name": "Abdominal Ultrasound (Feline)",
+    "category": "radiology",
+    "specialties": ["veterinary"],
+    "defaultResultTime": 20,
+    "genericResult": {
+      "summary": "Abdominal ultrasound resulted",
+      "values": {},
+      "narrative": "Abdominal ultrasound (focused bladder/kidneys): Urinary bladder — mild wall thickening (3.5 mm; normal <1.7 mm), increased echogenicity of bladder contents, no uroliths (stones) identified. Urethra not obstructed. Kidneys — bilateral normal size and echogenicity; no pyelonephritis signs. No free abdominal fluid. Findings consistent with cystitis without urolithiasis or upper tract extension."
+    }
+  },
+  "ear-cytology-canine": {
+    "id": "ear-cytology-canine",
+    "name": "Ear Cytology (Canine)",
+    "category": "microbiology",
+    "specialties": ["veterinary"],
+    "defaultResultTime": 20,
+    "genericResult": {
+      "summary": "Ear cytology resulted",
+      "values": {
+        "Malassezia_per_hpf": 17,
+        "bacteria": "rare cocci only",
+        "neutrophils": "moderate degenerate"
+      },
+      "narrative": "Ear cytology (right ear canal, Diff-Quik stained): Heavy Malassezia yeast — 15–20 'footprint-shaped' organisms per high-power field (diagnostic threshold >5/hpf with signs). Occasional non-significant cocci. Moderate degenerate neutrophils confirming active inflammation. No rod-shaped bacteria, no ear mites. Diagnosis: Malassezia otitis externa."
+    }
+  },
+  "ear-culture-canine": {
+    "id": "ear-culture-canine",
+    "name": "Ear Swab Culture & Sensitivity (Canine)",
+    "category": "microbiology",
+    "specialties": ["veterinary"],
+    "defaultResultTime": 2880,
+    "genericResult": {
+      "summary": "Ear culture sent (results 2–3 days)",
+      "values": {},
+      "narrative": "Ear swab culture submitted. Preliminary: Malassezia pachydermatis — heavy growth. Susceptible to miconazole, clotrimazole, ketoconazole. No significant bacterial growth (contaminant level). Results confirm cytology: pure yeast infection, azole antifungals appropriate."
+    }
+  },
+  "canine-cbc": {
+    "id": "canine-cbc",
+    "name": "Complete Blood Count (Canine)",
+    "category": "hematology",
+    "specialties": ["veterinary"],
+    "defaultResultTime": 30,
+    "genericResult": {
+      "summary": "Canine CBC resulted",
+      "values": {
+        "WBC_k_uL": 9.8,
+        "neutrophils_k_uL": 7.1,
+        "eosinophils_k_uL": 0.9,
+        "HCT_percent": 46,
+        "Plt_k_uL": 325
+      },
+      "narrative": "CBC: WBC 9.8 × 10³/µL — normal. Mild borderline eosinophilia (0.9 × 10³/µL; ref 0–0.9) — possible atopic contribution but not diagnostic alone. Haematocrit 46% — normal. Platelets normal. No significant leukocytosis or anaemia."
+    }
+  },
+  "canine-chemistry-panel": {
+    "id": "canine-chemistry-panel",
+    "name": "Chemistry Panel with T4 (Canine)",
+    "category": "chemistries",
+    "specialties": ["veterinary"],
+    "defaultResultTime": 30,
+    "genericResult": {
+      "summary": "Canine chemistry panel resulted",
+      "values": {
+        "ALT_U_L": 42,
+        "ALP_U_L": 65,
+        "BUN_mg_dL": 18,
+        "creatinine_mg_dL": 1.0,
+        "glucose_mg_dL": 102,
+        "totalProtein_g_dL": 7.2,
+        "T4_ug_dL": 2.4
+      },
+      "narrative": "Chemistry: Hepatic and renal values normal. T4 2.4 µg/dL (normal 1.0–4.0) — hypothyroidism unlikely as a primary driver. All values within reference ranges. No systemic disease identified."
+    }
   }
 }

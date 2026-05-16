@@ -6,9 +6,15 @@ interface Props {
   text: string;
   caseTitle: string;
   onBegin: () => void;
+  advisorLabel?: string;
 }
 
-export function CaseBriefModal({ text, caseTitle, onBegin }: Props) {
+export function CaseBriefModal({
+  text,
+  caseTitle,
+  onBegin,
+  advisorLabel,
+}: Props) {
   const [tipsOpen, setTipsOpen] = useState(false);
 
   return (
@@ -66,7 +72,8 @@ export function CaseBriefModal({ text, caseTitle, onBegin }: Props) {
               </li>
               <li>
                 Stuck? Tap <strong>💡 Hint</strong> in the tab bar to ask the
-                Attending Physician for guidance (costs a few points).
+                {advisorLabel ?? "Attending Physician"} for guidance (costs a
+                few points).
               </li>
               <li>
                 There's no time limit — read carefully. But some decisions earn

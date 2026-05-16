@@ -1,0 +1,1062 @@
+{
+  "id": "dog-otitis-001",
+  "version": "1.0.0",
+  "metadata": {
+    "title": "Bella Won't Stop Scratching",
+    "specialty": "veterinary",
+    "difficulty": "beginner",
+    "estimatedMinutes": 20,
+    "tags": [
+      "otitis externa",
+      "Malassezia",
+      "yeast",
+      "canine",
+      "ear",
+      "cytology"
+    ],
+    "author": "emulos-content-team",
+    "expansionPack": "vet",
+    "requiredEngineVersion": ">=1.0.0"
+  },
+  "patient": {
+    "demographics": {
+      "name": "Bella",
+      "age": 4,
+      "sex": "female",
+      "weight": 28.5,
+      "occupation": "Golden Retriever (indoor/outdoor, spayed)"
+    },
+    "initialVitals": {
+      "heartRate": 88,
+      "bloodPressure": {
+        "systolic": 122,
+        "diastolic": 74
+      },
+      "respiratoryRate": 20,
+      "temperature": 38.9,
+      "oxygenSaturation": 99,
+      "consciousness": "alert",
+      "painScore": 2
+    },
+    "conditions": {
+      "active": [],
+      "hidden": [
+        {
+          "conditionId": "canine-malassezia-otitis",
+          "severity": "moderate"
+        }
+      ]
+    },
+    "riskFactors": ["regular-swimmer", "floppy-ears-breed"]
+  },
+  "scoring": {
+    "maxScore": 1000,
+    "passingScore": 600,
+    "gradeThresholds": {
+      "S": 950,
+      "A": 850,
+      "B": 700,
+      "C": 600
+    },
+    "timeBonuses": [
+      {
+        "gameTimeThreshold": 25,
+        "bonus": 200,
+        "label": "Diagnosis and treatment within 25 minutes — efficient workup"
+      },
+      {
+        "gameTimeThreshold": 40,
+        "bonus": 100,
+        "label": "Treatment initiated within 40 minutes"
+      }
+    ],
+    "criticalActions": [
+      {
+        "actionId": "history-gathered",
+        "points": 50,
+        "isMandatory": false,
+        "label": "Complete history obtained — onset, swimming exposure, prior episodes, diet and skin"
+      },
+      {
+        "actionId": "physical-exam-done",
+        "points": 75,
+        "isMandatory": false,
+        "label": "General physical examination performed"
+      },
+      {
+        "actionId": "otoscope-exam-done",
+        "points": 100,
+        "isMandatory": true,
+        "label": "Otoscopic examination of both ears — tympanic membrane verified intact"
+      },
+      {
+        "actionId": "ear-cytology-done",
+        "points": 150,
+        "isMandatory": true,
+        "label": "Ear cytology performed — Malassezia yeast identified, guides treatment choice"
+      },
+      {
+        "actionId": "ear-culture-ordered",
+        "points": 100,
+        "isMandatory": false,
+        "label": "Ear culture ordered — antimicrobial stewardship and confirmation of susceptibility"
+      },
+      {
+        "actionId": "correct-antifungal-prescribed",
+        "points": 300,
+        "isMandatory": true,
+        "label": "Appropriate antifungal ear drops prescribed (miconazole or equivalent azole)"
+      },
+      {
+        "actionId": "owner-education-given",
+        "points": 50,
+        "isMandatory": false,
+        "label": "Owner educated: ear cleaning technique, post-swim drying, 14-day cytology recheck"
+      },
+      {
+        "actionId": "comprehensive-workup-bonus",
+        "points": 50,
+        "isMandatory": false,
+        "label": "Comprehensive workup: ear culture and bloodwork/thyroid panel ordered"
+      }
+    ],
+    "modifiers": [
+      {
+        "id": "antibacterial-for-yeast",
+        "description": "Antibacterial ear drops prescribed for confirmed Malassezia yeast otitis — incorrect drug class, will not clear the infection",
+        "type": "flat-delta",
+        "value": -150
+      },
+      {
+        "id": "treated-without-cytology",
+        "description": "Treatment prescribed without performing ear cytology first — diagnosis not confirmed, organism type unknown",
+        "type": "flat-delta",
+        "value": -100
+      }
+    ],
+    "irrelevantActionPenalty": -25
+  },
+  "nodes": {
+    "start": {
+      "id": "start",
+      "type": "presentation",
+      "hint": "Bella's head shaking, self-trauma, brown ceruminous discharge, and that distinctive musty odour are all pointing at otitis externa. Before you examine or treat, take a proper history from Mr. Thompson — swimming history is the most important risk factor for moisture-driven yeast otitis in dogs. Ask about prior episodes too, because recurrent bilateral otitis almost always has an underlying allergic cause that will need investigating.",
+      "text": "CASE BRIEF\nBella — 4F (spayed) Golden Retriever, 28.5 kg\n\n\nCHECK-IN COMPLAINT\nMr. Thompson presents Bella at your veterinary clinic. He says: 'She started shaking her head about four days ago and now she won't stop pawing at her right ear. I noticed this morning it smells really bad and there's a lot of dark brown stuff in there.'\n\n\nINITIAL ASSESSMENT\nHR 88 bpm | BP 122/74 | RR 20 | Temp 38.9°C | SpO₂ 99% | Pain 2/10\n\n• Bella is bright and alert, tail wagging despite obvious right-sided discomfort\n• Mucous membranes pink and moist; CRT < 2 seconds\n• Body condition score 5/9 (ideal weight for a working Golden Retriever)\n• Bella flinches when you approach her right pinnae; shakes her head when the right ear is near the exam table\n\n\nOWNER OBSERVATIONS\n• Head shaking and pawing at right ear × 4 days, gradually worsening\n• Dark brown, waxy discharge visible in right ear canal this morning\n• 'Musty' or 'cheesy' smell from the right ear noticed last night\n• Occasional whimpering when she scratches at it\n• No discharge or smell from the left ear\n\n─────────────────────────────────────────────\nCLINICAL IMPRESSION\nA 4-year-old spayed Golden Retriever presenting with unilateral right-sided otitis externa: progressive head shaking, ceruminous brown discharge, and a characteristic musty odour consistent with yeast. Floppy ears and any water exposure are significant risk factors for moisture-driven Malassezia otitis. Bacterial or mixed infection also possible. Collect a full owner history including swimming habits and prior episodes, perform an otoscopic examination, and run ear cytology before selecting a treatment.",
+      "effects": [],
+      "choices": [
+        {
+          "id": "start-take-history",
+          "text": "Take a complete history from Mr. Thompson — duration, swimming, prior episodes, diet, skin signs",
+          "nextNodeId": "history-hub",
+          "timeCost": 2,
+          "effects": [],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "history-started"
+            }
+          }
+        },
+        {
+          "id": "start-examine-first",
+          "text": "Begin the ear examination immediately — the discharge and smell are obvious",
+          "nextNodeId": "examination-hub",
+          "timeCost": 0,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "skipped-history",
+              "points": -20,
+              "reason": "Skipping the owner history misses crucial context — swimming history is the primary aetiology trigger for moisture-driven yeast otitis, and prior episodes or skin signs elsewhere would change your long-term management plan",
+              "category": "penalty"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "history-started"
+            }
+          }
+        },
+        {
+          "id": "start-straight-to-cytology",
+          "text": "Order an ear cytology immediately — the brown discharge needs a microscope, not more history",
+          "nextNodeId": "cytology-result",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "skipped-hx-exam",
+              "points": -40,
+              "reason": "Ordering a cytology before examining the ear means you don't know if the tympanic membrane is intact — putting ear drops into a ruptured eardrum can cause permanent hearing damage and vestibular signs",
+              "category": "penalty"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "history-hub": {
+      "id": "history-hub",
+      "type": "history",
+      "hint": "Cover all four areas: duration and progression, water/swimming exposure (the number-one perpetuating factor for canine otitis), prior ear infections and whether they were investigated, and diet plus skin signs elsewhere on the body. Dogs with recurrent otitis in multiple sites — between the toes, around the mouth, on the belly — almost always have underlying atopic dermatitis or food allergy as the primary driver. Knowing this now shapes your discharge advice.",
+      "text": "Mr. Thompson is attentive and happy to answer your questions.\n\nWhat aspects of the history do you want to explore?",
+      "effects": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "history-started"
+        }
+      ],
+      "choices": [
+        {
+          "id": "ask-duration",
+          "text": "Duration and progression — when did the symptoms start, has it been getting worse?",
+          "nextNodeId": "hx-duration",
+          "timeCost": 3,
+          "effects": [],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "hx-duration-gathered"
+            }
+          }
+        },
+        {
+          "id": "ask-swimming",
+          "text": "Water exposure — does Bella swim? How often, and how recently?",
+          "nextNodeId": "hx-swimming",
+          "timeCost": 3,
+          "effects": [],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "hx-swimming-gathered"
+            }
+          }
+        },
+        {
+          "id": "ask-previous",
+          "text": "Previous ear problems — has this happened before? Any treatments?",
+          "nextNodeId": "hx-previous",
+          "timeCost": 3,
+          "effects": [],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "hx-previous-gathered"
+            }
+          }
+        },
+        {
+          "id": "ask-diet-skin",
+          "text": "Diet and skin — what is she eating? Any itching, redness, or rashes anywhere else on her body?",
+          "nextNodeId": "hx-diet-skin",
+          "timeCost": 3,
+          "effects": [],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "hx-diet-skin-gathered"
+            }
+          }
+        },
+        {
+          "id": "history-to-exam",
+          "text": "History is sufficient — proceed to physical examination",
+          "nextNodeId": "examination-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "hx-duration": {
+      "id": "hx-duration",
+      "type": "history",
+      "text": "Duration and progression:\n\n• Onset: About 4 days ago — Mr. Thompson first noticed Bella shaking her head more frequently during their morning walk on Tuesday\n• Initial signs: Mild intermittent head shaking, occasional scratching at the right jaw/ear area\n• Progression: Gradual worsening over 4 days. By day 2, he noticed she was scratching several times per hour. By this morning (day 4), he found brown discharge when he looked inside the ear.\n• Fluctuation: No periods of improvement — continuously worsening\n• No acute trauma to the ear, no foreign body exposure he's aware of\n• Bella has been slightly less interested in fetch over the past two days — possibly the discomfort\n\nClinical context: A 4-day progressive course with worsening discharge fits an active infectious otitis externa. The gradual onset (not sudden) makes foreign body less likely. The musty odour Mr. Thompson describes is highly characteristic of Malassezia yeast — bacteria typically produce a more purulent, pus-like discharge with a less distinctive smell.",
+      "effects": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "hx-duration-gathered"
+        },
+        {
+          "type": "add_history_item",
+          "itemId": "head-shaking-4-days"
+        }
+      ],
+      "choices": [
+        {
+          "id": "duration-hx-back",
+          "text": "Continue taking history",
+          "nextNodeId": "history-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "hx-swimming": {
+      "id": "hx-swimming",
+      "type": "history",
+      "text": "Water exposure and swimming history:\n\nMr. Thompson immediately lights up: 'Oh yes — Bella LOVES water. We go to Millbrook Lake every Sunday without fail. She was in the water all last Sunday — that's two days before the shaking started.'\n\n• Regular swimming: Every weekend throughout the warmer months — 40–60 minutes of repeated fetch in open water\n• Post-swim ear care: 'I dry her off with a towel but I've never done anything special with her ears — should I be?'\n• No bath in the 10 days prior to onset\n• She shakes the water from her coat but her ears stay wet for a while after — Mr. Thompson has noticed this\n\nKEY FINDING — SWIMMING AS THE PRIMARY RISK FACTOR:\nThis is the most important piece of history in this case.\n\nWhen water enters the ear canal, the warm, dark, moist environment massively favours Malassezia pachydermatis yeast overgrowth:\n• Moisture disrupts the waxy cerumen barrier that normally limits yeast numbers\n• Floppy, pendulous ears (classic Golden Retriever anatomy) restrict airflow, trapping moisture after water exposure\n• pH shifts in the moist canal further favour yeast proliferation over the normal flora\n\nThe Sunday lake swim → Tuesday onset is a textbook presentation for moisture-provoked Malassezia otitis externa.",
+      "effects": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "hx-swimming-gathered"
+        },
+        {
+          "type": "add_history_item",
+          "itemId": "swimming-risk-factor"
+        }
+      ],
+      "choices": [
+        {
+          "id": "swimming-hx-back",
+          "text": "Continue taking history",
+          "nextNodeId": "history-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "hx-previous": {
+      "id": "hx-previous",
+      "type": "history",
+      "text": "Previous episodes and medical history:\n\n• Prior ear infections: 'Actually, yes — maybe a year and a half ago, the previous vet gave us some ear drops and it cleared up in about a week. I don't remember what they were.' He believes it was the same ear.\n• Vaccines: Up to date — DA2PP + Rabies + Leptospirosis, last updated 9 months ago\n• Parasite prevention: Monthly Simparica Trio (flea, tick, heartworm)\n• No current medications\n• Spayed at 9 months, no complications\n• Last wellness exam: 9 months ago, all values normal\n• Allergies or prior drug reactions: None reported\n\nClinical context:\nA single prior undiagnosed episode treated with ear drops is a common first-episode otitis pattern — likely another moisture event. If this is a THIRD presentation or if Bella presents with bilateral otitis, that recurrence pattern would strongly indicate an underlying driver (environmental atopy, food allergy, or hypothyroidism) requiring full investigation.\n\nFor this first well-characterised episode with an identifiable precipitant (lake swimming), targeted treatment and preventive education is appropriate. Flag in the record to initiate an allergy workup if she presents again.",
+      "effects": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "hx-previous-gathered"
+        }
+      ],
+      "choices": [
+        {
+          "id": "previous-hx-back",
+          "text": "Continue taking history",
+          "nextNodeId": "history-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "hx-diet-skin": {
+      "id": "hx-diet-skin",
+      "type": "history",
+      "text": "Diet and skin signs elsewhere:\n\n• Diet: Royal Canin Medium Adult dry kibble — same food for over 2 years. Treats: Milk-Bone small biscuits, occasional dental chews. No raw food, no new food items in the past month.\n• Skin elsewhere: 'She doesn't really itch anywhere else that I've noticed. Her coat looks fine.' Mr. Thompson confirms no redness between the toes, no licking of paws, no belly rash, no hair loss.\n• No seasonal pattern to any skin issues\n• No new cleaning products, carpet treatments, or household changes\n\nClinical relevance:\nThe ABSENCE of skin signs elsewhere is important. Dogs with atopic dermatitis (environmental allergy) or food allergy typically show:\n→ Interdigital erythema (red, moist between the toes)\n→ Perioral staining (rust-coloured saliva staining around the mouth from licking)\n→ Ventral rash (red skin on the belly or groin)\n→ Bilateral or recurrent otitis in multiple locations\n\nBella shows none of these. Taken with the lake swimming history, moisture is the most likely cause for this first episode. Owner education on post-swim ear drying should prevent recurrence.\n\nIMPORTANT: If Bella presents a second or third time, an allergy workup is warranted regardless — up to 80% of dogs with recurrent bilateral otitis externa have underlying allergic skin disease.",
+      "effects": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "hx-diet-skin-gathered"
+        },
+        {
+          "type": "add_score_event",
+          "actionId": "history-gathered",
+          "points": 50,
+          "reason": "Complete history obtained from owner — onset, swimming risk factor, prior episodes, diet, and full skin screen for allergic signs",
+          "category": "critical-action"
+        }
+      ],
+      "choices": [
+        {
+          "id": "diet-hx-to-exam",
+          "text": "Good — proceed to physical examination",
+          "nextNodeId": "examination-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "examination-hub": {
+      "id": "examination-hub",
+      "type": "examination",
+      "hint": "Two examination priorities: (1) Full general examination — temperature, lymph nodes (especially the periauricular region for this ear infection), hydration, mucous membranes, and a quick skin survey. (2) Otoscopic examination of BOTH ears — always compare left and right. The most critical single finding is whether the tympanic membrane is intact. An intact eardrum is a green light to instil ear medication. A ruptured eardrum means many standard ear preparations — especially those containing aminoglycosides like gentamicin — are contraindicated and can cause cochlear damage and permanent vestibular signs.",
+      "text": "You prepare to examine Bella on the exam table. She is alert, tail wagging, tolerating handling well — though she turns her head slightly away when you approach from the right.\n\nWhat aspects of the physical exam do you want to perform?",
+      "effects": [],
+      "choices": [
+        {
+          "id": "exam-gen",
+          "text": "General physical examination — temperature, hydration, lymph nodes, coat and skin",
+          "nextNodeId": "exam-general",
+          "timeCost": 3,
+          "effects": [],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "general-exam-done"
+            }
+          }
+        },
+        {
+          "id": "exam-otoscope",
+          "text": "Otoscopic examination — inspect both ear canals and confirm tympanic membrane status",
+          "nextNodeId": "exam-ear-otoscope",
+          "timeCost": 5,
+          "effects": [],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "otoscope-exam-done"
+            }
+          }
+        },
+        {
+          "id": "exam-to-investigation",
+          "text": "Examination complete — proceed to investigations",
+          "nextNodeId": "investigation-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "exam-general": {
+      "id": "exam-general",
+      "type": "examination",
+      "text": "General physical examination:\n\n• Temperature: 38.9°C confirmed (normal canine range 38.3–39.2°C) — at the upper end of normal, reflecting mild localised inflammation rather than systemic infection.\n• Heart rate: 88 bpm — regular rhythm, no murmur. Normal for a calm, medium-sized dog.\n• Respiratory rate: 20 breaths/min — normal.\n• Hydration: Excellent — skin tent recoil instant, mucous membranes pink and moist, CRT < 2 seconds.\n• Body condition: 5/9 — ideal weight for a Golden Retriever.\n• Lymph nodes: Right prescapular lymph node is mildly enlarged and slightly firmer than the left — consistent with regional drainage from active inflammation in the right ear/head area. All other peripheral nodes (submandibular, axillary, popliteal, inguinal) are symmetrical and normal.\n• Coat and skin: Dense, well-groomed golden coat. No patchy alopecia. No interdigital erythema (toes clean and dry). No ventral rash. Skin between toes and on abdomen unremarkable — no allergy signs.\n• Eye/nasal: No ocular or nasal discharge. Conjunctivae normal bilaterally.\n• Oral: Normal gum colour, no stomatitis.\n\nNote: The right prescapular lymph node enlargement confirms an active local inflammatory response draining from the head/neck region. This is expected with an ear infection and is not concerning for systemic disease.",
+      "effects": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "general-exam-done"
+        },
+        {
+          "type": "add_examination_finding",
+          "findingId": "right-prescapular-lymph-enlarged"
+        },
+        {
+          "type": "add_score_event",
+          "actionId": "physical-exam-done",
+          "points": 75,
+          "reason": "General physical examination performed — temperature, lymph nodes, hydration, and skin assessed. Mild regional lymphadenopathy confirming localised ear inflammation.",
+          "category": "critical-action"
+        }
+      ],
+      "choices": [
+        {
+          "id": "gen-exam-back",
+          "text": "Continue examination",
+          "nextNodeId": "examination-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "exam-ear-otoscope": {
+      "id": "exam-ear-otoscope",
+      "type": "examination",
+      "hint": "When the eardrum is unclear due to discharge, flush the canal with warm saline before re-examination rather than forcing the otoscope deeper. Forcing the scope against inflamed tissue is painful and risks canal trauma. In this case, the tympanic membrane is visible and intact — safe to proceed with topical treatment.",
+      "text": "OTOSCOPIC EXAMINATION\n\nYou select a large speculum and apply the otoscope. Bella sits still on the table for the left ear; she turns her head slightly when you approach the right.\n\nLEFT EAR (comparison, examined first):\n• Pinna: Normal — pale pink inner surface, no swelling or erythema\n• Ear canal: Small amount of normal pale amber cerumen. Canal walls smooth, unremarkable.\n• Tympanic membrane: Intact, pearly-grey, translucent — normal appearance\n• Odour: Neutral\n\nRIGHT EAR (affected):\n• Pinna: Erythematous (red, inflamed) inner surface — mild diffuse oedema\n• Ear canal entrance: Moderate accumulation of dark brown, soft, waxy ceruminous discharge — the 'cake batter' consistency is characteristic of Malassezia\n• Canal walls: Diffusely erythematous and oedematous — epithelial lining thickened compared to the left ear. Approximately one-third of the vertical canal is occluded by discharge.\n• Odour: Distinctly musty or brewery-like — the hallmark of Malassezia yeast. Not purulent or foul-smelling.\n• Tympanic membrane: Visible through the discharge — slightly dull but INTACT. No perforation, no otitis media signs.\n• Foreign body: None identified\n• Ear mites: None identified on gross inspection\n\nSUMMARY: Unilateral right-sided otitis externa — erythema, moderate ceruminous brown discharge with a musty odour, intact tympanic membrane. No foreign body. Cytology required to confirm organism before treatment. Eardrum status confirmed — topical treatment is safe.",
+      "effects": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "otoscope-exam-done"
+        },
+        {
+          "type": "add_examination_finding",
+          "findingId": "right-ear-erythema"
+        },
+        {
+          "type": "add_examination_finding",
+          "findingId": "brown-ceruminous-discharge"
+        },
+        {
+          "type": "add_examination_finding",
+          "findingId": "tympanic-membrane-intact"
+        },
+        {
+          "type": "add_score_event",
+          "actionId": "otoscope-exam-done",
+          "points": 100,
+          "reason": "Otoscopic examination performed — right-sided erythema and ceruminous discharge documented. Tympanic membrane confirmed intact before any topical medication.",
+          "category": "critical-action"
+        }
+      ],
+      "choices": [
+        {
+          "id": "otoscope-to-investigation",
+          "text": "Continue — proceed to investigations",
+          "nextNodeId": "investigation-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "investigation-hub": {
+      "id": "investigation-hub",
+      "type": "decision",
+      "hint": "Ear cytology is the key investigation — it takes 20 minutes, costs very little, and tells you exactly what you are treating. Take a swab from the discharge in the right ear canal, roll it onto a glass slide, heat-fix it, and Diff-Quik stain. Malassezia yeast appear as small purple 'footprint-shaped' or peanut-shaped budding organisms at 1000× oil immersion. More than 5 organisms per high-power field in a dog with signs is diagnostic. Cytology distinguishes yeast (antifungal) from bacteria (antibiotic) or mixed (both) — you cannot reliably make this distinction from the clinical appearance alone.",
+      "text": "Otoscopy shows right-sided erythema, moderate brown ceruminous discharge with musty odour, and an intact tympanic membrane. Your working differential:\n1. Malassezia (yeast) otitis — most likely given the brown waxy discharge and characteristic musty odour\n2. Bacterial otitis — possible (Staphylococcus cocci or Pseudomonas rods)\n3. Mixed yeast and bacterial infection — seen in approximately 20–30% of canine otitis cases\n\nWhat investigations do you want to run?",
+      "effects": [],
+      "choices": [
+        {
+          "id": "order-cytology",
+          "text": "Ear cytology — swab the right ear and examine under microscopy to identify the organism",
+          "nextNodeId": "cytology-result",
+          "timeCost": 20,
+          "effects": [],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "ear-cytology-done"
+            }
+          }
+        },
+        {
+          "id": "order-culture",
+          "text": "Ear swab culture & sensitivity — confirm organism and antibiotic/antifungal susceptibility",
+          "nextNodeId": "culture-result",
+          "timeCost": 5,
+          "effects": [],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "ear-culture-sent"
+            }
+          }
+        },
+        {
+          "id": "order-bloodwork",
+          "text": "CBC and chemistry panel with T4 — screen for systemic disease or hypothyroidism as an underlying cause",
+          "nextNodeId": "cbc-chemistry-result",
+          "timeCost": 3,
+          "effects": [],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "bloodwork-done"
+            }
+          }
+        },
+        {
+          "id": "investigations-to-treatment",
+          "text": "I have enough information — proceed to treatment",
+          "nextNodeId": "treatment-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "cytology-result": {
+      "id": "cytology-result",
+      "type": "result",
+      "hint": "Malassezia pachydermatis is a commensal yeast that lives on healthy canine skin and ear canals in small numbers. It only causes disease when local conditions shift — moisture, excess cerumen, altered pH, or impaired local immunity allow it to overgrow. Treatment: azole antifungals applied topically. Always clean the ear canal before instilling medication — debris blocks drug penetration into the canal walls where the yeast are living.",
+      "text": "EAR CYTOLOGY — RIGHT EAR CANAL\n(Diff-Quik stained smear, oil immersion microscopy)\n\nMicroscopic findings (1000× oil immersion):\n• Malassezia pachydermatis: 15–20 organisms per high-power field\n  → Morphology: Classic 'footprint' or peanut-shaped budding yeast with thick walls\n  → Staining: Purple on Diff-Quik\n  → Diagnostic threshold: >5 organisms/hpf in a symptomatic dog = significant overgrowth\n• Bacteria: Occasional isolated cocci — < 1–2/hpf (not clinically significant; contaminant level)\n• Inflammatory cells: Moderate degenerate neutrophils — confirming active inflammation\n• Ear mites: None\n• No significant rod-shaped bacteria\n\nINTERPRETATION\nDIAGNOSIS CONFIRMED: Malassezia otitis externa\n\nThe count of 15–20 Malassezia yeast per hpf is well above the diagnostic threshold of 5/hpf. There is no significant bacterial growth. This is a PRIMARY YEAST INFECTION.\n\nTreatment implications:\n→ Azole antifungal ear drops are required (miconazole, clotrimazole, ketoconazole)\n→ Clean the ear first to remove discharge and maximise drug contact with canal walls\n→ Antibacterial drops alone will have no effect on yeast — Malassezia are not bacteria",
+      "effects": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "ear-cytology-done"
+        },
+        {
+          "type": "reveal_condition",
+          "conditionId": "canine-malassezia-otitis"
+        },
+        {
+          "type": "add_score_event",
+          "actionId": "ear-cytology-done",
+          "points": 150,
+          "reason": "Ear cytology performed — Malassezia yeast confirmed at 15–20 organisms/hpf. Cytology-guided antifungal treatment selected.",
+          "category": "critical-action"
+        },
+        {
+          "type": "order_test",
+          "testId": "ear-cytology-canine"
+        },
+        {
+          "type": "result_test",
+          "testId": "ear-cytology-canine"
+        }
+      ],
+      "choices": [
+        {
+          "id": "cytology-to-hub",
+          "text": "Continue — order further investigations or proceed to treatment",
+          "nextNodeId": "investigation-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "culture-result": {
+      "id": "culture-result",
+      "type": "result",
+      "text": "EAR SWAB CULTURE — RIGHT EAR\nPreliminary report: swab submitted, laboratory processing.\n\nDay 2–3 results (advance report for this case):\n• Fungal culture: Malassezia pachydermatis — heavy growth confirmed\n• Azole susceptibility: Susceptible to miconazole (MIC ≤ 0.5 µg/mL), clotrimazole, ketoconazole\n• Bacterial culture: Coagulase-negative staphylococci — < 100 CFU (contaminant level, not significant)\n• No gram-negative rods, no Pseudomonas, no enterococci\n\nINTERPRETATION\nCulture confirms cytology — pure Malassezia overgrowth, no significant bacteria. Azole antifungals are appropriate and expected to achieve clinical and cytological cure.\n\nWhen ear culture adds the most value:\n• Recurrent otitis (2+ episodes) — to catch resistant organisms early\n• Prior antibiotic treatment failure — suggests resistance\n• Rod-shaped organisms on cytology — gram-negative bacteria (especially Pseudomonas) are more resistant and require culture-guided therapy\n• Otitis media — middle ear infections require longer treatment and culture-confirmed sensitivities\n\nFor a first-episode Malassezia otitis in a dog with an identifiable precipitant (swimming), cytology alone was sufficient here. Culture adds confirmation but is not strictly required for this presentation.",
+      "effects": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "ear-culture-sent"
+        },
+        {
+          "type": "add_score_event",
+          "actionId": "ear-culture-ordered",
+          "points": 100,
+          "reason": "Ear culture ordered — confirms organism identity and susceptibility, good stewardship practice",
+          "category": "critical-action"
+        },
+        {
+          "type": "order_test",
+          "testId": "ear-culture-canine"
+        }
+      ],
+      "choices": [
+        {
+          "id": "culture-to-hub",
+          "text": "Good — continue investigations or proceed to treatment",
+          "nextNodeId": "investigation-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "cbc-chemistry-result": {
+      "id": "cbc-chemistry-result",
+      "type": "result",
+      "text": "HAEMATOLOGY AND BIOCHEMISTRY (CANINE)\n\nCBC:\n• WBC: 9.8 × 10³/µL (normal 5.5–16.9) — normal\n• Neutrophils: 7.1 × 10³/µL — normal\n• Eosinophils: 0.9 × 10³/µL (reference 0–0.9 × 10³/µL) — borderline upper normal; possible mild atopic contribution, but not diagnostic alone\n• Lymphocytes: 1.6 × 10³/µL — normal\n• HCT: 46% (normal 37–55%) — normal\n• Platelets: 325 × 10³/µL — normal\n\nChemistry:\n• ALT: 42 U/L — normal\n• ALP: 65 U/L — normal\n• BUN: 18 mg/dL — normal\n• Creatinine: 1.0 mg/dL — normal\n• Glucose: 102 mg/dL — normal\n• Total protein: 7.2 g/dL — normal\n• T4 (thyroid): 2.4 µg/dL (normal 1.0–4.0 µg/dL) — normal\n\nINTERPRETATION\nBloodwork is largely unremarkable. Thyroid function is normal — hypothyroidism (a known predisposing cause of recurrent otitis in middle-aged dogs) is unlikely here. The borderline eosinophilia is noted but not diagnostic of allergy alone. No systemic disease identified to explain the ear infection. The lake swimming history remains the most likely aetiology.",
+      "effects": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "bloodwork-done"
+        },
+        {
+          "type": "result_test",
+          "testId": "canine-cbc"
+        },
+        {
+          "type": "result_test",
+          "testId": "canine-chemistry-panel"
+        }
+      ],
+      "choices": [
+        {
+          "id": "cbc-back-to-hub",
+          "text": "Continue investigations",
+          "nextNodeId": "investigation-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "treatment-hub": {
+      "id": "treatment-hub",
+      "type": "decision",
+      "hint": "Cytology confirmed Malassezia yeast — the treatment must be antifungal. Azole ear drops (miconazole, clotrimazole) are first-line. Before you dispense the drops, clean the ear canal in clinic to remove discharge and show Mr. Thompson how to do it at home. The ear cleaning step is not optional — ceruminous debris blocks drug penetration and gives the yeast somewhere to hide from the medication. Prescribe 14 days minimum and book a repeat cytology at the recheck to confirm clearance cytologically — not just based on clinical signs.",
+      "text": "Ear cytology confirms: Malassezia yeast otitis — 15–20 yeast organisms per hpf, no significant bacteria.\n\nThe tympanic membrane is intact. Bella is systemically well.\n\nChoose your treatment approach:",
+      "effects": [],
+      "choices": [
+        {
+          "id": "treat-miconazole",
+          "text": "Prescribe miconazole antifungal ear drops × 14 days — clean ear in clinic, demonstrate technique to owner, schedule 14-day cytology recheck",
+          "nextNodeId": "outcome-excellent",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "dispense_medication",
+              "medicationId": "miconazole-tris-ear-drops"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "correct-antifungal-given"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "correct-antifungal-prescribed",
+              "points": 300,
+              "reason": "Miconazole antifungal ear drops prescribed — correct drug class for cytology-confirmed Malassezia otitis",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "owner-education-given",
+              "points": 50,
+              "reason": "Owner educated on ear cleaning technique, post-swim drying, and 14-day recheck with repeat cytology",
+              "category": "critical-action"
+            }
+          ],
+          "condition": {
+            "op": "has_knowledge",
+            "knowledgeId": "ear-cytology-done"
+          }
+        },
+        {
+          "id": "treat-miconazole-empiric",
+          "text": "Prescribe miconazole antifungal ear drops empirically — the presentation looks like yeast, so treat for yeast without cytology",
+          "nextNodeId": "outcome-empiric",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "dispense_medication",
+              "medicationId": "miconazole-tris-ear-drops"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "correct-antifungal-given"
+            },
+            {
+              "type": "apply_score_modifier",
+              "modifierId": "treated-without-cytology"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "correct-antifungal-prescribed",
+              "points": 150,
+              "reason": "Antifungal prescribed empirically — correct drug class for the presentation, but cytology was not performed to confirm the diagnosis first",
+              "category": "critical-action"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "ear-cytology-done"
+            }
+          }
+        },
+        {
+          "id": "treat-gentamicin",
+          "text": "Prescribe gentamicin antibacterial ear drops (Mometamax) — broad-spectrum ear drops to cover infection",
+          "nextNodeId": "outcome-antibacterial",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "dispense_medication",
+              "medicationId": "gentamicin-mometasone-ear"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "antibacterial-given"
+            },
+            {
+              "type": "apply_score_modifier",
+              "modifierId": "antibacterial-for-yeast"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "outcome-excellent": {
+      "id": "outcome-excellent",
+      "type": "outcome",
+      "outcomeId": "outcome-excellent",
+      "effects": [
+        {
+          "type": "add_score_event",
+          "actionId": "comprehensive-workup-bonus",
+          "points": 50,
+          "reason": "Comprehensive workup: ear culture and bloodwork with thyroid screening ordered in addition to cytology",
+          "category": "optional-bonus",
+          "condition": {
+            "op": "and",
+            "conditions": [
+              { "op": "has_knowledge", "knowledgeId": "ear-culture-sent" },
+              { "op": "has_knowledge", "knowledgeId": "bloodwork-done" }
+            ]
+          }
+        }
+      ],
+      "text": "Bella is discharged with a complete treatment plan.\n\nTreatment summary:\n• Ear cleaning in clinic: You flush the right ear canal with a gentle ceruminolytic solution, massage the base of the ear for 30 seconds, and allow Bella to shake her head. You remove the loosened brown discharge from the pinna with a cotton ball. Mr. Thompson watches closely: 'Oh wow — that was a lot of stuff!'\n• Ear drops: Miconazole topical antifungal ear drops — apply 5–8 drops to the right ear canal BID (twice daily) × 14 days. Always clean first, then apply drops. Massage the base of the ear for 30 seconds after applying.\n• Ear cleaning at home: You demonstrate the full cleaning routine step-by-step. Mr. Thompson practises with your supervision before leaving. He's confident.\n• Post-swim protocol: After every lake visit, fold the pinna back and gently place a piece of cotton wool in the entrance of the canal to absorb moisture. Allow to air-dry for 10–15 minutes. An ear-drying solution (e.g. EpiOtic) applied once after swimming further acidifies and dries the canal — Bella will need this every swim session going forward.\n• Recheck: Return in 14 days for repeat otoscopy and repeat ear cytology. Clinical improvement alone is not sufficient — cytological cure (< 2 yeast/hpf) must be confirmed before stopping treatment.\n\nClinical course (follow-up notes):\nDay 3: Mr. Thompson calls — 'She's definitely scratching less. Put the drops in this morning and she barely noticed.' Reports the discharge is visibly decreasing.\nDay 7: 'She's back to her normal self — fetching and playing. The smell is almost gone.'\nDay 14 (recheck): Bella bright and alert. No head shaking. Right ear canal: mild residual erythema (resolving), minimal clean cerumen, no discharge, no odour. Repeat cytology: 1 yeast/hpf — RESOLVED. Mr. Thompson has been using EpiOtic after every lake swim. He's bought a bottle for home.\n\n─────────────────────────────────────────────\nDEBRIEF\n\nExcellent clinical approach to canine otitis externa:\n\n✓ Complete history — identified lake swimming as the primary moisture risk factor\n✓ General examination — noted mild regional lymphadenopathy, no systemic disease\n✓ Otoscopic examination — confirmed erythema, discharge character, intact tympanic membrane (green light for topical treatment)\n✓ Ear cytology — Malassezia yeast confirmed at 15–20/hpf; diagnosis established before prescribing\n✓ Targeted antifungal prescribed — miconazole directly addresses the confirmed organism\n✓ Owner education — ear cleaning technique demonstrated, post-swim drying protocol, 14-day cytology recheck scheduled\n\nKey teaching points:\n• Ear cytology is the single most important investigation for otitis externa — 20 minutes, low cost, pinpoints exactly what you're treating\n• Yeast require antifungals; bacteria require antibiotics; you cannot reliably distinguish them by eye\n• Always clean before medicating — ceruminous debris physically blocks drug penetration to the canal walls\n• Confirm the tympanic membrane is intact before instilling ANY topical preparation — aminoglycosides (gentamicin) through a ruptured TM can cause permanent cochlear damage and vestibular signs\n• Post-swim ear care (drying + acidifying solution) is highly effective secondary prevention in susceptible dogs\n• If Bella presents again, initiate a full allergy workup — recurrent bilateral otitis in dogs is atopic disease until proven otherwise"
+    },
+    "outcome-antibacterial": {
+      "id": "outcome-antibacterial",
+      "type": "outcome",
+      "outcomeId": "outcome-antibacterial",
+      "effects": [],
+      "text": "Bella is discharged with gentamicin ear drops.\n\nClinical outcome: Bella does not improve. Mr. Thompson calls on day 5: 'She's still shaking her head and it still smells — maybe even a bit worse. The drops aren't doing anything.'\n\nOn re-presentation at day 7:\n• Right ear canal: Erythema unchanged. Brown discharge persists, same musty odour.\n• Head shaking and scratching: Ongoing. Bella is now resisting having the drops applied — the continued discomfort has made her averse to ear handling.\n• Repeat otoscopy: Tympanic membrane still intact.\n• Repeat cytology: 20+ Malassezia yeast per hpf — infection not controlled, possibly slightly worse.\n\nThis is a treatment failure. Gentamicin is an aminoglycoside antibiotic. It kills gram-negative bacteria. It has no antifungal activity whatsoever.\n\n─────────────────────────────────────────────\nDEBRIEF\n\nGentamicin will not clear a Malassezia yeast infection.\n\nWHY CYTOLOGY-GUIDED TREATMENT MATTERS:\n\nThe three most common otitis pathogens require completely different drug classes:\n\n1. Malassezia pachydermatis (yeast) — the most common in dogs\n   → Treatment: Azole antifungals — miconazole, clotrimazole, ketoconazole, posaconazole\n   → Cytology: 'Footprint-shaped' or peanut-shaped budding yeast cells\n   → Antibacterials: COMPLETELY INEFFECTIVE\n\n2. Staphylococcus pseudintermedius (gram-positive cocci) — second most common\n   → Treatment: Fusidic acid, chloramphenicol, amoxicillin-clavulanate (sensitivity dependent)\n   → Cytology: cocci in clusters or chains\n\n3. Pseudomonas aeruginosa (gram-negative rods) — most challenging, most resistant\n   → Treatment: Fluoroquinolones (marbofloxacin, ciprofloxacin), polymyxin B, silver sulfadiazine — ALWAYS culture and sensitivity first\n   → Cytology: rod-shaped organisms\n\nCytology takes 20 minutes, costs pennies, and tells you which drug class to use. Without it, you're guessing. In this case, guessing cost Bella an additional week of pain and a treatment failure.\n\nNote: Mometamax (which contains gentamicin + mometasone + clotrimazole) DOES have antifungal activity due to the clotrimazole component. If you had prescribed Mometamax specifically (rather than gentamicin drops alone), Bella might have partially responded. However, the targeted and stewardship-appropriate approach is always: cytology first, then targeted monotherapy."
+    },
+    "outcome-empiric": {
+      "id": "outcome-empiric",
+      "type": "outcome",
+      "outcomeId": "outcome-empiric",
+      "effects": [],
+      "text": "Bella is discharged with miconazole ear drops, prescribed empirically without cytology.\n\nClinical outcome: Bella improves. Head shaking decreases by day 3, scratching stops by day 6. Mr. Thompson calls: 'Completely different dog — she's back to her normal bouncy self.'\n\nDay 14 recheck: Right ear canal shows minimal residual erythema, no discharge, no odour. A good clinical outcome.\n\n─────────────────────────────────────────────\nDEBRIEF\n\nBella improved — but was this the right approach?\n\nShort answer: In practice, many vets DO treat a first-episode otitis with the classic Malassezia presentation empirically, and often get away with it. The discharge character and musty odour are fairly specific. This time, it worked.\n\nLonger answer — here is why cytology first is best practice:\n\n1. Presentation alone cannot distinguish organism type reliably\n   The brown ceruminous discharge and musty odour are strongly associated with Malassezia, but approximately 20–30% of canine otitis cases are mixed infections (yeast + bacteria). Empiric antifungal will miss the bacterial component in a mixed case. Cytology tells you in 20 minutes.\n\n2. No baseline for monitoring\n   Without a before-treatment cytology count, you cannot objectively assess response at recheck. Is 3 yeast/hpf post-treatment a success or a treatment failure? You cannot answer that without a baseline.\n\n3. Promotes a cytology habit that prevents misdiagnosis\n   For every 10 cases where the empiric guess is right, there will be one Pseudomonas case or one mixed infection where the wrong empiric choice causes a treatment failure — and potentially resistance. Making cytology routine every time eliminates guesswork for all cases.\n\n4. Stewardship\n   Empiric treatment without cytology is the first step toward selecting for resistant populations. Any treatment failure will require repeat attendance, prolonged treatment, and a frustrated owner.\n\nConclusion: Bella got lucky — and so did you. In your future practice, make ear cytology standard for every otitis presentation."
+    }
+  },
+  "freeActionEffects": {
+    "tests": {
+      "ear-cytology-canine": [
+        {
+          "type": "order_test",
+          "testId": "ear-cytology-canine"
+        },
+        {
+          "type": "result_test",
+          "testId": "ear-cytology-canine"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "ear-cytology-done",
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "ear-cytology-done"
+            }
+          }
+        },
+        {
+          "type": "reveal_condition",
+          "conditionId": "canine-malassezia-otitis"
+        },
+        {
+          "type": "append_narrative",
+          "narrativeType": "result",
+          "text": "Ear cytology (right ear canal, Diff-Quik): 15–20 Malassezia 'footprint-shaped' yeast per hpf (normal < 2/hpf). Moderate degenerate neutrophils. No significant bacteria. Diagnosis: Malassezia otitis externa."
+        },
+        {
+          "type": "add_score_event",
+          "actionId": "ear-cytology-done",
+          "points": 150,
+          "reason": "Ear cytology performed — Malassezia yeast overgrowth confirmed",
+          "category": "critical-action",
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "ear-cytology-done"
+            }
+          }
+        }
+      ],
+      "ear-culture-canine": [
+        {
+          "type": "order_test",
+          "testId": "ear-culture-canine"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "ear-culture-sent",
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "ear-culture-sent"
+            }
+          }
+        },
+        {
+          "type": "append_narrative",
+          "narrativeType": "result",
+          "text": "Ear swab culture submitted. Results in 2–3 days. Preliminary culture: Malassezia pachydermatis — heavy growth. Susceptible to miconazole and clotrimazole. No significant bacterial growth."
+        },
+        {
+          "type": "add_score_event",
+          "actionId": "ear-culture-ordered",
+          "points": 100,
+          "reason": "Ear culture ordered — confirms organism and azole susceptibility, good stewardship practice",
+          "category": "critical-action",
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "ear-culture-sent"
+            }
+          }
+        }
+      ],
+      "canine-cbc": [
+        {
+          "type": "result_test",
+          "testId": "canine-cbc"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "bloodwork-done",
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "bloodwork-done"
+            }
+          }
+        },
+        {
+          "type": "append_narrative",
+          "narrativeType": "result",
+          "text": "Canine CBC: WBC 9.8 × 10³/µL — normal. Borderline eosinophilia (0.9 × 10³/µL). HCT 46% — normal. No leukocytosis. Consistent with a localised inflammatory process without systemic involvement."
+        }
+      ],
+      "canine-chemistry-panel": [
+        {
+          "type": "result_test",
+          "testId": "canine-chemistry-panel"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "bloodwork-done",
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "bloodwork-done"
+            }
+          }
+        },
+        {
+          "type": "append_narrative",
+          "narrativeType": "result",
+          "text": "Canine chemistry panel: ALT, ALP, renal values all normal. T4 2.4 µg/dL — hypothyroidism unlikely. No systemic disease identified."
+        }
+      ]
+    },
+    "medications": {
+      "miconazole-tris-ear-drops": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "correct-antifungal-given"
+        },
+        {
+          "type": "add_score_event",
+          "actionId": "correct-antifungal-prescribed",
+          "points": 300,
+          "reason": "Miconazole antifungal ear drops prescribed — correct targeted treatment for cytology-confirmed Malassezia otitis",
+          "category": "critical-action",
+          "condition": {
+            "op": "and",
+            "conditions": [
+              {
+                "op": "not",
+                "condition": {
+                  "op": "has_knowledge",
+                  "knowledgeId": "correct-antifungal-given"
+                }
+              },
+              { "op": "has_knowledge", "knowledgeId": "ear-cytology-done" }
+            ]
+          }
+        },
+        {
+          "type": "add_score_event",
+          "actionId": "correct-antifungal-prescribed",
+          "points": 150,
+          "reason": "Miconazole prescribed empirically — correct drug class but cytology not performed first to confirm organism",
+          "category": "critical-action",
+          "condition": {
+            "op": "and",
+            "conditions": [
+              {
+                "op": "not",
+                "condition": {
+                  "op": "has_knowledge",
+                  "knowledgeId": "correct-antifungal-given"
+                }
+              },
+              {
+                "op": "not",
+                "condition": {
+                  "op": "has_knowledge",
+                  "knowledgeId": "ear-cytology-done"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "apply_score_modifier",
+          "modifierId": "treated-without-cytology",
+          "condition": {
+            "op": "and",
+            "conditions": [
+              {
+                "op": "not",
+                "condition": {
+                  "op": "has_knowledge",
+                  "knowledgeId": "correct-antifungal-given"
+                }
+              },
+              {
+                "op": "not",
+                "condition": {
+                  "op": "has_knowledge",
+                  "knowledgeId": "ear-cytology-done"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "add_score_event",
+          "actionId": "owner-education-given",
+          "points": 50,
+          "reason": "Owner educated on ear cleaning, post-swim drying, and 14-day cytology recheck",
+          "category": "critical-action",
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "correct-antifungal-given"
+            }
+          }
+        },
+        {
+          "type": "append_narrative",
+          "narrativeType": "narrative",
+          "text": "Miconazole antifungal ear drops dispensed. Apply 5–8 drops BID × 14 days after cleaning the ear canal. Demonstrate technique to owner. Book 14-day recheck with repeat cytology."
+        }
+      ],
+      "gentamicin-mometasone-ear": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "antibacterial-given"
+        },
+        {
+          "type": "apply_score_modifier",
+          "modifierId": "antibacterial-for-yeast",
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "antibacterial-given"
+            }
+          }
+        },
+        {
+          "type": "append_narrative",
+          "narrativeType": "narrative",
+          "text": "⚠ Gentamicin/mometasone ear drops dispensed. Note: Gentamicin is an aminoglycoside antibacterial — it has no antifungal activity. If cytology has confirmed Malassezia yeast, this preparation will be ineffective. Reconsider and switch to an azole antifungal."
+        }
+      ],
+      "meloxicam-canine-vet": [
+        {
+          "type": "adjust_vital",
+          "vital": "painScore",
+          "delta": -1
+        },
+        {
+          "type": "append_narrative",
+          "narrativeType": "narrative",
+          "text": "Meloxicam (Metacam) dispensed for pain relief. 0.2 mg/kg PO SID day 1, then 0.1 mg/kg SID × 3–5 days. Addresses discomfort while the antifungal clears the infection."
+        }
+      ]
+    },
+    "procedures": {}
+  },
+  "relevantTests": [
+    "ear-cytology-canine",
+    "ear-culture-canine",
+    "canine-cbc",
+    "canine-chemistry-panel"
+  ],
+  "relevantMedications": [
+    "miconazole-tris-ear-drops",
+    "gentamicin-mometasone-ear",
+    "meloxicam-canine-vet"
+  ]
+}

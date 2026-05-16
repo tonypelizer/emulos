@@ -2,6 +2,8 @@ import styles from "./CaseSelectionScreen.module.css";
 
 interface CaseListing {
   id: string;
+  /** null = core pack; string = named expansion (e.g. "vet") */
+  expansionId: string | null;
   title: string;
   specialty: string;
   difficulty: "beginner" | "intermediate" | "advanced";
@@ -10,9 +12,11 @@ interface CaseListing {
   tags: string[];
 }
 
-const CASES: CaseListing[] = [
+const ALL_CASES: CaseListing[] = [
+  // ── Core Clinical Cases ──────────────────────────────────────────────────
   {
     id: "fever-001",
+    expansionId: null,
     title: "Not Just a Cold",
     specialty: "General Medicine",
     difficulty: "beginner",
@@ -23,6 +27,7 @@ const CASES: CaseListing[] = [
   },
   // {
   //   id: "chest-pain-001",
+  //   expansionId: null,
   //   title: "The Chest That Wouldn't Stop",
   //   specialty: "Emergency Medicine",
   //   difficulty: "intermediate",
@@ -32,6 +37,7 @@ const CASES: CaseListing[] = [
   // },
   // {
   //   id: "ectopic-pregnancy-001",
+  //   expansionId: null,
   //   title: "Pain at 7 Weeks",
   //   specialty: "OB/GYN",
   //   difficulty: "intermediate",
@@ -42,6 +48,7 @@ const CASES: CaseListing[] = [
   // },
   // {
   //   id: "confusion-001",
+  //   expansionId: null,
   //   title: "Not Herself Today",
   //   specialty: "Emergency Medicine",
   //   difficulty: "beginner",
@@ -57,6 +64,7 @@ const CASES: CaseListing[] = [
   // },
   // {
   //   id: "first-trimester-bleeding-001",
+  //   expansionId: null,
   //   title: "Six Weeks and Bleeding",
   //   specialty: "OB/GYN",
   //   difficulty: "beginner",
@@ -67,6 +75,7 @@ const CASES: CaseListing[] = [
   // },
   // {
   //   id: "preeclampsia-001",
+  //   expansionId: null,
   //   title: "Headache at 34 Weeks",
   //   specialty: "OB/GYN",
   //   difficulty: "intermediate",
@@ -77,6 +86,7 @@ const CASES: CaseListing[] = [
   // },
   // {
   //   id: "placental-abruption-001",
+  //   expansionId: null,
   //   title: "Something\u2019s Not Right",
   //   specialty: "OB/GYN",
   //   difficulty: "advanced",
@@ -90,6 +100,30 @@ const CASES: CaseListing[] = [
   //     "OB/GYN",
   //   ],
   // },
+
+  // ── Vet Clinic ───────────────────────────────────────────────────────────
+  {
+    id: "cat-uti-001",
+    expansionId: "vet",
+    title: "Luna Won't Use Her Box",
+    specialty: "Feline Medicine",
+    difficulty: "beginner",
+    estimatedMinutes: 20,
+    chiefComplaint:
+      "5F spayed DSH cat — haematuria, stranguria, pollakiuria × 2 days. Owner reports crying when urinating.",
+    tags: ["UTI", "Feline", "Urinary", "Cystitis"],
+  },
+  {
+    id: "dog-otitis-001",
+    expansionId: "vet",
+    title: "Bella Won't Stop Scratching",
+    specialty: "Canine Medicine",
+    difficulty: "beginner",
+    estimatedMinutes: 20,
+    chiefComplaint:
+      "4F spayed Golden Retriever — head shaking, pawing at right ear × 4 days. Brown discharge and musty odour.",
+    tags: ["Otitis", "Canine", "Ear", "Yeast", "Malassezia"],
+  },
 ];
 
 const DIFFICULTY_LABEL: Record<CaseListing["difficulty"], string> = {
@@ -98,27 +132,42 @@ const DIFFICULTY_LABEL: Record<CaseListing["difficulty"], string> = {
   advanced: "Advanced",
 };
 
+const EXPANSION_HEADING: Record<string, string> = {
+  core: "Core Clinical Cases",
+  vet: "Vet Clinic",
+};
+
 interface Props {
+  /** null = core cases; string = named expansion */
+  expansionId: string | null;
   onSelectCase: (caseId: string) => void;
   onBack: () => void;
 }
 
-export function CaseSelectionScreen({ onSelectCase, onBack }: Props) {
+export function CaseSelectionScreen({
+  expansionId,
+  onSelectCase,
+  onBack,
+}: Props) {
+  const cases = ALL_CASES.filter((c) => c.expansionId === expansionId);
+  const headingKey = expansionId ?? "core";
+  const heading = EXPANSION_HEADING[headingKey] ?? "Cases";
+
   return (
     <main className={styles.root}>
       <header className={styles.header}>
         <button
           className={styles.backBtn}
           onClick={onBack}
-          aria-label="Back to menu"
+          aria-label="Back to expansions"
         >
           ← Back
         </button>
-        <h1 className={styles.heading}>Patient Cases</h1>
+        <h1 className={styles.heading}>{heading}</h1>
       </header>
 
       <ul className={styles.list} role="list">
-        {CASES.map((c) => (
+        {cases.map((c) => (
           <li key={c.id}>
             <button className={styles.card} onClick={() => onSelectCase(c.id)}>
               <div className={styles.cardTop}>

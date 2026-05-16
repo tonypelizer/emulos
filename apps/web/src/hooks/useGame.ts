@@ -13,6 +13,7 @@ import { GameService } from "../service/GameService";
 export type Screen =
   | "splash"
   | "menu"
+  | "expansions"
   | "select"
   | "play"
   | "summary"
@@ -20,6 +21,9 @@ export type Screen =
 
 interface HookState {
   screen: Screen;
+  /** The selected expansion pack ID (null = core cases). Set when the player
+   * picks an expansion and carried forward to the case selection screen. */
+  selectedExpansionId: string | null;
   gameState: GameState | null;
   report: ScoreReport | null;
   error: string | null;
@@ -31,6 +35,7 @@ interface HookState {
 
 const INITIAL: HookState = {
   screen: "splash",
+  selectedExpansionId: null,
   gameState: null,
   report: null,
   error: null,
@@ -46,17 +51,27 @@ export function useGame() {
     setState((prev) => ({ ...prev, screen, error: null }));
   }, []);
 
+  const selectExpansion = useCallback((expansionId: string | null) => {
+    setState((prev) => ({
+      ...prev,
+      selectedExpansionId: expansionId,
+      screen: "select",
+      error: null,
+    }));
+  }, []);
+
   const startCase = useCallback((caseId: string) => {
     try {
       const gameState = service.current.startCase(caseId);
-      setState({
+      setState((prev) => ({
+        ...prev,
         screen: "play",
         gameState,
         report: null,
         error: null,
         currentHint: null,
         lastActionEvents: [],
-      });
+      }));
     } catch (err) {
       setState((prev) => ({
         ...prev,
@@ -80,6 +95,7 @@ export function useGame() {
         if (service.current.isTerminal(newState)) {
           const report = service.current.getScoreReport(newState);
           return {
+            ...prev,
             screen: "summary",
             gameState: newState,
             report,
@@ -122,6 +138,7 @@ export function useGame() {
         if (service.current.isTerminal(newState)) {
           const report = service.current.getScoreReport(newState);
           return {
+            ...prev,
             screen: "summary",
             gameState: newState,
             report,
@@ -181,6 +198,7 @@ export function useGame() {
 
   return {
     screen: state.screen,
+    selectedExpansionId: state.selectedExpansionId,
     gameState: state.gameState,
     report: state.report,
     error: state.error,
@@ -192,6 +210,7 @@ export function useGame() {
       ? service.current.nodeHasHint(state.gameState)
       : false,
     goTo,
+    selectExpansion,
     startCase,
     makeChoice,
     performFreeAction,

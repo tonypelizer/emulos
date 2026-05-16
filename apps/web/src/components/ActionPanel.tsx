@@ -30,6 +30,7 @@ interface Props {
   hintsUsedAtNodes: string[];
   nodeHasHint: boolean;
   freeActionMode?: boolean;
+  advisorLabel?: string;
 }
 
 const TAB_CONFIG: { id: Tab; icon: string; label: string }[] = [
@@ -56,6 +57,7 @@ export function ActionPanel({
   hintsUsedAtNodes,
   nodeHasHint,
   freeActionMode = false,
+  advisorLabel,
 }: Props) {
   const hintAlreadyUsed = hintsUsedAtNodes.includes(currentNodeId);
   const [openTab, setOpenTab] = useState<Tab | null>(null);
@@ -160,15 +162,17 @@ export function ActionPanel({
             </div>
           )}
 
-          {/* Hint (Attending Physician) */}
+          {/* Hint (Advisor) */}
           {openTab === "hint" && (
             <div className={styles.hintPane}>
               <div className={styles.hintPaneHeader}>
                 <span className={styles.hintPaneIcon} aria-hidden="true">
-                  👨‍⚕️
+                  {advisorLabel === "Head Vet" ? "🐾" : "👨‍⚕️"}
                 </span>
                 <div>
-                  <h2 className={styles.hintPaneTitle}>Attending Physician</h2>
+                  <h2 className={styles.hintPaneTitle}>
+                    {advisorLabel ?? "Attending Physician"}
+                  </h2>
                   <p className={styles.hintPaneMeta}>
                     Ask for guidance — costs 10 pts per node
                   </p>
@@ -177,7 +181,7 @@ export function ActionPanel({
               {currentHint !== null ? (
                 <div className={styles.hintRevealBox} role="note">
                   <span className={styles.hintRevealLabel}>
-                    Attending says:
+                    {advisorLabel ?? "Attending"} says:
                   </span>
                   <p className={styles.hintRevealText}>{currentHint}</p>
                 </div>
@@ -186,7 +190,7 @@ export function ActionPanel({
                   <p className={styles.hintAskText}>
                     {hintAlreadyUsed
                       ? "You already asked for a hint here. Navigate to a new decision to ask again."
-                      : "Not sure what to do next? Your Attending is available for guidance."}
+                      : `Not sure what to do next? Your ${advisorLabel ?? "Attending"} is available for guidance.`}
                   </p>
                   {!hintAlreadyUsed && nodeHasHint && (
                     <button
@@ -194,9 +198,9 @@ export function ActionPanel({
                       onClick={() => {
                         onHint();
                       }}
-                      aria-label="Ask Attending Physician for a hint (−10 pts)"
+                      aria-label={`Ask ${advisorLabel ?? "Attending Physician"} for a hint (−10 pts)`}
                     >
-                      Ask Attending (−10 pts)
+                      Ask {advisorLabel ?? "Attending"} (−10 pts)
                     </button>
                   )}
                   {!hintAlreadyUsed && !nodeHasHint && (

@@ -1,0 +1,1225 @@
+{
+  "id": "cat-uti-001",
+  "version": "1.0.0",
+  "metadata": {
+    "title": "Luna Won't Use Her Box",
+    "specialty": "veterinary",
+    "difficulty": "beginner",
+    "estimatedMinutes": 20,
+    "tags": [
+      "UTI",
+      "feline",
+      "urinary",
+      "antibiotics",
+      "urine culture",
+      "cystitis"
+    ],
+    "author": "emulos-content-team",
+    "expansionPack": "vet",
+    "requiredEngineVersion": ">=1.0.0"
+  },
+  "patient": {
+    "demographics": {
+      "name": "Luna",
+      "age": 5,
+      "sex": "female",
+      "weight": 4.2,
+      "occupation": "Domestic shorthair cat (indoor, spayed)"
+    },
+    "initialVitals": {
+      "heartRate": 185,
+      "bloodPressure": {
+        "systolic": 128,
+        "diastolic": 84
+      },
+      "respiratoryRate": 26,
+      "temperature": 39.4,
+      "oxygenSaturation": 99,
+      "consciousness": "alert",
+      "painScore": 2
+    },
+    "conditions": {
+      "active": [],
+      "hidden": [
+        {
+          "conditionId": "feline-uti",
+          "severity": "moderate"
+        }
+      ]
+    },
+    "riskFactors": ["dry-food-only-diet", "indoor-sedentary"]
+  },
+  "scoring": {
+    "maxScore": 1000,
+    "passingScore": 600,
+    "gradeThresholds": {
+      "S": 950,
+      "A": 850,
+      "B": 700,
+      "C": 600
+    },
+    "timeBonuses": [
+      {
+        "gameTimeThreshold": 25,
+        "bonus": 200,
+        "label": "Diagnosis and treatment within 25 minutes — efficient workup"
+      },
+      {
+        "gameTimeThreshold": 40,
+        "bonus": 100,
+        "label": "Treatment initiated within 40 minutes"
+      }
+    ],
+    "criticalActions": [
+      {
+        "actionId": "history-gathered",
+        "points": 50,
+        "isMandatory": false,
+        "label": "Complete history obtained from owner"
+      },
+      {
+        "actionId": "physical-exam-done",
+        "points": 75,
+        "isMandatory": true,
+        "label": "Physical examination performed — bladder palpated"
+      },
+      {
+        "actionId": "urine-collected",
+        "points": 100,
+        "isMandatory": true,
+        "label": "Urine sample collected (cystocentesis or free-catch)"
+      },
+      {
+        "actionId": "urinalysis-performed",
+        "points": 150,
+        "isMandatory": true,
+        "label": "Urinalysis with sediment exam performed — confirms UTI"
+      },
+      {
+        "actionId": "urine-culture-ordered",
+        "points": 100,
+        "isMandatory": false,
+        "label": "Urine culture & sensitivity ordered (antimicrobial stewardship)"
+      },
+      {
+        "actionId": "correct-antibiotic-prescribed",
+        "points": 300,
+        "isMandatory": true,
+        "label": "Appropriate first-line antibiotic prescribed (amoxicillin-clavulanate or TMS)"
+      },
+      {
+        "actionId": "owner-education-given",
+        "points": 50,
+        "isMandatory": false,
+        "label": "Owner educated: wet food, water intake, and 7-day recheck"
+      },
+      {
+        "actionId": "comprehensive-workup-bonus",
+        "points": 50,
+        "isMandatory": false,
+        "label": "Comprehensive workup: abdominal ultrasound and bloodwork ordered"
+      }
+    ],
+    "modifiers": [
+      {
+        "id": "antibiotics-without-urinalysis",
+        "description": "Antibiotics prescribed without running a urinalysis — diagnosis unconfirmed, could be idiopathic FLUTD",
+        "type": "flat-delta",
+        "value": -150
+      },
+      {
+        "id": "fluoroquinolone-first-line",
+        "description": "Fluoroquinolone (enrofloxacin) used as first-line antibiotic in a cat — antimicrobial stewardship concern",
+        "type": "flat-delta",
+        "value": -100
+      },
+      {
+        "id": "sent-home-untreated",
+        "description": "Cat sent home without antibiotics for confirmed bacterial UTI",
+        "type": "multiplier",
+        "value": 0.3
+      }
+    ],
+    "irrelevantActionPenalty": -25
+  },
+  "nodes": {
+    "start": {
+      "id": "start",
+      "type": "presentation",
+      "hint": "Luna's owner is worried because the cat is straining to urinate and there's blood in the urine. In cats this could be bacterial UTI, idiopathic FLUTD, or even a urethral obstruction (dangerous in males, rarer in females). Your first step is to take a complete history from the owner — how long, what symptoms, diet, and any prior episodes. Then examine Luna.",
+      "text": "CASE BRIEF\nLuna — 5F (spayed) domestic shorthair cat, 4.2 kg\n\n\nCHECK-IN COMPLAINT\nMrs. Chen presents Luna at your veterinary clinic. She explains: 'Luna has been going in and out of her litter box all night but barely producing anything — and I can see blood in the little bit she does pass. She cried out twice when she tried to go. This started two days ago.'\n\n\nINITIAL ASSESSMENT\nHR 185 bpm | BP 128/84 | RR 26 | Temp 39.4°C | SpO₂ 99% | Pain 2/10\n\n• Luna is alert and responsive, mildly tense when you handle her\n• Mucous membranes pink and moist; CRT < 2 seconds\n• Coat is well-groomed; body condition score 4/9 (lean-normal)\n• Mild pain response on caudal abdominal palpation\n\n\nOWNER OBSERVATIONS\n• Blood-tinged urine in litter box × 2 days\n• Frequent trips to box with minimal output (stranguria / pollakiuria)\n• Crying out occasionally during attempts to urinate\n• Appetite reduced since yesterday\n• No vomiting, no diarrhoea\n\n─────────────────────────────────────────────\nCLINICAL IMPRESSION\nA 5-year-old spayed female cat presenting with haematuria, stranguria, and pollakiuria × 2 days. Top differentials: bacterial UTI, idiopathic feline lower urinary tract disease (iFLUTD), urolithiasis. Urethral obstruction is less common in females but must be considered. Collect history, perform physical examination, then run a urinalysis on a cystocentesis sample.",
+      "effects": [],
+      "choices": [
+        {
+          "id": "start-take-history",
+          "text": "Take a complete history from Mrs. Chen — duration, symptoms, diet, environment",
+          "nextNodeId": "history-hub",
+          "timeCost": 2,
+          "effects": [],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "history-started"
+            }
+          }
+        },
+        {
+          "id": "start-examine-first",
+          "text": "Begin physical examination immediately — worry about history later",
+          "nextNodeId": "examination-hub",
+          "timeCost": 0,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "skipped-history",
+              "points": -20,
+              "reason": "Skipping the owner history misses key context — duration, diet, prior episodes, and home environment all influence your differential and management",
+              "category": "penalty"
+            }
+          ],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "history-started"
+            }
+          }
+        },
+        {
+          "id": "start-straight-to-tests",
+          "text": "Order a urinalysis immediately — the signs are obvious enough",
+          "nextNodeId": "urine-collection-result",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "add_score_event",
+              "actionId": "skipped-hx-exam",
+              "points": -40,
+              "reason": "Ordering tests without a history or physical exam skips important diagnostic steps — you may miss concurrent findings or choose the wrong tests",
+              "category": "penalty"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "history-hub": {
+      "id": "history-hub",
+      "type": "history",
+      "hint": "Cover the key areas: urinary symptoms (the main complaint), diet and water intake (important risk factors for FLUTD and UTI), living environment and stress (idiopathic FLUTD is often stress-triggered), and past medical history. Once you have enough, proceed to the physical examination.",
+      "text": "Mrs. Chen is attentive and cooperative. You need a focused history.\n\nWhat aspects do you want to explore?",
+      "effects": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "history-started"
+        }
+      ],
+      "choices": [
+        {
+          "id": "ask-urinary-symptoms",
+          "text": "Urinary symptoms — frequency, straining, blood, pain, output volume",
+          "nextNodeId": "history-urinary",
+          "timeCost": 4,
+          "effects": [],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "urinary-hx-gathered"
+            }
+          }
+        },
+        {
+          "id": "ask-diet-water",
+          "text": "Diet and water intake — food type, fluid consumption, any recent changes",
+          "nextNodeId": "history-diet-water",
+          "timeCost": 3,
+          "effects": [],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "diet-hx-gathered"
+            }
+          }
+        },
+        {
+          "id": "ask-environment",
+          "text": "Living environment — indoor/outdoor, litter box setup, recent stressors",
+          "nextNodeId": "history-environment",
+          "timeCost": 3,
+          "effects": [],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "environment-hx-gathered"
+            }
+          }
+        },
+        {
+          "id": "ask-pmhx",
+          "text": "Past medical history — prior UTIs, vaccinations, medications",
+          "nextNodeId": "history-pmhx",
+          "timeCost": 3,
+          "effects": [],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "pmhx-gathered"
+            }
+          }
+        },
+        {
+          "id": "history-to-exam",
+          "text": "I have enough history — proceed to physical examination",
+          "nextNodeId": "examination-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "history-urinary": {
+      "id": "history-urinary",
+      "type": "history",
+      "text": "Mrs. Chen describes Luna's urinary symptoms in detail:\n\n• Started 2 days ago — Luna began visiting the litter box much more frequently than usual\n• She sits in the box, strains, and produces only a few drops each time (pollakiuria + stranguria)\n• The urine is blood-tinged — Mrs. Chen noticed pink-red spots in the clay litter\n• Luna has cried out twice during attempts to urinate — audible vocalisation suggesting pain\n• She has not gone 'normally' since this started\n• No evidence of urinating anywhere other than the litter box (no periuria noted)\n• No blood seen near the vulva between attempts (no continuous haemorrhage)\n\nThe combination of haematuria + stranguria + pollakiuria in an intact/spayed female cat has a broad differential, but bacterial UTI with cystitis is a strong candidate. Idiopathic FLUTD (Pandora syndrome) is also possible — it is actually more common in cats overall, but less likely in a 5-year-old with a confirmed fever.",
+      "effects": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "urinary-hx-gathered"
+        },
+        {
+          "type": "add_history_item",
+          "itemId": "haematuria"
+        },
+        {
+          "type": "add_history_item",
+          "itemId": "stranguria"
+        },
+        {
+          "type": "add_history_item",
+          "itemId": "pollakiuria"
+        }
+      ],
+      "choices": [
+        {
+          "id": "urinary-hx-back",
+          "text": "Continue taking history",
+          "nextNodeId": "history-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "history-diet-water": {
+      "id": "history-diet-water",
+      "type": "history",
+      "text": "Diet and water intake:\n\n• Luna eats exclusively dry kibble (no wet food) — Mrs. Chen has never offered wet food\n• Water intake: Mrs. Chen provides a single ceramic bowl of still water. She estimates Luna drinks 'a normal amount' but admits she's never closely monitored it\n• No dietary changes in the past month\n• No treats other than occasional dry kibble pieces\n\nClinical relevance — IMPORTANT:\nDry-food-only diets are a well-established risk factor for feline lower urinary tract disease. Cats evolved as desert predators and get most of their hydration from prey (roughly 70% water). Dry kibble contains only 10–12% moisture. Chronically low water intake produces concentrated urine (high specific gravity) — which predisposes to UTI, crystal formation, and idiopathic FLUTD.\n\nRecommending increased wet food and a water fountain will be an important part of Luna's discharge advice.",
+      "effects": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "diet-hx-gathered"
+        },
+        {
+          "type": "add_history_item",
+          "itemId": "dry-food-risk-factor"
+        }
+      ],
+      "choices": [
+        {
+          "id": "diet-hx-back",
+          "text": "Continue taking history",
+          "nextNodeId": "history-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "history-environment": {
+      "id": "history-environment",
+      "type": "history",
+      "text": "Living environment and potential stressors:\n\n• Luna is strictly indoor — never goes outside\n• Single-cat household\n• One litter box (scooped daily, changed weekly)\n• Recent changes: Mrs. Chen's adult son moved in approximately 3 weeks ago — new person in the household, some rearranging of furniture, occasional loud music late at night\n• Luna has been hiding under the bed more than usual since the son arrived\n\nClinical context:\nEnvironmental stress is the primary trigger for idiopathic FLUTD (iFLUTD) in cats. A new person, changed layout, and disrupted routine all represent significant stressors for a cat. However, iFLUTD typically self-resolves within 3–7 days and does not cause fever — Luna's temperature of 39.4°C suggests an infectious or inflammatory process beyond pure iFLUTD. Bacterial UTI, potentially superimposed on stress-related FLUTD, remains the leading diagnosis.",
+      "effects": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "environment-hx-gathered"
+        }
+      ],
+      "choices": [
+        {
+          "id": "environment-hx-back",
+          "text": "Continue taking history",
+          "nextNodeId": "history-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "history-pmhx": {
+      "id": "history-pmhx",
+      "type": "history",
+      "text": "Past medical history:\n\n• Spayed at 6 months of age — no complications\n• Vaccinations: up to date (FVRCP + Rabies — last updated 10 months ago)\n• No prior urinary episodes — this is the first time\n• No known drug allergies\n• No prior illnesses or hospitalisations\n• No medications currently\n• Annual wellness exams — last exam 10 months ago; all normal at that time\n\nNote: Being a first episode with fever and positive urine findings raises the suspicion of a true bacterial UTI rather than idiopathic FLUTD. Cats with iFLUTD typically have recurrent episodes and no fever.",
+      "effects": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "pmhx-gathered"
+        },
+        {
+          "type": "add_score_event",
+          "actionId": "history-gathered",
+          "points": 50,
+          "reason": "Complete history obtained from owner — covers urinary signs, diet risk factors, environment, and past medical history",
+          "category": "critical-action"
+        }
+      ],
+      "choices": [
+        {
+          "id": "pmhx-to-exam",
+          "text": "Good — proceed to physical examination",
+          "nextNodeId": "examination-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "examination-hub": {
+      "id": "examination-hub",
+      "type": "examination",
+      "hint": "In a cat presenting with urinary signs, your exam priorities are: (1) abdominal palpation — is the bladder distended or painful? Can you express urine? (2) Check for signs of systemic illness — dehydration, lymphadenopathy. A blocked urethra is a life-threatening emergency requiring immediate relief, but that is more common in male cats. Luna is female, so obstruction is less likely but worth ruling out with palpation.",
+      "text": "You prepare to examine Luna. She is sitting on the exam table, alert but tense.\n\nWhat aspects of the physical exam do you focus on?",
+      "effects": [],
+      "choices": [
+        {
+          "id": "exam-abdomen",
+          "text": "Palpate the abdomen — assess bladder size, pain, and check for urethral obstruction",
+          "nextNodeId": "exam-abdominal",
+          "timeCost": 5,
+          "effects": [],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "abdomen-examined"
+            }
+          }
+        },
+        {
+          "id": "exam-general",
+          "text": "General assessment — dehydration, lymph nodes, pain score, mucous membranes",
+          "nextNodeId": "exam-general",
+          "timeCost": 3,
+          "effects": [],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "general-exam-done"
+            }
+          }
+        },
+        {
+          "id": "exam-to-investigation",
+          "text": "Examination complete — proceed to investigations",
+          "nextNodeId": "investigation-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "exam-abdominal": {
+      "id": "exam-abdominal",
+      "type": "examination",
+      "text": "You gently palpate Luna's abdomen.\n\n• Bladder: Small and firm, located in the caudal abdomen. Mild pain response — Luna tenses and vocalises softly when you palpate the bladder. A small amount of urine is present. The bladder wall feels slightly thickened.\n• Urethra: No firm, cord-like obstruction palpable in the perineal region. Luna was able to produce a few drops during check-in, confirming the urethra is patent.\n• Kidneys: Normal size bilaterally, smooth contour, non-painful on palpation — no evidence of nephromegaly or renomegaly suggesting upper tract involvement.\n• No palpable abdominal masses, no mesenteric lymphadenopathy.\n• No peritoneal signs.\n\nFindings: Small, mildly painful bladder with wall thickening. Urethra patent. Kidneys normal. No obstruction. These findings are consistent with cystitis — the bladder itself is inflamed.",
+      "effects": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "abdomen-examined"
+        },
+        {
+          "type": "add_examination_finding",
+          "findingId": "painful-bladder"
+        },
+        {
+          "type": "add_examination_finding",
+          "findingId": "bladder-wall-thickened"
+        },
+        {
+          "type": "add_examination_finding",
+          "findingId": "kidneys-normal"
+        },
+        {
+          "type": "add_score_event",
+          "actionId": "physical-exam-done",
+          "points": 75,
+          "reason": "Physical examination performed — bladder palpated, urethra patent, kidneys assessed. No obstruction identified.",
+          "category": "critical-action"
+        }
+      ],
+      "choices": [
+        {
+          "id": "abdomen-back",
+          "text": "Continue examination",
+          "nextNodeId": "examination-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "exam-general": {
+      "id": "exam-general",
+      "type": "examination",
+      "text": "General physical assessment:\n\n• Hydration: Skin tent recoil normal, mucous membranes moist — adequately hydrated.\n• Lymph nodes: Submandibular and popliteal lymph nodes non-enlarged, non-painful.\n• Coat: Well-groomed overall; no overgrooming of the perineal or caudal abdominal region.\n• Eyes / Nasal: No discharge, no respiratory distress.\n• Temperature: 39.4°C confirmed (normal feline range 38.0–39.2°C) — mild pyrexia consistent with active infection.\n• Heart and lungs: Regular rate and rhythm, no murmur. Clear lung fields.\n• Pain score: 2/10 — Luna shows mild intermittent discomfort during caudal palpation, consistent with a moderate perceived pain level (cats suppress pain responses).\n\nNote: Cats are experts at masking pain. A pain score of 2/10 in this context likely represents a clinically meaningful level of discomfort.",
+      "effects": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "general-exam-done"
+        },
+        {
+          "type": "add_examination_finding",
+          "findingId": "mild-pyrexia-confirmed"
+        }
+      ],
+      "choices": [
+        {
+          "id": "general-exam-back",
+          "text": "Continue examination",
+          "nextNodeId": "examination-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "investigation-hub": {
+      "id": "investigation-hub",
+      "type": "decision",
+      "hint": "The single most important test here is a urinalysis on a cystocentesis sample. Cystocentesis (a sterile needle aspirate from the bladder) gives you an uncontaminated sample — unlike free-catch, which can be contaminated by vulvar bacteria. From the sample you can run a dipstick + sediment exam in-house in 10 minutes. Also send a urine culture for antimicrobial stewardship. CBC and chemistry add context. Ultrasound rules out stones.",
+      "text": "Physical examination suggests cystitis. Your working differential:\n1. Bacterial UTI (most likely — fever, first episode, positive palpation findings)\n2. Idiopathic FLUTD (possible — environmental stress, dry diet)\n3. Urolithiasis (possible — collect urine, consider ultrasound)\n\nWhat investigations do you want to run?",
+      "effects": [],
+      "choices": [
+        {
+          "id": "collect-urine-cystocentesis",
+          "text": "Collect urine via cystocentesis (sterile bladder tap) — gold standard sample",
+          "nextNodeId": "urine-collection-result",
+          "timeCost": 5,
+          "effects": [],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "urine-collected"
+            }
+          }
+        },
+        {
+          "id": "order-urinalysis-only",
+          "text": "Run urinalysis (dipstick + sediment exam) on collected sample",
+          "nextNodeId": "urinalysis-result",
+          "timeCost": 10,
+          "effects": [],
+          "condition": {
+            "op": "and",
+            "conditions": [
+              {
+                "op": "has_knowledge",
+                "knowledgeId": "urine-collected"
+              },
+              {
+                "op": "not",
+                "condition": {
+                  "op": "has_knowledge",
+                  "knowledgeId": "urinalysis-done"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "order-urine-culture",
+          "text": "Send urine for culture & sensitivity (antimicrobial stewardship)",
+          "nextNodeId": "urine-culture-result",
+          "timeCost": 3,
+          "effects": [],
+          "condition": {
+            "op": "and",
+            "conditions": [
+              {
+                "op": "has_knowledge",
+                "knowledgeId": "urine-collected"
+              },
+              {
+                "op": "not",
+                "condition": {
+                  "op": "has_knowledge",
+                  "knowledgeId": "urine-culture-sent"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "order-cbc-chemistry",
+          "text": "Order CBC and chemistry panel — check for systemic effects",
+          "nextNodeId": "cbc-chemistry-result",
+          "timeCost": 3,
+          "effects": [],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "bloodwork-done"
+            }
+          }
+        },
+        {
+          "id": "order-ultrasound",
+          "text": "Order abdominal ultrasound — rule out urolithiasis (stones)",
+          "nextNodeId": "ultrasound-result",
+          "timeCost": 3,
+          "effects": [],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "ultrasound-done"
+            }
+          }
+        },
+        {
+          "id": "investigations-to-treatment",
+          "text": "I have enough information — proceed to treatment",
+          "nextNodeId": "treatment-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "urine-collection-result": {
+      "id": "urine-collection-result",
+      "type": "result",
+      "text": "You prepare the cystocentesis.\n\nWith Luna in lateral recumbency, you clip a small area of caudal ventral abdomen, prep with alcohol, and use a 22G needle attached to a 6 mL syringe. Under palpation guidance, you aspirate the bladder.\n\n• 3 mL of amber, cloudy urine obtained — good sample\n• Luna tolerates the procedure well with minimal restraint\n• The cloudiness and colour are already notable — clear, pale-yellow urine is normal in cats\n\nCystocentesis advantages:\n• Sterile sample — eliminates contamination from the urethra, vulva, and prepuce\n• Gold standard for urine culture interpretation\n• Quick, safe, and well-tolerated in most cats\n\nThe sample is ready for urinalysis and culture.",
+      "effects": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "urine-collected"
+        },
+        {
+          "type": "add_score_event",
+          "actionId": "urine-collected",
+          "points": 100,
+          "reason": "Urine sample collected via cystocentesis — sterile technique, gold standard for culture interpretation",
+          "category": "critical-action"
+        }
+      ],
+      "choices": [
+        {
+          "id": "urine-collected-to-hub",
+          "text": "Run the urinalysis on this sample",
+          "nextNodeId": "urinalysis-result",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "urinalysis-result": {
+      "id": "urinalysis-result",
+      "type": "result",
+      "hint": "The UA is abnormal — high WBCs, bacteria, blood, and high specific gravity. This pattern (pyuria + bacteriuria + haematuria) is the hallmark of bacterial UTI in cats. The high SG (1.042) tells you the kidneys are concentrating urine well — no renal insufficiency. Send this sample for culture before starting antibiotics so you can target therapy.",
+      "text": "URINALYSIS RESULTS (cystocentesis sample)\n\nMacroscopic:\n• Colour: Amber\n• Turbidity: Cloudy\n• Specific gravity: 1.042 (concentrated — normal ≥1.035 for cats)\n\nDipstick:\n• Leukocyte esterase: 3+\n• Nitrites: Positive\n• Blood: 3+\n• Protein: 1+\n• pH: 6.5\n\nSediment exam (400× microscopy):\n• WBCs: 42/hpf (normal 0–5/hpf)\n• RBCs: 18/hpf (normal 0–5/hpf)\n• Bacteria: Many rod-shaped organisms\n• No casts, no crystals\n\nINTERPRETATION\nThe findings are diagnostic of bacterial cystitis:\n• Pyuria (42 WBCs/hpf) — white cells in the bladder = inflammation/infection\n• Bacteriuria — rod-shaped organisms (likely E. coli or Pasteurella)\n• Haematuria — bleeding from inflamed mucosa\n• High specific gravity — kidneys are concentrating normally; no renal involvement at this stage\n• Absence of crystals — makes struvite or oxalate urolithiasis less likely, though ultrasound can confirm\n\nDIAGNOSIS CONFIRMED: Bacterial Urinary Tract Infection (Cystitis)",
+      "effects": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "urinalysis-done"
+        },
+        {
+          "type": "reveal_condition",
+          "conditionId": "feline-uti"
+        },
+        {
+          "type": "order_test",
+          "testId": "urinalysis-feline"
+        },
+        {
+          "type": "result_test",
+          "testId": "urinalysis-feline"
+        },
+        {
+          "type": "add_score_event",
+          "actionId": "urinalysis-performed",
+          "points": 150,
+          "reason": "Urinalysis performed — pyuria, bacteriuria, and haematuria confirmed. Bacterial UTI diagnosis established.",
+          "category": "critical-action"
+        }
+      ],
+      "choices": [
+        {
+          "id": "ua-to-hub",
+          "text": "Order a urine culture before starting antibiotics, then proceed to treatment",
+          "nextNodeId": "urine-culture-result",
+          "timeCost": 3,
+          "effects": [],
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "urine-culture-sent"
+            }
+          }
+        },
+        {
+          "id": "ua-straight-to-treatment",
+          "text": "Diagnosis clear — proceed directly to treatment",
+          "nextNodeId": "treatment-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "urine-culture-result": {
+      "id": "urine-culture-result",
+      "type": "result",
+      "text": "Urine culture submitted.\n\nYou submit the cystocentesis sample to the laboratory for aerobic culture and sensitivity testing.\n\nPreliminary report: Cloudy urine. Gram-negative rods on direct smear.\nFull culture with sensitivity results: 3–5 days (will be available for follow-up visit)\n\nWhy this matters:\n• Culture-directed therapy is the standard of care for UTI\n• It identifies the causative organism and its antibiotic sensitivities\n• It allows de-escalation or adjustment if empiric therapy fails\n• It reduces unnecessary use of broad-spectrum antibiotics (antimicrobial stewardship)\n\nYou will start empiric antibiotics based on common uropathogens in cats. Amoxicillin-clavulanate and trimethoprim-sulfa are first-line choices for feline UTI — both have good gram-negative and gram-positive coverage with low resistance rates in community-acquired cat UTI.",
+      "effects": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "urine-culture-sent"
+        },
+        {
+          "type": "order_test",
+          "testId": "urine-culture-feline"
+        },
+        {
+          "type": "add_score_event",
+          "actionId": "urine-culture-ordered",
+          "points": 100,
+          "reason": "Urine culture & sensitivity ordered — enables targeted therapy and supports antimicrobial stewardship",
+          "category": "critical-action"
+        }
+      ],
+      "choices": [
+        {
+          "id": "culture-to-treatment",
+          "text": "Culture sent — now choose empiric antibiotic treatment",
+          "nextNodeId": "treatment-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "cbc-chemistry-result": {
+      "id": "cbc-chemistry-result",
+      "type": "result",
+      "text": "BLOODWORK RESULTS\n\nCBC:\n• WBC: 14.2 × 10³/µL (ref 5.5–19.5) — mild leukocytosis\n• Neutrophils: 10.8 × 10³/µL — neutrophilia (active infection marker)\n• Haematocrit: 35% (ref 30–45%) — low-normal\n• Platelets: Normal\n\nChemistry Panel:\n• BUN: 28 mg/dL (ref 14–36) — normal\n• Creatinine: 1.2 mg/dL (ref 0.6–2.4) — normal\n• ALT: 45 U/L — normal\n• Glucose: 118 mg/dL — mildly elevated (likely stress hyperglycaemia)\n\nINTERPRETATION\nMild leukocytosis with neutrophilia — consistent with active bacterial infection. Renal function is intact (BUN and creatinine normal) — no evidence of pyelonephritis or upper tract involvement at this stage. The mildly elevated glucose in a stressed cat in clinic is a common and expected finding — not concerning for diabetes.\n\nBloodwork supports a localised lower urinary tract infection without systemic complications.",
+      "effects": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "bloodwork-done"
+        },
+        {
+          "type": "order_test",
+          "testId": "feline-cbc"
+        },
+        {
+          "type": "result_test",
+          "testId": "feline-cbc"
+        },
+        {
+          "type": "order_test",
+          "testId": "feline-chemistry-panel"
+        },
+        {
+          "type": "result_test",
+          "testId": "feline-chemistry-panel"
+        }
+      ],
+      "choices": [
+        {
+          "id": "cbc-back-to-hub",
+          "text": "Continue investigations",
+          "nextNodeId": "investigation-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "ultrasound-result": {
+      "id": "ultrasound-result",
+      "type": "result",
+      "text": "ABDOMINAL ULTRASOUND\n\nBladder:\n• Wall thickening: 3.5 mm (normal < 1.7 mm) — consistent with cystitis\n• Bladder contents: Increased echogenicity (cellular debris / pus / blood)\n• Uroliths (stones): None identified\n• Urethra: Patent — no obstruction\n\nKidneys:\n• Bilateral normal size and echogenicity\n• No renal pelvis dilation (rules out hydronephrosis or upper tract obstruction)\n• No pyelonephritis changes\n\nOther: No free abdominal fluid. No other masses.\n\nINTERPRETATION\nUltrasound confirms cystitis (thickened bladder wall, echogenic contents) WITHOUT urolithiasis or urethral obstruction. This is reassuring — no stones means antimicrobial therapy alone should be sufficient. Upper tract is normal — infection appears confined to the lower urinary tract.",
+      "effects": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "ultrasound-done"
+        },
+        {
+          "type": "order_test",
+          "testId": "abdominal-ultrasound-feline"
+        },
+        {
+          "type": "result_test",
+          "testId": "abdominal-ultrasound-feline"
+        }
+      ],
+      "choices": [
+        {
+          "id": "ultrasound-back-to-hub",
+          "text": "Good — continue investigations or proceed to treatment",
+          "nextNodeId": "investigation-hub",
+          "timeCost": 0,
+          "effects": [],
+          "condition": null
+        }
+      ]
+    },
+    "treatment-hub": {
+      "id": "treatment-hub",
+      "type": "decision",
+      "hint": "First-line antibiotics for feline UTI are amoxicillin-clavulanate (Clavamox — 62.5 mg PO BID × 10–14 days) or trimethoprim-sulfa (15 mg/kg PO BID × 10–14 days). Both provide excellent gram-negative and gram-positive coverage. Fluoroquinolones (like enrofloxacin) should be reserved for culture-confirmed resistant cases — using them first-line depletes your last-resort drugs and risks retinal toxicity in cats at high doses. After prescribing, educate Mrs. Chen on wet food, a water fountain to increase hydration, and return in 7 days.",
+      "text": "You have confirmed bacterial cystitis in Luna.\n\nUrinalysis: 42 WBCs/hpf, rod-shaped bacteria, haematuria, SG 1.042\nDiagnosis: Bacterial UTI — Cystitis (lower tract, no obstruction, no upper tract signs)\n\nChoose your treatment approach:",
+      "effects": [],
+      "choices": [
+        {
+          "id": "treat-amox-clav",
+          "text": "Prescribe amoxicillin-clavulanate (Clavamox) — 62.5 mg PO BID × 14 days + owner education",
+          "nextNodeId": "outcome-excellent",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "dispense_medication",
+              "medicationId": "amoxicillin-clavulanate-vet"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "correct-antibiotic-given"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "correct-antibiotic-prescribed",
+              "points": 300,
+              "reason": "Amoxicillin-clavulanate prescribed — excellent first-line choice for feline UTI. Broad spectrum, good tissue penetration, well-tolerated.",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "owner-education-given",
+              "points": 50,
+              "reason": "Owner educated on wet food transition, water fountain, and 7-day recheck",
+              "category": "critical-action"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "treat-tms",
+          "text": "Prescribe trimethoprim-sulfa (TMS) — 15 mg/kg PO BID × 14 days + owner education",
+          "nextNodeId": "outcome-excellent",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "dispense_medication",
+              "medicationId": "trimethoprim-sulfa-vet"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "correct-antibiotic-given"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "correct-antibiotic-prescribed",
+              "points": 300,
+              "reason": "Trimethoprim-sulfa prescribed — an excellent alternative first-line choice for feline UTI with good urinary tract penetration.",
+              "category": "critical-action"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "owner-education-given",
+              "points": 50,
+              "reason": "Owner educated on wet food transition, water fountain, and 7-day recheck",
+              "category": "critical-action"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "treat-enrofloxacin",
+          "text": "Prescribe enrofloxacin (Baytril) — 5 mg/kg PO SID × 10 days",
+          "nextNodeId": "outcome-fluoroquinolone",
+          "timeCost": 5,
+          "effects": [
+            {
+              "type": "dispense_medication",
+              "medicationId": "enrofloxacin-vet"
+            },
+            {
+              "type": "add_knowledge",
+              "knowledgeId": "enrofloxacin-given"
+            },
+            {
+              "type": "apply_score_modifier",
+              "modifierId": "fluoroquinolone-first-line"
+            },
+            {
+              "type": "add_score_event",
+              "actionId": "correct-antibiotic-prescribed",
+              "points": 150,
+              "reason": "Enrofloxacin is effective for UTI but is not the recommended first-line choice — reserve fluoroquinolones for culture-confirmed resistant infections",
+              "category": "critical-action"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "id": "treat-nothing",
+          "text": "Discharge Luna without antibiotics — wait for culture results before treating",
+          "nextNodeId": "outcome-no-treatment",
+          "timeCost": 2,
+          "effects": [
+            {
+              "type": "apply_score_modifier",
+              "modifierId": "sent-home-untreated"
+            }
+          ],
+          "condition": null
+        }
+      ]
+    },
+    "outcome-excellent": {
+      "id": "outcome-excellent",
+      "type": "outcome",
+      "outcomeId": "outcome-excellent",
+      "effects": [
+        {
+          "type": "add_score_event",
+          "actionId": "comprehensive-workup-bonus",
+          "points": 50,
+          "reason": "Comprehensive workup: abdominal ultrasound and bloodwork ordered in addition to urinalysis and culture",
+          "category": "optional-bonus",
+          "condition": {
+            "op": "and",
+            "conditions": [
+              { "op": "has_knowledge", "knowledgeId": "ultrasound-done" },
+              { "op": "has_knowledge", "knowledgeId": "bloodwork-done" }
+            ]
+          }
+        }
+      ],
+      "text": "Luna is discharged with a treatment plan.\n\nTreatment summary:\n• Antibiotic: Amoxicillin-clavulanate 62.5 mg PO BID × 14 days (or TMS 15 mg/kg BID × 14 days)\n• Wet food transition: Introduce a quality wet food to increase dietary moisture\n• Water fountain: Switch to a recirculating water fountain to encourage drinking\n• Activity: Encourage play and environmental enrichment to reduce stress (new housemate adjustment)\n• Recheck: Return in 7 days for re-examination and to review culture results\n• Owner education: Signs of recurrence — straining, blood, vocalising when urinating\n\nClinical course (follow-up notes):\nDay 3: Mrs. Chen calls — Luna is urinating normally again, no blood visible. Eating better.\nDay 7 (recheck): Luna bright and alert. No urinary signs. Bladder non-painful on palpation. Repeat UA: WBC 2/hpf, no bacteria — infection resolved.\nCulture result (day 5): E. coli, sensitive to amoxicillin-clavulanate and TMS. Antibiotic choice confirmed appropriate.\nDay 14: Course completed. Luna doing well. Mrs. Chen has switched to a mixed wet/dry diet and set up a water fountain.\n\n─────────────────────────────────────────────\nDEBRIEF\n\nExcellent work. This was a thorough approach to feline lower urinary tract disease:\n\n✓ Complete history from owner — identified dry-diet risk factor and environmental stress trigger\n✓ Physical examination — bladder palpated, urethra confirmed patent\n✓ Cystocentesis — sterile urine sample, gold standard collection technique\n✓ Urinalysis — pyuria, bacteriuria, and haematuria confirmed bacterial UTI\n✓ Urine culture — enables targeted therapy and antimicrobial stewardship\n✓ First-line antibiotic — appropriate agent, correct duration\n✓ Owner education — dietary changes and recheck planned\n\nKey teaching points:\n• Cats on dry-food-only diets produce highly concentrated urine which predisposes to UTI and FLUTD\n• A fever in a cat with lower urinary signs raises the probability of true bacterial UTI over idiopathic FLUTD\n• Cystocentesis is superior to free-catch for culture accuracy\n• Fluoroquinolones should be reserved for culture-confirmed resistant infections in cats — not first-line\n• A urine culture at recheck (post-treatment) confirms cure"
+    },
+    "outcome-fluoroquinolone": {
+      "id": "outcome-fluoroquinolone",
+      "type": "outcome",
+      "outcomeId": "outcome-fluoroquinolone",
+      "text": "Luna is discharged with enrofloxacin.\n\nClinical outcome: Luna does improve — enrofloxacin is bactericidal for most gram-negative uropathogens. Her urinary signs resolve by day 4.\n\nHowever, your pharmacist contacts you the following day after reviewing the prescription, and your attending veterinarian raises a concern at morning rounds.\n\n─────────────────────────────────────────────\nDEBRIEF\n\nEnrofloxacin is effective against most gram-negative uropathogens (including E. coli) and the patient improved — but this was not the right first-line choice.\n\nWHY FLUOROQUINOLONES SHOULD NOT BE FIRST-LINE IN CATS:\n\n1. Retinal toxicity risk:\n   Enrofloxacin is uniquely toxic to the feline retinal tapetal layer at elevated or prolonged doses. This causes sudden-onset irreversible blindness. The risk is dose-dependent — 5 mg/kg SID is the maximum safe dose for cats. The risk is real and well-documented; many practitioners have seen it.\n\n2. Antimicrobial stewardship:\n   Fluoroquinolones are 'reserve' antibiotics in veterinary medicine. First-line feline UTI is caused predominantly by E. coli and Staphylococcus — organisms that respond well to amoxicillin-clavulanate and TMS. Using fluoroquinolones empirically without culture evidence of resistance depletes your last-resort drugs and drives resistance.\n\n3. Better choices were available:\n   • Amoxicillin-clavulanate (Clavamox): First-line, well-tolerated, excellent UTI penetration\n   • Trimethoprim-sulfa: Well-absorbed into urine, cost-effective\n\nKey lesson: Save fluoroquinolones for culture-confirmed resistant infections where first-line antibiotics have failed.",
+      "effects": []
+    },
+    "outcome-no-treatment": {
+      "id": "outcome-no-treatment",
+      "type": "outcome",
+      "outcomeId": "outcome-no-treatment",
+      "text": "Luna is sent home without antibiotics.\n\nMrs. Chen calls 3 days later. Luna is worse — she has not eaten in 2 days, is hiding under the bed, and is now producing only a drop of very dark urine. She appears lethargic.\n\nOn emergency re-presentation:\n• HR 210 bpm | RR 32 | Temp 40.1°C | Pain: 5/10\n• Luna is moderately dehydrated — skin tent, tacky mucous membranes\n• Kidney values: BUN 58, Creatinine 2.8 mg/dL — acute kidney injury developing\n• UA repeat: 80+ WBCs/hpf, heavy bacteriuria, glucose in urine (stress/renal)\n\nLuna is hospitalised for 3 days: IV fluids, IV amoxicillin-clavulanate, pain management.\n\n─────────────────────────────────────────────\nDEBRIEF\n\nWaiting for culture results before starting antibiotics is NOT appropriate when:\n• The diagnosis of bacterial UTI is already confirmed on urinalysis (pyuria + bacteriuria + haematuria)\n• The patient has a fever and is clearly uncomfortable\n\nCulture results take 3–5 days. Sending a cat home with confirmed bacterial cystitis and no treatment allows the infection to ascend to the kidneys (pyelonephritis) and cause systemic illness.\n\nThe correct approach:\n→ Run the urinalysis first (quick, in-house, 10 minutes)\n→ Confirm bacterial infection\n→ Start empiric antibiotics immediately based on likely organisms\n→ Use culture results at recheck to confirm sensitivities and adjust if needed\n\nCulture should guide therapy — not delay it.",
+      "effects": []
+    }
+  },
+  "freeActionEffects": {
+    "tests": {
+      "urinalysis-feline": [
+        {
+          "type": "result_test",
+          "testId": "urinalysis-feline"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "urine-collected",
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "urine-collected"
+            }
+          }
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "urinalysis-done",
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "urinalysis-done"
+            }
+          }
+        },
+        {
+          "type": "reveal_condition",
+          "conditionId": "feline-uti"
+        },
+        {
+          "type": "append_narrative",
+          "narrativeType": "result",
+          "text": "Urinalysis (cystocentesis): Amber, cloudy. SG 1.042. Leukocyte esterase 3+, nitrites positive, blood 3+. Sediment: 42 WBCs/hpf, 18 RBCs/hpf, many rod-shaped bacteria. Diagnosis confirmed: bacterial cystitis."
+        },
+        {
+          "type": "add_score_event",
+          "actionId": "urine-collected",
+          "points": 100,
+          "reason": "Urine collected and urinalysis performed",
+          "category": "critical-action",
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "urine-collected"
+            }
+          }
+        },
+        {
+          "type": "add_score_event",
+          "actionId": "urinalysis-performed",
+          "points": 150,
+          "reason": "Urinalysis performed — pyuria, bacteriuria, and haematuria confirmed bacterial UTI",
+          "category": "critical-action",
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "urinalysis-done"
+            }
+          }
+        }
+      ],
+      "urine-culture-feline": [
+        {
+          "type": "order_test",
+          "testId": "urine-culture-feline"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "urine-culture-sent",
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "urine-culture-sent"
+            }
+          }
+        },
+        {
+          "type": "append_narrative",
+          "narrativeType": "result",
+          "text": "Urine culture submitted. Gram-negative rods on direct smear. Full sensitivity results in 3–5 days."
+        },
+        {
+          "type": "add_score_event",
+          "actionId": "urine-culture-ordered",
+          "points": 100,
+          "reason": "Urine culture ordered from cystocentesis sample — antimicrobial stewardship",
+          "category": "critical-action",
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "urine-culture-sent"
+            }
+          }
+        }
+      ],
+      "feline-cbc": [
+        {
+          "type": "result_test",
+          "testId": "feline-cbc"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "bloodwork-done"
+        },
+        {
+          "type": "append_narrative",
+          "narrativeType": "result",
+          "text": "CBC: WBC 14.2 × 10³/µL (mild leukocytosis), neutrophilia 10.8 × 10³/µL. HCT 35%. Consistent with active bacterial infection."
+        }
+      ],
+      "feline-chemistry-panel": [
+        {
+          "type": "result_test",
+          "testId": "feline-chemistry-panel"
+        },
+        {
+          "type": "append_narrative",
+          "narrativeType": "result",
+          "text": "Chemistry panel: BUN 28, Creatinine 1.2 — renal function intact. Mild stress hyperglycaemia (glucose 118). No systemic complications."
+        }
+      ],
+      "abdominal-ultrasound-feline": [
+        {
+          "type": "result_test",
+          "testId": "abdominal-ultrasound-feline"
+        },
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "ultrasound-done"
+        },
+        {
+          "type": "append_narrative",
+          "narrativeType": "result",
+          "text": "Ultrasound: Bladder wall thickening (3.5 mm), echogenic contents. No uroliths. Urethra patent. Kidneys normal. Cystitis confirmed, no stones or obstruction."
+        }
+      ]
+    },
+    "medications": {
+      "amoxicillin-clavulanate-vet": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "correct-antibiotic-given"
+        },
+        {
+          "type": "add_score_event",
+          "actionId": "correct-antibiotic-prescribed",
+          "points": 300,
+          "reason": "Amoxicillin-clavulanate prescribed — excellent first-line choice for feline bacterial UTI",
+          "category": "critical-action",
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "correct-antibiotic-given"
+            }
+          }
+        },
+        {
+          "type": "append_narrative",
+          "narrativeType": "narrative",
+          "text": "Amoxicillin-clavulanate (Clavamox) 62.5 mg PO BID × 14 days dispensed. Excellent first-line choice for feline UTI — broad-spectrum, good urinary penetration, well-tolerated."
+        },
+        {
+          "type": "add_score_event",
+          "actionId": "owner-education-given",
+          "points": 50,
+          "reason": "Owner educated on wet food, water fountain, and return in 7 days",
+          "category": "critical-action",
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "correct-antibiotic-given"
+            }
+          }
+        }
+      ],
+      "trimethoprim-sulfa-vet": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "correct-antibiotic-given"
+        },
+        {
+          "type": "add_score_event",
+          "actionId": "correct-antibiotic-prescribed",
+          "points": 300,
+          "reason": "Trimethoprim-sulfa prescribed — excellent alternative first-line choice for feline bacterial UTI",
+          "category": "critical-action",
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "correct-antibiotic-given"
+            }
+          }
+        },
+        {
+          "type": "append_narrative",
+          "narrativeType": "narrative",
+          "text": "Trimethoprim-sulfa (TMS) 15 mg/kg PO BID × 14 days dispensed. Well-absorbed into urinary tract tissue — an excellent alternative first-line choice."
+        },
+        {
+          "type": "add_score_event",
+          "actionId": "owner-education-given",
+          "points": 50,
+          "reason": "Owner educated on wet food, water fountain, and return in 7 days",
+          "category": "critical-action",
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "correct-antibiotic-given"
+            }
+          }
+        }
+      ],
+      "enrofloxacin-vet": [
+        {
+          "type": "add_knowledge",
+          "knowledgeId": "enrofloxacin-given"
+        },
+        {
+          "type": "apply_score_modifier",
+          "modifierId": "fluoroquinolone-first-line",
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "enrofloxacin-given"
+            }
+          }
+        },
+        {
+          "type": "add_score_event",
+          "actionId": "correct-antibiotic-prescribed",
+          "points": 150,
+          "reason": "Enrofloxacin prescribed — effective but not recommended as first-line. Reserve fluoroquinolones for culture-confirmed resistant cases in cats.",
+          "category": "critical-action",
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "has_knowledge",
+              "knowledgeId": "enrofloxacin-given"
+            }
+          }
+        },
+        {
+          "type": "append_narrative",
+          "narrativeType": "narrative",
+          "text": "⚠ Enrofloxacin dispensed. Note: Fluoroquinolones carry a risk of retinal toxicity in cats and should be reserved for culture-confirmed resistant infections. Consider switching to amoxicillin-clavulanate or TMS as first-line."
+        }
+      ],
+      "meloxicam-vet": [
+        {
+          "type": "adjust_vital",
+          "vital": "painScore",
+          "delta": -1
+        },
+        {
+          "type": "append_narrative",
+          "narrativeType": "narrative",
+          "text": "Meloxicam 0.05 mg/kg PO SID × 3 days dispensed for pain and inflammation. Appropriate short-course NSAID use in cats — monitor for GI signs."
+        }
+      ]
+    },
+    "procedures": {}
+  },
+  "relevantTests": [
+    "urinalysis-feline",
+    "urine-culture-feline",
+    "feline-cbc",
+    "feline-chemistry-panel",
+    "abdominal-ultrasound-feline"
+  ],
+  "relevantMedications": [
+    "amoxicillin-clavulanate-vet",
+    "trimethoprim-sulfa-vet",
+    "enrofloxacin-vet",
+    "meloxicam-vet"
+  ]
+}

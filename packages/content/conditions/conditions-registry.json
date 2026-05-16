@@ -260,5 +260,27 @@
         "eventNodeId": "septic-shock-event"
       }
     ]
+  },
+  "feline-uti": {
+    "id": "feline-uti",
+    "name": "Feline Bacterial Urinary Tract Infection",
+    "category": "urologic",
+    "isFatal": false,
+    "vitalProgression": {
+      "temperature": [
+        { "atMinute": 0, "value": 0.2 },
+        { "atMinute": 60, "value": 0.3 }
+      ],
+      "heartRate": [
+        { "atMinute": 0, "value": 5 },
+        { "atMinute": 60, "value": 10 }
+      ]
+    }
+  },
+  "canine-malassezia-otitis": {
+    "id": "canine-malassezia-otitis",
+    "name": "Malassezia Otitis Externa (Canine)",
+    "category": "dermatologic",
+    "isFatal": false
   }
 }

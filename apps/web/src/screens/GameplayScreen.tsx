@@ -32,6 +32,7 @@ interface Props {
   /** New score events from the most recent action — used for penalty feedback. */
   lastActionEvents: ScoreEvent[];
   nodeHasHint: boolean;
+  expansionId?: string | null;
 }
 
 export function GameplayScreen({
@@ -47,7 +48,10 @@ export function GameplayScreen({
   caseTitle,
   lastActionEvents,
   nodeHasHint,
+  expansionId,
 }: Props) {
+  const advisorLabel =
+    expansionId === "vet" ? "Head Vet" : "Attending Physician";
   // Case brief shown once when the case loads.
   const [hasDismissedBrief, setHasDismissedBrief] = useState(false);
 
@@ -107,6 +111,7 @@ export function GameplayScreen({
           text={briefText}
           caseTitle={caseTitle}
           onBegin={() => setHasDismissedBrief(true)}
+          advisorLabel={advisorLabel}
         />
       )}
 
@@ -140,6 +145,7 @@ export function GameplayScreen({
         currentNodeId={state.progress.currentNodeId}
         hintsUsedAtNodes={state.player.hintsUsedAtNodes}
         nodeHasHint={nodeHasHint}
+        advisorLabel={advisorLabel}
       />
 
       {/* Penalty toast for story-choice penalties (no popup produced) */}

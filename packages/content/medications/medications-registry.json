@@ -372,5 +372,97 @@
     "defaultEffects": [
       { "type": "add_knowledge", "knowledgeId": "med-doxycycline-po-given" }
     ]
+  },
+  "amoxicillin-clavulanate-vet": {
+    "id": "amoxicillin-clavulanate-vet",
+    "name": "Amoxicillin-Clavulanate (Clavamox)",
+    "category": "antibiotic",
+    "specialties": ["veterinary"],
+    "timeCost": 2,
+    "dosageLabel": "62.5 mg PO BID × 10–14 days (cats)",
+    "contraindications": [],
+    "defaultEffects": [
+      {
+        "type": "add_knowledge",
+        "knowledgeId": "med-amoxicillin-clavulanate-vet-given"
+      }
+    ]
+  },
+  "trimethoprim-sulfa-vet": {
+    "id": "trimethoprim-sulfa-vet",
+    "name": "Trimethoprim-Sulfamethoxazole (TMS)",
+    "category": "antibiotic",
+    "specialties": ["veterinary"],
+    "timeCost": 2,
+    "dosageLabel": "15 mg/kg PO BID × 10–14 days",
+    "contraindications": [],
+    "defaultEffects": [
+      {
+        "type": "add_knowledge",
+        "knowledgeId": "med-trimethoprim-sulfa-vet-given"
+      }
+    ]
+  },
+  "enrofloxacin-vet": {
+    "id": "enrofloxacin-vet",
+    "name": "Enrofloxacin (Baytril)",
+    "category": "antibiotic",
+    "specialties": ["veterinary"],
+    "timeCost": 2,
+    "dosageLabel": "5 mg/kg PO SID (CAUTION: retinal toxicity risk in cats at high doses)",
+    "contraindications": ["feline-dose-sensitive"],
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "med-enrofloxacin-vet-given" }
+    ]
+  },
+  "meloxicam-vet": {
+    "id": "meloxicam-vet",
+    "name": "Meloxicam (Metacam)",
+    "category": "nsaid",
+    "specialties": ["veterinary"],
+    "timeCost": 2,
+    "dosageLabel": "0.05 mg/kg PO SID × 3 days (cats — short course only)",
+    "contraindications": [],
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "med-meloxicam-vet-given" },
+      { "type": "adjust_vital", "vital": "painScore", "delta": -1 }
+    ]
+  },
+  "miconazole-tris-ear-drops": {
+    "id": "miconazole-tris-ear-drops",
+    "name": "Miconazole/Tris-EDTA Topical Ear Drops",
+    "category": "antifungal",
+    "specialties": ["veterinary"],
+    "timeCost": 3,
+    "dosageLabel": "5–8 drops affected ear BID × 14 days (clean ear before each application)",
+    "contraindications": [],
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "med-miconazole-ear-given" }
+    ]
+  },
+  "gentamicin-mometasone-ear": {
+    "id": "gentamicin-mometasone-ear",
+    "name": "Gentamicin/Mometasone Ear Drops (Mometamax)",
+    "category": "antibiotic",
+    "specialties": ["veterinary"],
+    "timeCost": 3,
+    "dosageLabel": "4 drops affected ear SID × 7–14 days (CAUTION: aminoglycoside antibacterial — ineffective for yeast)",
+    "contraindications": [],
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "med-gentamicin-ear-given" }
+    ]
+  },
+  "meloxicam-canine-vet": {
+    "id": "meloxicam-canine-vet",
+    "name": "Meloxicam (Metacam Canine)",
+    "category": "nsaid",
+    "specialties": ["veterinary"],
+    "timeCost": 2,
+    "dosageLabel": "0.2 mg/kg PO SID day 1, then 0.1 mg/kg PO SID × 3–5 days (dogs)",
+    "contraindications": [],
+    "defaultEffects": [
+      { "type": "add_knowledge", "knowledgeId": "med-meloxicam-canine-given" },
+      { "type": "adjust_vital", "vital": "painScore", "delta": -1 }
+    ]
   }
 }
