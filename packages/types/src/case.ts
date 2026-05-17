@@ -362,6 +362,12 @@ export const ScoringDefSchema = z.object({
    * back to its built-in generic remarks.
    */
   irrelevantActionRemarks: z.array(z.string()).optional(),
+  /**
+   * Optional item-specific overrides for irrelevant free-action remarks.
+   * Keys are free-action item IDs, and values are arrays of possible remarks.
+   * Each string may contain `{item}` which is replaced with the item name.
+   */
+  irrelevantActionRemarksByItem: z.record(z.array(z.string())).optional(),
 });
 
 export type ScoringDef = z.infer<typeof ScoringDefSchema>;

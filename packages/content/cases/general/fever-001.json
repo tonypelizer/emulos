@@ -156,7 +156,12 @@
       "👨‍⚕️ Your attending looks at the {item} order and then at the patient. \"This is a respiratory case.\" They tap the chart. \"Re. Spi. Ra. To. Ry.\"",
       "👨‍⚕️ Your attending squints. \"{item}. For a 34-year-old with pneumonia.\" They nod slowly. \"Fascinating choice. Expensive. Wrong, but fascinating.\"",
       "👨‍⚕️ The ward nurse looks at the {item} order and then at you with a raised eyebrow. Your attending appears from around the corner. \"Yeah, no. Cancel that.\""
-    ]
+    ],
+    "irrelevantActionRemarksByItem": {
+      "chest-tube": [
+        "👨‍⚕️ Your attending looks at the Chest Tube Thoracostomy order and then at the chest X-ray. \"This is pneumonia.\" They tap the report. \"Con. So. Li. Da. Tion. Not a pneumothorax. Not an effusion.\""
+      ]
+    }
   },
   "nodes": {
     "start": {

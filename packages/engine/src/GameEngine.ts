@@ -467,9 +467,24 @@ export class GameEngine {
       this.caseDoc.caseData.scoring.irrelevantActionRemarks?.map((r) =>
         r.replace("{item}", itemName),
       );
-    const attendingRemarks = caseRemarks?.length ? caseRemarks : genericRemarks;
-    const text =
+    const itemSpecificRemarks =
+      this.caseDoc.caseData.scoring.irrelevantActionRemarksByItem?.[
+        request.itemId
+      ]?.map((r) => r.replace("{item}", itemName));
+    const attendingRemarks = itemSpecificRemarks?.length
+      ? itemSpecificRemarks
+      : caseRemarks?.length
+        ? caseRemarks
+        : genericRemarks;
+    const blockedText =
+      request.type === "dispense_medication"
+        ? `🛑 ${itemName} stopped. Your supervisor intervenes before the medication is given.`
+        : request.type === "perform_procedure"
+          ? `🛑 ${itemName} stopped. Your supervisor intervenes before the procedure begins.`
+          : `🛑 ${itemName} not ordered. Your supervisor stops the request before it is carried out.`;
+    const remarkText =
       attendingRemarks[Math.floor(Math.random() * attendingRemarks.length)]!;
+    const text = `${blockedText}\n\n${remarkText}`;
 
     return produce(state, (draft) => {
       draft.progress.narrativeLog.push({
